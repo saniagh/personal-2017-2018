@@ -4,8 +4,11 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
 
-app.use('/public', express.static(__dirname + '/res/index'));
+app.use('/public/index', express.static(__dirname + '/res/index'));
 app.use('/public', express.static(__dirname + '/public'));
+
+const uploadRoute = require('./res/handlers/upload.js');
+app.use('/upload', uploadRoute);
 
 app.get('*', function (req, res) {
   res.sendFile(__dirname + '/res' + '/index' + '/index.html');

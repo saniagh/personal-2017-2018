@@ -21203,21 +21203,48 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _ref = _jsx('div', {}, void 0, 'Hi there!');
+var _ref2 = _jsx('input', {
+  type: 'file',
+  name: 'upload-file',
+  id: 'upload-file'
+});
 
 var BaseApp = function (_Component) {
   _inherits(BaseApp, _Component);
 
   function BaseApp() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
     _classCallCheck(this, BaseApp);
 
-    return _possibleConstructorReturn(this, (BaseApp.__proto__ || Object.getPrototypeOf(BaseApp)).apply(this, arguments));
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = BaseApp.__proto__ || Object.getPrototypeOf(BaseApp)).call.apply(_ref, [this].concat(args))), _this), _this.onUpload = function (e) {
+      var form = new FormData(document.forms.namedItem('upload-form'));
+      var xhr = new XMLHttpRequest();
+      xhr.open('post', '/upload/upload', true);
+      xhr.send(form);
+      e.preventDefault();
+    }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(BaseApp, [{
     key: 'render',
     value: function render() {
-      return _ref;
+      return _jsx('div', {}, void 0, _jsx('form', {
+        id: 'upload-form',
+        encType: 'multipart/form-data',
+        method: 'post'
+      }, void 0, _ref2, _jsx('input', {
+        type: 'submit',
+        name: 'submit-button',
+        id: 'submit-button',
+        onClick: this.onUpload
+      })));
     }
   }]);
 
