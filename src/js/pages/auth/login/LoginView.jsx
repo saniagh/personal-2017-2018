@@ -1,0 +1,112 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {
+  onUsernameOrEmailChangeAction,
+  onLoginPasswordChangeAction,
+  onLoginRequestAction,
+  onClearStatusErrorsMessageLoginAction,
+} from '../authActions.js';
+import {
+  onHideLoginModalAction,
+  onShowSignupModalAction,
+} from '../../universal/navigationActions';
+
+import Login from './Login.jsx';
+
+let createHandlers = function (dispatch) {
+  let onUsernameOrEmailChange = function (usernameOrEmail) {
+    dispatch(onUsernameOrEmailChangeAction(usernameOrEmail));
+  };
+
+  let onPasswordChange = function (password) {
+    dispatch(onLoginPasswordChangeAction(password));
+  };
+
+  let onLogin = function (usernameOrEmail, password) {
+    dispatch(onLoginRequestAction(usernameOrEmail, password));
+  };
+
+  let onClearStatusErrorsMessage = function () {
+    dispatch(onClearStatusErrorsMessageLoginAction());
+  };
+
+  let onHideLoginModal = function () {
+    dispatch(onHideLoginModalAction());
+  };
+
+  let onShowSignupModal = function () {
+    dispatch(onShowSignupModalAction());
+  };
+
+  return {
+    onUsernameOrEmailChange,
+    onPasswordChange,
+    onLogin,
+    onHideLoginModal,
+    onShowSignupModal,
+    onClearStatusErrorsMessage,
+  };
+};
+
+class LoginView extends Component {
+  constructor(props) {
+    super(props);
+    this.handlers = createHandlers(this.props.dispatch);
+  }
+
+  onUsernameOrEmailChange = (e) => {
+    this.handlers.onUsernameOrEmailChange(e.target.value);
+  };
+
+  onPasswordChange = (e) => {
+    this.handlers.onPasswordChange(e.target.value);
+  };
+
+  onLogin = () => {
+    this.handlers.onLogin(this.props.usernameOrEmail, this.props.password);
+  };
+
+  onClearStatusErrorsMessage = () => {
+    this.handlers.onClearStatusErrorsMessage();
+  };
+
+  onHideLoginModal = () => {
+    this.handlers.onHideLoginModal();
+  };
+
+  onShowSignupModal = () => {
+    this.handlers.onShowSignupModal();
+  };
+
+  render() {
+    return <Login usernameOrEmail={this.props.usernameOrEmail}
+                  password={this.props.password}
+                  status={this.props.status}
+                  errors={this.props.errors}
+                  message={this.props.message}
+                  onUsernameOrEmailChange={this.onUsernameOrEmailChange}
+                  onPasswordChange={this.onPasswordChange}
+                  onLogin={this.onLogin}
+                  onClearStatusErrorsMessage={this.onClearStatusErrorsMessage}
+                  onHideLoginModal={this.onHideLoginModal}
+                  onShowSignupModal={this.onShowSignupModal}/>;
+  }
+}
+LoginView.propTypes = {
+  usernameOrEmail: PropTypes.string,
+  password: PropTypes.string,
+  status: PropTypes.string,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    usernameOrEmail: state.authReducer.login.usernameOrEmail,
+    password: state.authReducer.login.password,
+    status: state.authReducer.login.status,
+    errors: state.authReducer.login.errors,
+    message: state.authReducer.login.message,
+  };
+};
+
+export default connect(mapStateToProps)(LoginView);

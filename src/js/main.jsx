@@ -1,6 +1,18 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import BaseApp from './dev/BaseApp.jsx';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-ReactDom.render(<BaseApp/>, document.getElementById('reactApp'));
+import { Provider } from 'react-redux';
+import storeConfig from './modules/storeConfig.js';
+
+import BaseApp from './pages/BaseApp.jsx';
+
+const store = storeConfig();
+
+ReactDom.render(
+    <Provider store={store}>
+      <Router>
+        <BaseApp/>
+      </Router>
+    </Provider>, document.getElementById('reactApp'));

@@ -2,14 +2,20 @@
   "presets": [
     "env",
     "react",
-    "stage-0",
-    "es2017"
+    "stage-0"
   ],
   "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "antd",
+        "style": "css"
+      }
+    ],
+    "transform-object-rest-spread",
     "transform-class-properties",
     "transform-decorators",
     "transform-react-constant-elements",
-    "transform-react-inline-elements",
-    "transform-object-rest-spread"
+    "transform-react-inline-elements"
   ]
 }

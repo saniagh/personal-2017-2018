@@ -3,6 +3,8 @@ const multer = require('multer');
 
 const router = new express.Router();
 
+// once we implement users we should use the user id to change the filename
+
 const storage = multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, './public/uploads');
