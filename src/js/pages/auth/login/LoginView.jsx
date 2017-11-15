@@ -63,6 +63,10 @@ class LoginView extends Component {
     this.handlers.onPasswordChange(e.target.value);
   };
 
+  onRedirect = () => {
+    this.context.router.history.replace('/');
+  };
+
   onLogin = () => {
     this.handlers.onLogin(this.props.usernameOrEmail, this.props.password);
   };
@@ -87,6 +91,7 @@ class LoginView extends Component {
                   message={this.props.message}
                   onUsernameOrEmailChange={this.onUsernameOrEmailChange}
                   onPasswordChange={this.onPasswordChange}
+                  onRedirect={this.onRedirect}
                   onLogin={this.onLogin}
                   onClearStatusErrorsMessage={this.onClearStatusErrorsMessage}
                   onHideLoginModal={this.onHideLoginModal}
@@ -97,6 +102,10 @@ LoginView.propTypes = {
   usernameOrEmail: PropTypes.string,
   password: PropTypes.string,
   status: PropTypes.string,
+};
+
+LoginView.contextTypes = {
+  router: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {

@@ -4,6 +4,10 @@
 # DB config sensitive data
 /db-config
 
+# Uploaded photos
+
+/public/uploads
+
 # Unwanted file
 /package-lock.json
 

@@ -82,8 +82,6 @@ export default function authReducer(
         ...state,
         login: {
           ...state.login,
-          usernameOrEmail: '',
-          password: '',
           status: 'NOT_ATTEMPTED',
           errors: {},
           message: '',

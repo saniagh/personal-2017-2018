@@ -93,6 +93,10 @@ class SignupView extends Component {
     });
   };
 
+  onRedirect = () => {
+    this.context.router.history.replace('/');
+  };
+
   onSignup = () => {
     const value = this.props;
     this.handlers.onSignup(value.username, value.email, value.password,
@@ -125,6 +129,7 @@ class SignupView extends Component {
                    onPasswordChange={this.onPasswordChange}
                    onConfirmPasswordChange={this.onConfirmPasswordChange}
                    onAgreeTermsOfService={this.onAgreeTermsOfService}
+                   onRedirect={this.onRedirect}
                    onSignup={this.onSignup}
                    onClearStatusErrorsMessage={this.onClearStatusErrorsMessage}
                    onShowLoginModal={this.onShowLoginModal}
@@ -143,6 +148,9 @@ SignupView.propTypes = {
     password: PropTypes.string,
   }),
   message: PropTypes.string,
+};
+SignupView.contextTypes = {
+  router: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {

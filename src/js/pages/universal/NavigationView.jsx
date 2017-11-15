@@ -61,6 +61,7 @@ class NavigationView extends Component {
   render() {
     return <Navigation login={this.props.login}
                        signup={this.props.signup}
+                       router={this.context.router}
                        onShowLoginModal={this.onShowLoginModal}
                        onHideLoginModal={this.onHideLoginModal}
                        onShowSignupModal={this.onShowSignupModal}
@@ -74,6 +75,10 @@ NavigationView.propTypes = {
   signup: PropTypes.shape({
     isModalVisible: PropTypes.bool,
   }),
+};
+
+NavigationView.contextTypes = {
+  router: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => {

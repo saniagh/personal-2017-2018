@@ -24,6 +24,17 @@
     .ant-alert {
       max-width: 312.5px; } }
 
+.ant-layout-header {
+  background: #ffffff !important; }
+
+.logo {
+  width: 120px;
+  height: 31px;
+  background: whitesmoke;
+  border-radius: 6px;
+  margin: 16px 24px 16px 0;
+  float: left; }
+
 .ant-form-item-control {
   display: flex;
   flex-direction: column; }
