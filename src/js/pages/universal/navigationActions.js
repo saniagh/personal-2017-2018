@@ -4,9 +4,6 @@ import {
   SHOW_SIGNUP_MODAL,
   HIDE_SIGNUP_MODAL,
 } from '../../modules/actionTypes.js';
-import axios from 'axios';
-import qs from 'qs';
-import Auth from '../../modules/Auth.js';
 
 export function onShowLoginModalAction() {
   return function (dispatch) {

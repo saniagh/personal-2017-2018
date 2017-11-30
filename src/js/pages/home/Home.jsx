@@ -5,11 +5,7 @@ class Home extends Component {
     return (
         <div>
           Home
-          <form id='upload-form' encType='multipart/form-data' method='post'>
-            <input type='file' name='upload-file' id='upload-file'/>
-            <input type='submit' name='submit-button' id='submit-button'
-                   onClick={this.props.onUpload}/>
-          </form>
+
         </div>
     );
   }

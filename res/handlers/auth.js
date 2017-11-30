@@ -2,8 +2,6 @@ const User = require('mongoose').model('User');
 const express = require('express');
 const passport = require('passport');
 const validator = require('validator');
-const jwt = require('jsonwebtoken');
-const dbConfig = require('../../db-config');
 
 const router = new express.Router();
 
@@ -27,15 +25,11 @@ router.post('/login', loginFormValidationMiddleware, (req, res, next) => {
           message: err.message,
           success: false,
         });
-      }
-
-      return res.status(400).json({
+      } else return res.status(400).json({
         message: 'Could not process form.',
         success: false,
       });
-    }
-
-    return res.json({
+    } else return res.json({
       success: true,
       token,
     });
@@ -64,15 +58,11 @@ router.post('/signup', signupFormValidationMiddleware, (req, res, next) => {
           message: 'Username is already taken.',
           success: false,
         });
-      }
-
-      return res.status(400).json({
+      } else return res.status(400).json({
         message: 'Could not process form.',
         success: false,
       });
-    }
-
-    return res.json({
+    } else return res.json({
       message: 'You have successfully signed up.',
       token,
       success: true,

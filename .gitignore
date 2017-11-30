@@ -5,7 +5,6 @@
 /db-config
 
 # Uploaded photos
-
 /public/uploads
 
 # Unwanted file

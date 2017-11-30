@@ -38,14 +38,6 @@ class HomeView extends Component {
     this.handlers.onHideLoginModal();
   };
 
-  onUpload = (e) => {
-    const form = new FormData(document.forms.namedItem('upload-form'));
-    const xhr = new XMLHttpRequest();
-    xhr.open('post', '/upload/upload', true);
-    xhr.send(form);
-    e.preventDefault();
-  };
-
   render() {
     return <Home onUpload={this.onUpload}
                  login={this.props.login}

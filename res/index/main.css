@@ -64,4 +64,52 @@
   top: 0;
   text-align: left; }
 
+@media screen and (max-width: 768px) {
+  .ant-upload.ant-upload-drag {
+    width: 90vw !important; } }
+@media screen and (max-width: 500px) {
+  .ant-upload.ant-upload-drag .ant-upload-btn {
+    padding: 0 !important; } }
+
+@media screen and (max-width: 768px) {
+  .ant-upload-hint {
+    word-break: normal;
+    word-wrap: break-word;
+    text-overflow: clip; } }
+
+.categories-wrap {
+  display: flex;
+  flex: 1; }
+
+.uploads-container {
+  display: flex;
+  flex: 1;
+  border: 1px solid #ddd; }
+
+.gallery-container {
+  width: 70%;
+  padding: 14px; }
+  @media screen and (max-width: 1160px) {
+    .gallery-container {
+      width: 100%; } }
+
+.info-container {
+  width: 30%;
+  padding: 14px; }
+  @media screen and (max-width: 1160px) {
+    .info-container {
+      display: none; } }
+
+.info-uploads {
+  height: 100%;
+  overflow: hidden;
+  border-left: 1px solid #ddd;
+  background: #f3f3f3; }
+
+.trigger {
+  font-size: 16px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color .3s; }
+
 /*# sourceMappingURL=main.css.map */

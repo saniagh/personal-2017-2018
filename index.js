@@ -12,7 +12,7 @@ require('./res/db-models').connect(dbConfig.dbUri);
 
 app.use(express.static('./res/index/'));
 app.use(express.static('./public/'));
-app.use(bodyParser.urlencoded({ extended: false, limit: '512kb' }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '20000kb' }));
 
 const authRoutes = require('./res/handlers/auth');
 const signupPassport = require('./res/auth/signup');
@@ -26,6 +26,10 @@ const authValidation = require('./res/middleware/auth-validation');
 
 // The middleware should be used for routes that require the user to be authenticated
 //app.use('/mock', authValidation);
+
+const productsCategoriesRoute = require(
+    './res/handlers/products-categories.js');
+app.use('/products-categories', productsCategoriesRoute);
 
 const uploadRoute = require('./res/handlers/upload');
 app.use('/upload', uploadRoute);

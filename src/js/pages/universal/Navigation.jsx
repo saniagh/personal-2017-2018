@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Modal, Button, Layout, Menu, Breadcrumb } from 'antd';
-const { Header, Content, Footer } = Layout;
+import { Modal, Layout, Menu } from 'antd';
+const { Header} = Layout;
 const MenuItem = Menu.Item;
 
 import LoginView from '../auth/login/LoginView.jsx';
@@ -57,6 +57,10 @@ class Navigation extends Component {
                 <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
                 <MenuItem key="/client-area"><Link to={`/client-area`}/>Client
                   Area</MenuItem>
+
+                <MenuItem key="/control-panel"><Link to={`/control-panel/index`}/>Control
+                  Panel</MenuItem>
+
                 <MenuItem key="logout">Logout</MenuItem>
               </Menu>
           }

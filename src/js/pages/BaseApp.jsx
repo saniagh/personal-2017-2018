@@ -1,23 +1,36 @@
 import React, { Component } from 'react';
-import NavigationView from './universal/NavigationView.jsx';
+import PropTypes from 'prop-types';
 
 import { Layout } from 'antd';
-const { Footer } = Layout;
+const { Content } = Layout;
+
+import NavigationView from './universal/NavigationView.jsx';
 
 import Routes from './Routes.jsx';
 
 class BaseApp extends Component {
+
   render() {
+
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
     return (
-        <Layout className="layout">
+        <Layout style={{ minHeight: '100vh' }}>
           <NavigationView/>
-          <Routes/>
-          <Footer style={{ textAlign: 'center' }}>
-            Personal App @2017-2018 Created by Valentin C.
-          </Footer>
+          <Layout>
+            <Layout>
+              <Content
+                  style={mediaQuery ? { padding: '0 50px' } : { padding: '0 5px' }}>
+                <Routes/>
+              </Content>
+            </Layout>
+          </Layout>
         </Layout>
     );
   }
 }
+
+BaseApp.contextTypes = {
+  router: PropTypes.object.isRequired,
+};
 
 export default BaseApp;

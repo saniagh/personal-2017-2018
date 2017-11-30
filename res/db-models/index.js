@@ -12,4 +12,6 @@ module.exports.connect = (dbUri) => {
   });
 
   require('./models/users.js');
+  require('./models/products-categories.js');
+  require('./models/uploads.js');
 };
