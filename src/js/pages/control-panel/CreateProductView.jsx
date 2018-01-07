@@ -8,6 +8,13 @@ import {
 import {
   onChooseImage,
 } from '../upload-modal/uploadActions.js';
+import {
+  onShowUploadsMultipleModalAction,
+  onHideUploadsMultipleModalAction,
+} from './productActions.js';
+import {
+  onChooseMultipleImages,
+} from '../upload-modal/uploadActions.js';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -26,10 +33,25 @@ let createHandlers = function (dispatch) {
     dispatch(onChooseImage(imageUrl));
   };
 
+  let onShowUploadsMultipleModal = function () {
+    dispatch(onShowUploadsMultipleModalAction());
+  };
+
+  let onHideUploadsMultipleModal = function () {
+    dispatch(onHideUploadsMultipleModalAction());
+  };
+
+  let onChooseMultipleImagesHandler = function (imageUrlsArray) {
+    dispatch(onChooseMultipleImages(imageUrlsArray));
+  };
+
   return {
     onShowUploadsModal,
     onHideUploadsModal,
     onChooseImageHandler,
+    onShowUploadsMultipleModal,
+    onHideUploadsMultipleModal,
+    onChooseMultipleImagesHandler,
   };
 };
 
@@ -38,6 +60,9 @@ class CreateProductView extends Component {
     super(props, context);
 
     this.handlers = createHandlers(this.props.dispatch);
+
+    // imageUrl from props is used as thumbnail
+    // productPicturess array is used as a gallery
 
     this.state = {
       fetchingCategories: false,
@@ -51,7 +76,7 @@ class CreateProductView extends Component {
       productLink: '',
       productCategory: [],
       productDescription: '',
-      productPicture: '',
+      productPictures: '',
       sku: '',
       productPrice: '',
       salePrice: '',
@@ -65,9 +90,6 @@ class CreateProductView extends Component {
       tags: [],
       tagInput: '',
       productFeatured: false,
-      productStatus: '',
-      productVisibility: '',
-      publishDate: '',
       latestModification: '',
     };
   }
@@ -139,10 +161,6 @@ class CreateProductView extends Component {
     });
   };
 
-  onProductCategoryChange = () => {
-
-  };
-
   onProductDescriptionChange = (value) => {
     this.setState({
       productDescription: value,
@@ -150,7 +168,7 @@ class CreateProductView extends Component {
     });
   };
 
-  onProductPictureChange = () => {
+  onProductPicturesChange = () => {
 
   };
 
@@ -226,8 +244,17 @@ class CreateProductView extends Component {
 
   onAddTag = () => {
     let tags = this.state.tags;
-    if (this.state.tagInput && tags.indexOf(this.state.tagInput) === -1) {
+    if (this.state.tagInput && tags.indexOf(this.state.tagInput) === -1 &&
+        this.state.tagInput.indexOf(',') === -1) {
       tags = [...tags, this.state.tagInput];
+    } else if (this.state.tagInput &&
+        tags.indexOf(this.state.tagInput) === -1 &&
+        this.state.tagInput.indexOf(',') !== -1) {
+      let multipleTags = this.state.tagInput.split(',');
+      for (let i = 0; i < multipleTags.length; i++) {
+        if (multipleTags[i])
+          tags = [...tags, multipleTags[i]];
+      }
     }
 
     this.setState({
@@ -256,7 +283,9 @@ class CreateProductView extends Component {
   };
 
   onProductFeaturedToggle = () => {
-
+    this.setState({
+      productFeatured: !this.state.productFeatured,
+    });
   };
 
   onShowUploadsModal = () => {
@@ -265,6 +294,14 @@ class CreateProductView extends Component {
 
   onHideUploadsModal = () => {
     this.handlers.onHideUploadsModal();
+  };
+
+  onShowUploadsMultipleModal = () => {
+    this.handlers.onShowUploadsMultipleModal();
+  };
+
+  onHideUploadsMultipleModal = () => {
+    this.handlers.onHideUploadsMultipleModal();
   };
 
   render() {
@@ -277,7 +314,7 @@ class CreateProductView extends Component {
                           productLink={this.state.productLink}
                           productCategory={this.state.productCategory}
                           productDescription={this.state.productDescription}
-                          productPicture={this.state.productPicture}
+                          productPictures={this.state.productPictures}
                           sku={this.state.sku}
                           productPrice={this.state.productPrice}
                           salePrice={this.state.salePrice}
@@ -291,18 +328,17 @@ class CreateProductView extends Component {
                           tags={this.state.tags}
                           tagInput={this.state.tagInput}
                           productFeatured={this.state.productFeatured}
-                          productStatus={this.state.productStatus}
-                          productVisibility={this.state.productVisibility}
-                          publishDate={this.state.publishDate}
                           latestModification={this.state.latestModification}
                           isModalVisible={this.props.isModalVisible}
                           imageUrl={this.props.imageUrl}
+                          isModalVisibleMultiple={this.props.isModalVisibleMultiple}
+                          imageUrlsArray={this.props.imageUrlsArray}
                           onRowSelection={this.onRowSelection}
                           onProductNameChange={this.onProductNameChange}
                           onProductLinkChange={this.onProductLinkChange}
                           onProductCategoryChange={this.onProductCategoryChange}
                           onProductDescriptionChange={this.onProductDescriptionChange}
-                          onProductPictureChange={this.onProductPictureChange}
+                          onproductPicturesChange={this.onproductPicturesChange}
                           onSKUChange={this.onSKUChange}
                           onProductPriceChange={this.onProductPriceChange}
                           onSalePriceChange={this.onSalePriceChange}
@@ -320,7 +356,10 @@ class CreateProductView extends Component {
                           onProductFeaturedToggle={this.onProductFeaturedToggle}
                           onShowUploadsModal={this.onShowUploadsModal}
                           onHideUploadsModal={this.onHideUploadsModal}
-                          onChooseImageHandler={this.handlers.onChooseImageHandler}/>;
+                          onChooseImageHandler={this.handlers.onChooseImageHandler}
+                          onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
+                          onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}
+                          onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}/>;
   }
 }
 
@@ -331,12 +370,16 @@ CreateProductView.contextTypes = {
 CreateProductView.propTypes = {
   isModalVisible: PropTypes.bool,
   imageUrl: PropTypes.string,
+  isModalVisibleMultiple: PropTypes.bool,
+  imageUrlsArray: PropTypes.array,
 };
 
 const mapStateToProps = (state) => {
   return {
     isModalVisible: state.categoriesReducer.isModalVisible,
     imageUrl: state.uploadReducer.imageUrl,
+    isModalVisibleMultiple: state.productReducer.isModalVisible,
+    imageUrlsArray: state.uploadReducer.imageUrlsArray,
   };
 };
 

@@ -4,6 +4,7 @@ import homeReducer from '../pages/home/homeReducer.js';
 import navigationReducer from '../pages/universal/navigationReducer.js';
 import uploadReducer from '../pages/upload-modal/uploadReducer.js';
 import categoriesReducer from '../pages/control-panel/categoriesReducer.js';
+import productReducer from '../pages/control-panel/productReducer.js';
 
 const rootReducer = combineReducers({
   authReducer: authReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   navigationReducer: navigationReducer,
   uploadReducer: uploadReducer,
   categoriesReducer: categoriesReducer,
+  productReducer: productReducer,
 });
 
 export default rootReducer;

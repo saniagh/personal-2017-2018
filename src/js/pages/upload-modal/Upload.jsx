@@ -68,6 +68,7 @@ class UploadC extends Component {
                          onSelectImage={this.props.onSelectImage}
                          enableLightbox={false}
                          onClickThumbnail={this.props.onSelectImage}
+                         multiple
                 />
               </div>
               <div className="info-container">

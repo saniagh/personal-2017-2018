@@ -343,6 +343,7 @@ class Categories extends Component {
                  wrapClassName="vertical-center-modal"
                  width="auto"
                  visible={this.props.isModalVisible}
+                 style={{ maxWidth: window.innerWidth }}
                  footer={null}
                  onOk={this.onHideUploadModal}
                  onCancel={this.onHideUploadModal}>

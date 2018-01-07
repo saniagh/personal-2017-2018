@@ -15,12 +15,14 @@ import {
   Tag,
   Tooltip,
   Modal,
+  Switch,
 } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
 
 import UploadView from '../upload-modal/UploadView.jsx';
+import UploadViewMultipleChoice from '../upload-modal/UploadViewMultipleChoice.jsx';
 
 const showHeader = false;
 
@@ -108,7 +110,7 @@ class CreateProduct extends Component {
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [
           { 'list': 'ordered' }, { 'list': 'bullet' },
-          { 'indent': '-1' }, { 'indent': '+1' }],
+          { 'indent': '-1' }, { 'indent': '+1' }, { 'align': [] }],
         ['link', 'video'],
       ],
       clipboard: {
@@ -121,7 +123,7 @@ class CreateProduct extends Component {
       'header', 'font', 'size',
       'bold', 'italic', 'underline', 'strike', 'blockquote',
       'list', 'bullet', 'indent',
-      'link', 'video',
+      'link', 'video', 'align',
     ];
 
     const formItemLayout = {
@@ -214,6 +216,32 @@ class CreateProduct extends Component {
                   <TabPane key="0"
                            tab={<span><Icon type="layout"/>General</span>}>
                     <FormItem key="3"
+                              label="Gallery"
+                              {...formItemLayout}>
+                      <div style={{ display: 'flex' }}
+                           onClick={this.props.onShowUploadsMultipleModal}>
+                        <div className="div-as-link">Click here to create a gallery to show on the product's page.</div>
+                        <div style={{ marginLeft: 5 }}>
+                          Current status: {this.props.imageUrlsArray &&
+                        this.props.imageUrlsArray.length > 0 ?
+                            <span style={{ color: 'green' }}>OK</span>
+                            :
+                            <span style={{ color: 'tomato' }}>NOT ADDED</span>
+                        }
+                        </div>
+                      </div>
+                    </FormItem>
+                    <FormItem key="4"
+                              label="Featured"
+                              help="The product will be featured on the first page"
+                              {...formItemLayout}>
+                      <Switch style={{ width: 10 }}
+                              checked={this.props.productFeatured}
+                              onChange={this.props.onProductFeaturedToggle}>
+
+                      </Switch>
+                    </FormItem>
+                    <FormItem key="5"
                               label="SKU"
                               help="Stock keeping unit"
                               {...formItemLayout}>
@@ -227,7 +255,7 @@ class CreateProduct extends Component {
                           <Input onChange={this.props.onSKUChange}/>,
                       )}
                     </FormItem>
-                    <FormItem key="4"
+                    <FormItem key="6"
                               label="Regular Price(ADD_CURRENCY)"
                               help="The price that you want to sell this product for, without discounts and excluding shipping fees"
                               {...formItemLayout}>
@@ -242,7 +270,7 @@ class CreateProduct extends Component {
                           <Input onChange={this.props.onProductPriceChange}/>,
                       )}
                     </FormItem>
-                    <FormItem key="5"
+                    <FormItem key="7"
                               label="Sale Price(ADD_CURRENCY)"
                               help="The sale price with applied discounts."
                               {...formItemLayout}>
@@ -259,7 +287,7 @@ class CreateProduct extends Component {
                     </FormItem>
                   </TabPane>
                   <TabPane key="1" tab={<span><Icon type="area-chart"/>Inventory</span>}>
-                    <FormItem key="5"
+                    <FormItem key="8"
                               label="Available in stock"
                               style={{ padding: 10, marginBottom: 0 }}
                               {...formItemLayout}>
@@ -268,7 +296,7 @@ class CreateProduct extends Component {
                         Will show product as available for purchase
                       </Checkbox>
                     </FormItem>
-                    <FormItem key="6"
+                    <FormItem key="9"
                               label="Show stock quantity"
                               style={{ padding: 10, marginBottom: 0 }}
                               {...formItemLayout}>
@@ -277,7 +305,7 @@ class CreateProduct extends Component {
                         Will show how many products are left for this particular product
                       </Checkbox>
                     </FormItem>
-                    <FormItem key="7"
+                    <FormItem key="10"
                               label="Stock Quantity"
                               help="Number of units available in stock."
                               {...formItemLayout}>
@@ -294,7 +322,7 @@ class CreateProduct extends Component {
                   </TabPane>
                   <TabPane key="2"
                            tab={<span><Icon type="car"/>Shipping</span>}>
-                    <FormItem key="8"
+                    <FormItem key="11"
                               label="Shipping fee(ADD_CURRENCY)"
                               help="The money you charge for shipping."
                               style={{ padding: 10, }}
@@ -309,7 +337,7 @@ class CreateProduct extends Component {
                           <Input onChange={this.props.onShippingFeeChange}/>,
                       )}
                     </FormItem>
-                    <FormItem key="9"
+                    <FormItem key="12"
                               label="Available in store"
                               {...formItemLayout}>
                       <Checkbox checked={this.props.availableInStore}
@@ -463,11 +491,11 @@ class CreateProduct extends Component {
                             padding: 0,
                           }}>
                       <img className="product-thumbnail-create"
-                          style={{
-                        maxWidth: cardMediaQuery.matches ?
-                            275 :
-                            290,
-                      }}
+                           style={{
+                             maxWidth: cardMediaQuery.matches ?
+                                 275 :
+                                 290,
+                           }}
                            src={this.props.imageUrl}
                            onClick={this.props.onShowUploadsModal}/>
                     </Card>
@@ -497,10 +525,21 @@ class CreateProduct extends Component {
                  wrapClassName="vertical-center-modal"
                  width="auto"
                  visible={this.props.isModalVisible}
+                 style={{ maxWidth: window.innerWidth }}
                  footer={null}
                  onOk={this.props.onHideUploadsModal}
                  onCancel={this.props.onHideUploadsModal}>
             <UploadView/>
+          </Modal>
+          <Modal title="Pick images to show in product's gallery"
+                 wrapClassName="vertical-center-modal"
+                 width="auto"
+                 visible={this.props.isModalVisibleMultiple}
+                 style={{ maxWidth: window.innerWidth }}
+                 footer={null}
+                 onOk={this.props.onHideUploadsMultipleModal}
+                 onCancel={this.props.onHideUploadsMultipleModal}>
+            <UploadViewMultipleChoice/>
           </Modal>
         </Card>
     );
