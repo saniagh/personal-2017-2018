@@ -14,12 +14,20 @@ class BaseApp extends Component {
 
     const mediaQuery = window.matchMedia('(max-width: 768px)');
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
           <NavigationView/>
-          <Layout>
+          <Layout style={mediaQuery.matches ? {
+            paddingTop: 64,
+          } : {}}>
             <Layout>
               <Content
-                  style={mediaQuery ? { padding: '0 50px' } : { padding: '0 5px' }}>
+                  style={mediaQuery.matches ?
+                      { padding: '0 5px' } :
+                      { padding: '0 50px' }}>
                 <Routes/>
               </Content>
             </Layout>

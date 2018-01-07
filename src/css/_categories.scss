@@ -1,0 +1,15 @@
+.ant-layout-sider-trigger {
+  display: none !important;
+}
+
+.ant-layout-sider-zero-width-trigger {
+  z-index: 1;
+  position: fixed !important;
+  top: 10px !important;
+  left: 5px;
+  border: 1px solid ghostwhite;
+  background: #fff !important;
+  i {
+    color: #000
+  }
+}

@@ -190,7 +190,10 @@ class CategoriesView extends Component {
         categoryMiniature: this.props.imageUrl,
       }),
     }).then(() => {
+
+      // Important because the variable is shared between categories and adding a product
       this.handlers.onChooseImageHandler('');
+
       this.setState({
         savingCategory: false,
         savedCategory: true,

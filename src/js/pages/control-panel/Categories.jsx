@@ -5,7 +5,6 @@ import {
   Input,
   Form,
   Select,
-  Spin,
   Button,
   Table,
   Modal,
@@ -172,7 +171,7 @@ class Categories extends Component {
         </Button>;
 
     const mediaQuery = window.matchMedia('(max-width: 1200px)');
-    const tableMediaQuery = window.matchMedia('(max-width: 768px)');
+    const cardMediaQuery = window.matchMedia('(max-width: 768px)');
 
     return (
         <Card className="categories-wrap"
@@ -182,6 +181,8 @@ class Categories extends Component {
                   {
                     display: 'flex',
                     flexDirection: 'column',
+                    padding: cardMediaQuery.matches ? 5 : 24,
+                    maxWidth: '100vh',
                   } :
                   {
                     display: 'flex',

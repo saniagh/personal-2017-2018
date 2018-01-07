@@ -14,11 +14,13 @@ const breadcrumbNameMap = {
   '/client-area': 'Client Area',
   '/control-panel': 'Control Panel',
   '/control-panel/products': 'Products',
+  '/control-panel/products/add-a-product': 'Add Product',
   '/control-panel/categories': 'Categories',
 };
 
 const Routes = withRouter((props) => {
   const { location } = props;
+  const mediaQuery = window.matchMedia('(max-width: 768px)');
   const pathSnippets = location.pathname.split('/').filter(i => i);
   const extraBreadcrumbItems = pathSnippets.map((_, index) => {
     const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
@@ -47,7 +49,7 @@ const Routes = withRouter((props) => {
             <Route path={`/control-panel`} component={IndexView}/>
           </Switch>
         <Footer style={{ textAlign: 'center' }}>
-          Personal App @2017-2018 Created by Valentin C.
+          Bloo Shop @2018 Created by Valentin C.
         </Footer>
       </span>
   );

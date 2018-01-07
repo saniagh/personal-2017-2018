@@ -1,3 +1,16 @@
+.ant-layout-sider-trigger {
+  display: none !important; }
+
+.ant-layout-sider-zero-width-trigger {
+  z-index: 1;
+  position: fixed !important;
+  top: 10px !important;
+  left: 5px;
+  border: 1px solid ghostwhite;
+  background: #fff !important; }
+  .ant-layout-sider-zero-width-trigger i {
+    color: #000; }
+
 .signup-form {
   width: 100%;
   margin: 0 auto; }
@@ -85,6 +98,9 @@
   display: flex;
   flex: 1;
   border: 1px solid #ddd; }
+  @media screen and (max-width: 1160px) {
+    .uploads-container {
+      flex-direction: column-reverse; } }
 
 .gallery-container {
   width: 70%;
@@ -98,7 +114,7 @@
   padding: 14px; }
   @media screen and (max-width: 1160px) {
     .info-container {
-      display: none; } }
+      width: 100%; } }
 
 .info-uploads {
   height: 100%;
@@ -111,5 +127,22 @@
   line-height: 64px;
   cursor: pointer;
   transition: color .3s; }
+
+.ql-editor {
+  min-height: 300px; }
+
+.div-as-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer; }
+
+.div-as-link:hover {
+  opacity: 0.8; }
+
+.product-thumbnail-create {
+  cursor: pointer; }
+
+.product-thumbnail-create:hover {
+  opacity: 0.8; }
 
 /*# sourceMappingURL=main.css.map */
