@@ -27,9 +27,16 @@ const authValidation = require('./res/middleware/auth-validation');
 // The middleware should be used for routes that require the user to be authenticated
 //app.use('/mock', authValidation);
 
+const settingsRoute = require('./res/handlers/settings.js');
+app.use('/settings', settingsRoute);
+
 const productsCategoriesRoute = require(
     './res/handlers/products-categories.js');
 app.use('/products-categories', productsCategoriesRoute);
+
+const productRoute = require(
+    './res/handlers/product.js');
+app.use('/product', productRoute);
 
 const uploadRoute = require('./res/handlers/upload');
 app.use('/upload', uploadRoute);

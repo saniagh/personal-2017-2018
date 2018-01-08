@@ -148,67 +148,78 @@ class CreateProduct extends Component {
                 padding: cardMediaQuery.matches ? 24 : 5,
               }}>
           <Form style={{ width: '100%' }}>
-            <FormItem key="0"
-                      style={{ marginBottom: 4 }}
-                      hasFeedback>
-              {getFieldDecorator('Product\'s name', {
-                rules: [
-                  {
-                    required: true,
-                    setFieldsValue: productName.value,
-                  },
-                ],
-              })(
-                  <Input placeholder="Product's name"
-                         style={{ width: '100%', fontSize: 16 }}
-                         onChange={this.props.onProductNameChange}/>,
-              )}
-            </FormItem>
-            <FormItem key="1">
-              <span style={{ display: 'flex', }}>
+            <Card loading={this.props.fetchingCategories}
+                  bordered={false}
+                  noHovering={true}
+                  bodyStyle={{
+                    padding: 0,
+                    margin: 0,
+                  }}>
+              <FormItem key="0"
+                        style={{ marginBottom: 4 }}
+                        hasFeedback>
+                {getFieldDecorator('Product\'s name', {
+                  rules: [
+                    {
+                      required: true,
+                      setFieldsValue: productName.value,
+                    },
+                  ],
+                })(
+                    <Input placeholder="Product's name"
+                           style={{ width: '100%', fontSize: 16 }}
+                           onChange={this.props.onProductNameChange}/>,
+                )}
+              </FormItem>
+              <FormItem key="1">
                 <span style={{ display: 'flex', }}>
-                  <b>Permalink: </b>
-                  {productLink.length === 0 ?
-                      <span style={{ display: 'flex', marginLeft: 3 }}>
-                        products/{productName.value}
-                      </span>
-                      :
-                      <span style={{ display: 'flex', marginLeft: 3 }}>
-                        products/{productLink}
-                      </span>}
-                  {this.state.editingProductLink ?
-                      <Input style={{ marginLeft: 10 }}
-                             value={productLink}
-                             onChange={this.props.onProductLinkChange}/>
-                      :
-                      null
-                  }
+                  <span style={{ display: 'flex', }}>
+                    <b>Permalink: </b>
+                    {productLink.length === 0 ?
+                        <span style={{ display: 'flex', marginLeft: 3 }}>
+                          products/{productName.value}
+                        </span>
+                        :
+                        <span style={{ display: 'flex', marginLeft: 3 }}>
+                          products/{productLink}
+                        </span>}
+                    {this.state.editingProductLink ?
+                        <Input style={{ marginLeft: 10 }}
+                               value={productLink}
+                               onChange={this.props.onProductLinkChange}/>
+                        :
+                        null
+                    }
+                  </span>
+                  <Button
+                      type={this.state.editingProductLink ?
+                          'primary' :
+                          'default'}
+                      style={{ marginLeft: 10 }}
+                      onClick={this.onEditProductLinkToggle}>
+                        {this.state.editingProductLink ?
+                            <span>
+                              Save
+                            </span>
+                            :
+                            <span>
+                              Edit
+                            </span>
+                        }
+                  </Button>
                 </span>
-                <Button
-                    type={this.state.editingProductLink ? 'primary' : 'default'}
-                    style={{ marginLeft: 10 }}
-                    onClick={this.onEditProductLinkToggle}>
-                      {this.state.editingProductLink ?
-                          <span>
-                            Save
-                          </span>
-                          :
-                          <span>
-                            Edit
-                          </span>
-                      }
-                </Button>
-              </span>
-            </FormItem>
-            <FormItem key="2">
-              <ReactQuill theme="snow"
-                          onChange={this.props.onProductDescriptionChange}
-                          value={this.props.productDescription}
-                          modules={modules}
-                          formats={formats}/>
-            </FormItem>
+              </FormItem>
+              <FormItem key="2">
+                <ReactQuill theme="snow"
+                            onChange={this.props.onProductDescriptionChange}
+                            value={this.props.productDescription}
+                            modules={modules}
+                            formats={formats}/>
+              </FormItem>
+            </Card>
             <span>
               <Card noHovering={true}
+                    loading={this.props.fetchingCategories}
                     bodyStyle={{
                       padding: cardMediaQuery.matches ? '8px 8px' : '8px 14px',
                     }}>
@@ -267,7 +278,8 @@ class CreateProduct extends Component {
                           },
                         ],
                       })(
-                          <Input onChange={this.props.onProductPriceChange}/>,
+                          <Input onChange={this.props.onProductPriceChange}
+                                 placeholder="Use a dot to separate decimals."/>,
                       )}
                     </FormItem>
                     <FormItem key="7"
@@ -277,7 +289,6 @@ class CreateProduct extends Component {
                       {getFieldDecorator('Product\'s sale price', {
                         rules: [
                           {
-                            required: true,
                             setFieldsValue: this.props.salePrice,
                           },
                         ],
@@ -357,6 +368,7 @@ class CreateProduct extends Component {
           </Form>
           <span style={{ display: 'flex', flexDirection: 'column' }}>
             <Card noHovering={true}
+                  loading={this.props.fetchingCategories}
                   title="Publish"
                   bodyStyle={{
                     display: 'flex',
@@ -371,7 +383,23 @@ class CreateProduct extends Component {
                 <span><Icon type="key"/> Status: <b>Not published</b></span>
               </span>
               <span style={{ display: 'flex', fontSize: 14, paddingBottom: 8 }}>
-                <span><Icon type="eye"/> Visibility: <b>Private</b></span>
+                <span>
+                  <Form>
+                    <FormItem key="13"
+                              label={<span style={{
+                                fontSize: 14,
+                                fontWeight: 300,
+                              }}>
+                                <Icon type="eye"
+                                      style={{ marginRight: 2 }}/>Visibility</span>}
+                              style={{ display: 'flex', margin: 0 }}>
+                      <Checkbox checked={this.props.productVisibility}
+                                onChange={this.props.onProductVisibilityChange}>
+                        {this.props.productVisibility ? 'Public' : 'Private'}
+                      </Checkbox>
+                    </FormItem>
+                  </Form>
+                </span>
               </span>
               <span style={{ display: 'flex', fontSize: 14, paddingBottom: 8 }}>
                 <span><Icon
@@ -379,6 +407,7 @@ class CreateProduct extends Component {
               </span>
             </Card>
             <Card noHovering={true}
+                  loading={this.props.fetchingCategories}
                   bodyStyle={{
                     display: 'flex',
                     width: cardMediaQuery.matches ? 285 : 300,
@@ -401,8 +430,14 @@ class CreateProduct extends Component {
                 flex: 1,
               }}>
                 <Button type='primary'
-                        htmlType="submit">
-                Publish
+                        htmlType="submit"
+                        onClick={this.props.onSave}
+                        loading={this.props.savingProduct}>
+                  {this.props.savingProduct ?
+                      <span>Working...</span>
+                      :
+                      <span>Publish</span>
+                  }
               </Button>
               </span>
             </Card>
@@ -419,11 +454,13 @@ class CreateProduct extends Component {
                     marginTop: 20,
                   }}>
               <Table {...this.tableState}
+                     loading={this.props.fetchingCategories}
                      rowSelection={rowSelection}
                      columns={categoriesTableColumns}
                      dataSource={categoriesTableContent}/>
             </Card>
             <Card noHovering={true}
+                  loading={this.props.fetchingCategories}
                   title="Product Tags"
                   bodyStyle={{
                     display: 'flex',
@@ -470,6 +507,7 @@ class CreateProduct extends Component {
               })}
             </Card>
             <Card noHovering={true}
+                  loading={this.props.fetchingCategories}
                   title="Product Thumbnail"
                   bodyStyle={{
                     display: 'flex',

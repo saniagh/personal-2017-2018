@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { notification } from 'antd';
 import { connect } from 'react-redux';
 import {
   onShowUploadsModalAction,
@@ -62,7 +63,7 @@ class CreateProductView extends Component {
     this.handlers = createHandlers(this.props.dispatch);
 
     // imageUrl from props is used as thumbnail
-    // productPicturess array is used as a gallery
+    // productPictures array is used as a gallery
 
     this.state = {
       fetchingCategories: false,
@@ -74,9 +75,9 @@ class CreateProductView extends Component {
         errorMsg: '',
       },
       productLink: '',
+      hasEditedLink: false,
       productCategory: [],
       productDescription: '',
-      productPictures: '',
       sku: '',
       productPrice: '',
       salePrice: '',
@@ -90,7 +91,11 @@ class CreateProductView extends Component {
       tags: [],
       tagInput: '',
       productFeatured: false,
+      productVisibility: true,
       latestModification: '',
+      savingProduct: false,
+      savedProduct: false,
+      savingProductError: false,
     };
   }
 
@@ -148,6 +153,11 @@ class CreateProductView extends Component {
         },
         latestModification: new Date(),
       });
+
+    if (this.state.hasEditedLink === false)
+      this.setState({
+        productLink: e.target.value,
+      });
   };
 
   onProductLinkChange = (e) => {
@@ -155,9 +165,11 @@ class CreateProductView extends Component {
       this.setState({
         productLink: e,
         latestModification: new Date(),
+        hasEditedLink: true,
       }); else this.setState({
       productLink: e.target.value,
       latestModification: new Date(),
+      hasEditedLink: true,
     });
   };
 
@@ -166,10 +178,6 @@ class CreateProductView extends Component {
       productDescription: value,
       latestModification: new Date(),
     });
-  };
-
-  onProductPicturesChange = () => {
-
   };
 
   onSKUChange = (e) => {
@@ -260,6 +268,7 @@ class CreateProductView extends Component {
     this.setState({
       tags: tags,
       tagInput: '',
+      latestModification: new Date(),
     });
   };
 
@@ -273,6 +282,7 @@ class CreateProductView extends Component {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
     this.setState({
       tags: tags,
+      latestModification: new Date(),
     });
   };
 
@@ -285,6 +295,14 @@ class CreateProductView extends Component {
   onProductFeaturedToggle = () => {
     this.setState({
       productFeatured: !this.state.productFeatured,
+      latestModification: new Date(),
+    });
+  };
+
+  onProductVisibilityChange = () => {
+    this.setState({
+      productVisibility: !this.state.productVisibility,
+      latestModification: new Date(),
     });
   };
 
@@ -304,6 +322,69 @@ class CreateProductView extends Component {
     this.handlers.onHideUploadsMultipleModal();
   };
 
+  onSave = () => {
+    this.setState({
+      savingProduct: true,
+    });
+
+    axios({
+      method: 'post',
+      url: '/product/add-product',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+      data: qs.stringify({
+        productName: this.state.productName.value,
+        productLink: this.state.productLink,
+        productCategory: JSON.stringify(this.state.productCategory),
+        productDescription: this.state.productDescription,
+        productThumbnail: this.props.imageUrl,
+        productPictures: JSON.stringify(this.props.imageUrlsArray),
+        sku: this.state.sku,
+        productPrice: this.state.productPrice,
+        salePrice: this.state.salePrice,
+        stockStatus: this.state.stockStatus,
+        showStockQuantity: this.state.showStockQuantity,
+        stockQuantity: this.state.stockQuantity,
+        shippingFee: this.state.shippingFee,
+        availableInStore: this.state.availableInStore,
+        upSellLink: this.state.upSellLink,
+        crossSellLink: this.state.crossSellLink,
+        tags: JSON.stringify(this.state.tags),
+        productFeatured: this.state.productFeatured,
+        productVisibility: this.state.productVisibility,
+      }),
+    }).then(() => {
+
+      notification.success({
+        message: 'Success!',
+        description: 'The product has been successfully created and is now visible on the website.',
+      });
+
+      // Important because the variable is shared between categories and adding a product
+      this.handlers.onChooseMultipleImagesHandler([]);
+      this.handlers.onChooseImageHandler('');
+
+      this.setState({
+        savingProduct: false,
+        savedProduct: true,
+        savingProductError: false,
+      });
+    }).catch(() => {
+
+      notification.error({
+        message: 'Failure',
+        description: 'The product has not been added to the website.',
+      });
+
+      this.setState({
+        savingProduct: false,
+        savedProduct: false,
+        savingProductError: true,
+      });
+    });
+  };
+
   render() {
     return <CreateProduct router={this.context.router}
                           fetchingCategories={this.state.fetchingCategories}
@@ -314,7 +395,6 @@ class CreateProductView extends Component {
                           productLink={this.state.productLink}
                           productCategory={this.state.productCategory}
                           productDescription={this.state.productDescription}
-                          productPictures={this.state.productPictures}
                           sku={this.state.sku}
                           productPrice={this.state.productPrice}
                           salePrice={this.state.salePrice}
@@ -328,17 +408,19 @@ class CreateProductView extends Component {
                           tags={this.state.tags}
                           tagInput={this.state.tagInput}
                           productFeatured={this.state.productFeatured}
+                          productVisibility={this.state.productVisibility}
                           latestModification={this.state.latestModification}
                           isModalVisible={this.props.isModalVisible}
                           imageUrl={this.props.imageUrl}
                           isModalVisibleMultiple={this.props.isModalVisibleMultiple}
                           imageUrlsArray={this.props.imageUrlsArray}
+                          savingProduct={this.state.savingProduct}
+                          savedProduct={this.state.savedProduct}
+                          savingProductError={this.state.savingProductError}
                           onRowSelection={this.onRowSelection}
                           onProductNameChange={this.onProductNameChange}
                           onProductLinkChange={this.onProductLinkChange}
-                          onProductCategoryChange={this.onProductCategoryChange}
                           onProductDescriptionChange={this.onProductDescriptionChange}
-                          onproductPicturesChange={this.onproductPicturesChange}
                           onSKUChange={this.onSKUChange}
                           onProductPriceChange={this.onProductPriceChange}
                           onSalePriceChange={this.onSalePriceChange}
@@ -354,12 +436,14 @@ class CreateProductView extends Component {
                           onRemoveTag={this.onRemoveTag}
                           onTagInputChange={this.onTagInputChange}
                           onProductFeaturedToggle={this.onProductFeaturedToggle}
+                          onProductVisibilityChange={this.onProductVisibilityChange}
                           onShowUploadsModal={this.onShowUploadsModal}
                           onHideUploadsModal={this.onHideUploadsModal}
                           onChooseImageHandler={this.handlers.onChooseImageHandler}
                           onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
                           onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}
-                          onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}/>;
+                          onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}
+                          onSave={this.onSave}/>;
   }
 }
 

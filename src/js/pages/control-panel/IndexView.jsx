@@ -11,6 +11,7 @@ import Index from './Index.jsx';
 import CategoriesView from './CategoriesView.jsx';
 import ProductView from './ProductView.jsx';
 import CreateProductView from './CreateProductView.jsx';
+import SettingsView from './SettingsView.jsx';
 
 class IndexView extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class IndexView extends Component {
 
     this.state = {
       collapsed: false,
+      selectedKeys: [],
     };
   }
 
@@ -26,6 +28,15 @@ class IndexView extends Component {
       collapsed: !this.state.collapsed,
     });
   };
+
+  componentDidMount() {
+    this.setState({ selectedKeys: [this.props.location.pathname] });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ selectedKeys: [nextProps.location.pathname] });
+    this.forceUpdate();
+  }
 
   render() {
 
@@ -45,7 +56,7 @@ class IndexView extends Component {
                 mediaQuery.matches ?
                     {
                       overflow: 'auto',
-                      height: '100vh',
+                      height: 'auto',
                       background: '#fff',
                       position: 'fixed',
                       left: 0,
@@ -57,68 +68,73 @@ class IndexView extends Component {
           >
             { //Triggers re-render of the menu preventing submenu closing itself
               !this.state.collapsed ?
-                <Menu theme="light"
-                      selectedKey={[`${this.context.router.route.location.pathname}`]}
-                      defaultSelectedKeys={[`${this.context.router.route.location.pathname}`]}
-                      defaultOpenKeys={['/control-panel/products-submenu']}
-                      mode="inline"
-                      onClick={mediaQuery.matches ?
-                          this.onCollapse :
-                          console.log('')}>
-                  {mediaQuery.matches ?
-                      <MenuItem key="control-navigator"
-                                style={{
-                                  display: 'flex',
-                                  justifyContent: 'center',
-                                }}>
+                  <Menu theme="light"
+                        selectedKeys={this.state.selectedKeys}
+                        defaultSelectedKeys={this.state.selectedKeys}
+                        defaultOpenKeys={['/control-panel/products-submenu']}
+                        mode="inline"
+                        onClick={mediaQuery.matches ?
+                            this.onCollapse :
+                            console.log('')}>
+                    {mediaQuery.matches ?
+                        <MenuItem key="control-navigator"
+                                  style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                  }}>
                 <span>
                 <Icon
                     className="trigger"
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 />
                   </span>
-                      </MenuItem>
-                      :
-                      <MenuItem disabled={true}
-                                style={{ cursor: 'default' }}>
-                        <div style={{ height: 32 }}/>
-                      </MenuItem>
-                  }
-                  <MenuItem key="/">
-                    <Link to={`/`}/>
-                    <Icon type="double-left"/>
-                    <span>Return to site</span>
-                  </MenuItem>
-                  <MenuItem key="/control-panel">
-                    <Link to={`/control-panel`}/>
-                    <Icon type="home"/>
-                    <span>Control Panel</span>
-                  </MenuItem>
-                  <SubMenu key="/control-panel/products-submenu"
-                           title={
-                             <span>
+                        </MenuItem>
+                        :
+                        <MenuItem disabled={true}
+                                  style={{ cursor: 'default' }}>
+                          <div style={{ height: 32 }}/>
+                        </MenuItem>
+                    }
+                    <MenuItem key="/">
+                      <Link to={`/`}/>
+                      <Icon type="double-left"/>
+                      <span>Return to site</span>
+                    </MenuItem>
+                    <MenuItem key="/control-panel">
+                      <Link to={`/control-panel`}/>
+                      <Icon type="home"/>
+                      <span>Control Panel</span>
+                    </MenuItem>
+                    <SubMenu key="/control-panel/products-submenu"
+                             title={
+                               <span>
                            <Link to={`/control-panel/products`}/>
                            <Icon type="shopping-cart"/>
                          <span>
                            Products
                          </span>
                        </span>}>
-                    <MenuItem key="/control-panel/products">
-                      <Link to={`/control-panel/products`}/>
-                      <span>All products</span>
+                      <MenuItem key="/control-panel/products">
+                        <Link to={`/control-panel/products`}/>
+                        <span>All products</span>
+                      </MenuItem>
+                      <MenuItem key="/control-panel/products/add-a-product">
+                        <Link to={`/control-panel/products/add-a-product`}/>
+                        <span>Add Product</span>
+                      </MenuItem>
+                      <MenuItem key="/control-panel/categories">
+                        <Link to={`/control-panel/categories`}/>
+                        <span>Categories</span>
+                      </MenuItem>
+                    </SubMenu>
+                    <MenuItem key="/control-panel/settings">
+                      <Link to={`/control-panel/settings`}/>
+                      <Icon type="setting"/>
+                      <span>Settings</span>
                     </MenuItem>
-                    <MenuItem key="/control-panel/products/add-a-product">
-                      <Link to={`/control-panel/products/add-a-product`}/>
-                      <span>Add Product</span>
-                    </MenuItem>
-                    <MenuItem key="/control-panel/categories">
-                      <Link to={`/control-panel/categories`}/>
-                      <span>Categories</span>
-                    </MenuItem>
-                  </SubMenu>
-                </Menu>
-                :
-                null
+                  </Menu>
+                  :
+                  null
             }
 
           </Sider>
@@ -139,6 +155,12 @@ class IndexView extends Component {
               {this.context.router.route.location.pathname ===
               '/control-panel/products/add-a-product' ?
                   <span>Add Product</span>
+                  :
+                  null
+              }
+              {this.context.router.route.location.pathname ===
+              '/control-panel/settings' ?
+                  <span>Settings</span>
                   :
                   null
               }
@@ -167,6 +189,9 @@ class IndexView extends Component {
               <Route exact
                      path={`${this.props.match.url}/products/add-a-product`}
                      component={CreateProductView}/>
+              <Route exact
+                     path={`${this.props.match.url}/settings`}
+                     component={SettingsView}/>
             </Content>
           </Layout>
         </Layout>

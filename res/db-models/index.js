@@ -15,4 +15,5 @@ module.exports.connect = (dbUri) => {
   require('./models/products-categories.js');
   require('./models/uploads.js');
   require('./models/product.js');
+  require('./models/settings.js');
 };

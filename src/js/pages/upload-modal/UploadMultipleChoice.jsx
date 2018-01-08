@@ -59,7 +59,6 @@ class UploadMultipleChoice extends Component {
               </Button>
             </div>
             <div style={{ maxWidth: '100vh !important' }}>
-              ss
               <Gallery images={this.props.uploads}
                        onSelectImage={this.props.onSelectImage}
                        enableLightbox={false}

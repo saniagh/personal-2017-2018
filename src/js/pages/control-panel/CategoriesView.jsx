@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { notification } from 'antd';
 import { connect } from 'react-redux';
 import {
   onShowUploadsModalAction,
@@ -67,6 +68,7 @@ class CategoriesView extends Component {
       deletingCategories: false,
       deletedCategories: false,
       deletingCategoriesError: false,
+      loadedPage: false,
     };
   }
 
@@ -83,6 +85,7 @@ class CategoriesView extends Component {
         fetchedCategories: true,
         fetchingCategoriesError: false,
         categories: res.data.categories,
+        loadedPage: true,
       });
     }).catch(() => {
       this.setState({
@@ -191,6 +194,11 @@ class CategoriesView extends Component {
       }),
     }).then(() => {
 
+      notification.success({
+        message: 'Success!',
+        description: 'The category has been successfully added.',
+      });
+
       // Important because the variable is shared between categories and adding a product
       this.handlers.onChooseImageHandler('');
 
@@ -234,7 +242,12 @@ class CategoriesView extends Component {
         });
       });
     }).catch((err) => {
-      console.log(err);
+
+      notification.error({
+        message: 'Failure',
+        description: 'The category has not been added.',
+      });
+
       this.setState({
         savingCategory: false,
         savedCategory: false,
@@ -268,6 +281,12 @@ class CategoriesView extends Component {
         selectedRowsDescriptors: selectedRowsDescriptors,
       }),
     }).then(() => {
+
+      notification.success({
+        message: 'Success!',
+        description: 'The selected categories have been successfully deleted.',
+      });
+
       this.setState({
         deletingCategories: false,
         deletedCategories: true,
@@ -293,6 +312,12 @@ class CategoriesView extends Component {
         });
       });
     }).catch(() => {
+
+      notification.error({
+        message: 'Failure',
+        description: 'The selected categories have not been deleted.',
+      });
+
       this.setState({
         deletingCategories: false,
         deletedCategories: false,
@@ -329,6 +354,7 @@ class CategoriesView extends Component {
                        deletingCategoriesError={this.state.deletingCategoriesError}
                        isModalVisible={this.props.isModalVisible}
                        imageUrl={this.props.imageUrl}
+                       loadedPage={this.state.loadedPage}
                        onCategoryNameChange={this.onCategoryNameChange}
                        onCategoryDescriptorChange={this.onCategoryDescriptorChange}
                        onCategoryParentChange={this.onCategoryParentChange}

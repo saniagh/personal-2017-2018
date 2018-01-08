@@ -10,15 +10,23 @@ const ProductSchema = new mongoose.Schema({
   },
   productCategory: {
     type: Array,
+    default: ['Uncategorized'],
   },
   productDescription: {
     type: String,
+    default: '<p></p>',
   },
-  productPicture: {
+  productThumbnail: {
     type: String,
+    default: '',
+  },
+  productPictures: {
+    type: Array,
+    default: [],
   },
   sku: {
     type: String,
+    default: '',
   },
   productPrice: {
     type: Number,
@@ -29,18 +37,23 @@ const ProductSchema = new mongoose.Schema({
   },
   stockStatus: {
     type: Boolean,
+    default: true,
   },
   showStockQuantity: {
     type: Boolean,
+    default: true,
   },
   stockQuantity: {
     type: Number,
+    default: 0,
   },
   shippingFee: {
     type: Number,
+    default: 0,
   },
   availableInStore: {
     type: Boolean,
+    default: false,
   },
   upSellLink: {
     type: String,
@@ -52,22 +65,31 @@ const ProductSchema = new mongoose.Schema({
   },
   tags: {
     type: Array,
+    default: [],
   },
   productFeatured: {
     type: Boolean,
+    default: false,
   },
   productStatus: {
     type: String,
+    default: 'Published',
   },
   productVisibility: {
-    type: String,
+    type: Boolean,
+    default: true,
   },
   publishDate: {
     type: Date,
     default: Date.now(),
   },
+  latestModification: {
+    type: Date,
+    default: Date.now(),
+  },
   viewCount: {
     type: Number,
+    default: 0,
   },
   orderInList: {
     type: Number,
