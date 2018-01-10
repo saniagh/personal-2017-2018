@@ -14,6 +14,11 @@ class ProductView extends Component {
       fetchedProducts: false,
       fetchingProductsError: false,
       products: [],
+      fetchingSettings: false,
+      fetchedSettings: false,
+      fetchingSettingsError: false,
+      settings: [],
+      currency: [],
       selectedRowsId: '',
       deletingProducts: false,
       deletedProducts: false,
@@ -55,6 +60,7 @@ class ProductView extends Component {
   componentDidMount() {
     this.setState({
       fetchingProducts: true,
+      fetchingSettings: true,
     });
     axios({
       method: 'get',
@@ -71,6 +77,33 @@ class ProductView extends Component {
       this.setState({
         fetchingProducts: false,
         fetchingProductsError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+      });
+    });
+    axios({
+      method: 'get',
+      url: '/settings/get-settings',
+    }).then((res) => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: true,
+        fetchingSettingsError: false,
+        settings: res.data.settings,
+        currency: res.data.settings[0].currency,
+        loadedPage: true,
+      });
+    }).catch(() => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: false,
+        fetchingSettingsError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
       });
     });
   }
@@ -367,7 +400,7 @@ class ProductView extends Component {
         this.state.tagInput.indexOf(',') !== -1) {
       let multipleTags = this.state.tagInput.split(',');
       for (let i = 0; i < multipleTags.length; i++) {
-        if (multipleTags[i])
+        if (multipleTags[i] && !tags.includes(multipleTags[i]))
           tags = [...tags, multipleTags[i]];
       }
     }
@@ -488,6 +521,11 @@ class ProductView extends Component {
                     fetchedProducts={this.state.fetchedProducts}
                     fetchingProductsError={this.state.fetchingProductsError}
                     products={this.state.products}
+                    fetchingSettings={this.state.fetchingSettings}
+                    fetchedSettings={this.state.fetchedSettings}
+                    fetchingSettingsError={this.state.fetchingSettingsError}
+                    settings={this.state.settings}
+                    currency={this.state.currency}
                     deletingProducts={this.state.deletingProducts}
                     deletedProducts={this.state.deletedProducts}
                     deletingProductsError={this.state.deletingProductsError}

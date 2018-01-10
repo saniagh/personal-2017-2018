@@ -107,7 +107,8 @@
   padding: 14px; }
   @media screen and (max-width: 1160px) {
     .gallery-container {
-      width: 100%; } }
+      width: 100%;
+      padding: 0; } }
 
 .info-container {
   width: 30%;

@@ -45,8 +45,12 @@ class Product extends Component {
         },
         sku: product.sku,
         stockStatus: product.stockStatus,
-        productPrice: product.productPrice,
-        salePrice: product.salePrice,
+        productPrice: nextProps.fetchedSettings ?
+            product.productPrice + ' ' + nextProps.currency[1] :
+            product.productPrice,
+        salePrice: nextProps.fetchedSettings ?
+            product.salePrice + ' ' + nextProps.currency[1] :
+            product.productPrice,
         productCategory: categoriesString,
         productFeatured: {
           value: product.productFeatured,
@@ -88,8 +92,8 @@ class Product extends Component {
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
-            productPrice: product.productPrice,
-            salePrice: product.salePrice,
+            productPrice: product.productPrice + ' ' + this.props.currency[1],
+            salePrice: product.salePrice + ' ' + this.props.currency[1],
             productCategory: categoriesString,
             productFeatured: {
               value: product.productFeatured,
@@ -129,8 +133,8 @@ class Product extends Component {
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
-            productPrice: product.productPrice,
-            salePrice: product.salePrice,
+            productPrice: product.productPrice + ' ' + this.props.currency[1],
+            salePrice: product.salePrice + ' ' + this.props.currency[1],
             productCategory: categoriesString,
             productFeatured: {
               value: product.productFeatured,
@@ -175,8 +179,8 @@ class Product extends Component {
           },
           sku: product.sku,
           stockStatus: product.stockStatus,
-          productPrice: product.productPrice,
-          salePrice: product.salePrice,
+          productPrice: product.productPrice + ' ' + this.props.currency[1],
+          salePrice: product.salePrice + ' ' + this.props.currency[1],
           productCategory: categoriesString,
           productFeatured: {
             value: product.productFeatured,
@@ -247,6 +251,10 @@ class Product extends Component {
       productVisibility: this.props.productVisibility,
       onProductVisibilityChange: this.props.onProductVisibilityChange,
       latestModification: this.props.latestModification,
+      fetchingSettings: this.props.fetchingSettings,
+      fetchedSettings: this.props.fetchedSettings,
+      fetchingSettingsError: this.props.fetchingSettingsError,
+      currency: this.props.currency,
     };
 
     let productsTableColumns = [];

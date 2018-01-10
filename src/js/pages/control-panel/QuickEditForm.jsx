@@ -166,7 +166,10 @@ const QuickEditForm = Form.create({
                       )}
                     </FormItem>
                     <FormItem key="6"
-                              label="Regular Price(ADD_CURRENCY)"
+                              label={props.fetchedSettings ?
+                                  `Regular Price (` + props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The price that you want to sell this product for, without discounts and excluding shipping fees"
                               {...formItemLayout}>
                       {getFieldDecorator('productPrice', {
@@ -182,7 +185,10 @@ const QuickEditForm = Form.create({
                       )}
                     </FormItem>
                     <FormItem key="7"
-                              label="Sale Price(ADD_CURRENCY)"
+                              label={props.fetchedSettings ?
+                                  `Sale Price (` + props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The sale price with applied discounts."
                               {...formItemLayout}>
                       {getFieldDecorator('salePrice', {
@@ -192,7 +198,8 @@ const QuickEditForm = Form.create({
                           },
                         ],
                       })(
-                          <Input onChange={props.onSalePriceChange}/>,
+                          <Input onChange={props.onSalePriceChange}
+                                 placeholder="Use a dot to separate decimals."/>,
                       )}
                     </FormItem>
                 </TabPane>
@@ -234,7 +241,10 @@ const QuickEditForm = Form.create({
                 <TabPane key="2"
                          tab={<span><Icon type="car"/>Shipping</span>}>
                     <FormItem key="11"
-                              label="Shipping fee(ADD_CURRENCY)"
+                              label={props.fetchedSettings ?
+                                  `Shipping fee (` + props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The money you charge for shipping."
                               style={{ padding: 10, }}
                               {...formItemLayout}>
@@ -245,7 +255,8 @@ const QuickEditForm = Form.create({
                           },
                         ],
                       })(
-                          <Input onChange={props.onShippingFeeChange}/>,
+                          <Input onChange={props.onShippingFeeChange}
+                                 placeholder="Use a dot to separate decimals."/>,
                       )}
                     </FormItem>
                     <FormItem key="12"
@@ -269,6 +280,7 @@ const QuickEditForm = Form.create({
                   display: 'flex',
                   flexDirection: 'column',
                   width: cardMediaQuery.matches ? 285 : 300,
+                  boxSizing: 'border-box',
                 }}
                 style={{
                   marginLeft: cardMediaQuery.matches ? 0 : 20,
@@ -305,7 +317,7 @@ const QuickEditForm = Form.create({
                 loading={props.fetchingCategories}
                 bodyStyle={{
                   display: 'flex',
-                  width: cardMediaQuery.matches ? 285 : 300,
+                  width: cardMediaQuery.matches ? 269 : 300,
                   padding: cardMediaQuery.matches ? '8px 8px' : '8px 14px',
                 }}
                 style={{
@@ -324,6 +336,7 @@ const QuickEditForm = Form.create({
               justifyContent: 'flex-end',
               flex: 1,
             }}>
+              <div>
                   <Button type='primary'
                           htmlType="submit"
                           onClick={props.onQuickUpdateFinish}
@@ -334,6 +347,7 @@ const QuickEditForm = Form.create({
                         <span>Publish</span>
                     }
                 </Button>
+                </div>
                 </span>
           </Card>
           <Card noHovering={true}
@@ -341,7 +355,7 @@ const QuickEditForm = Form.create({
                 bodyStyle={{
                   display: 'flex',
                   flexDirection: 'column',
-                  width: cardMediaQuery.matches ? 285 : 300,
+                  width: cardMediaQuery.matches ? 269 : 300,
                   padding: 5,
                 }}
                 style={{
@@ -360,7 +374,7 @@ const QuickEditForm = Form.create({
                 bodyStyle={{
                   display: 'flex',
                   flexDirection: 'column',
-                  width: cardMediaQuery.matches ? 285 : 300,
+                  width: cardMediaQuery.matches ? 269 : 300,
                   padding: 5,
                 }}
                 style={{

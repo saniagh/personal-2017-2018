@@ -70,6 +70,11 @@ class CreateProductView extends Component {
       fetchedCategories: false,
       fetchingCategoriesError: false,
       categories: [],
+      fetchingSettings: false,
+      fetchedSettings: false,
+      fetchingSettingsError: false,
+      settings: [],
+      currency: [],
       productName: {
         value: '',
         errorMsg: '',
@@ -102,6 +107,7 @@ class CreateProductView extends Component {
   componentDidMount() {
     this.setState({
       fetchingCategories: true,
+      fetchingSettings: true,
     });
     axios({
       method: 'get',
@@ -117,6 +123,33 @@ class CreateProductView extends Component {
       this.setState({
         fetchingCategories: false,
         fetchingCategoriesError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+      });
+    });
+    axios({
+      method: 'get',
+      url: '/settings/get-settings',
+    }).then((res) => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: true,
+        fetchingSettingsError: false,
+        settings: res.data.settings,
+        currency: res.data.settings[0].currency,
+        loadedPage: true,
+      });
+    }).catch(() => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: false,
+        fetchingSettingsError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
       });
     });
   }
@@ -154,23 +187,31 @@ class CreateProductView extends Component {
         latestModification: new Date(),
       });
 
-    if (this.state.hasEditedLink === false)
+    if (this.state.hasEditedLink === false) {
+      let str = e.target.value.toLowerCase().replace(/\s/g, '-');
+      console.log(str);
       this.setState({
-        productLink: e.target.value,
+        productLink: str,
       });
+    }
   };
 
   onProductLinkChange = (e) => {
-    if (typeof e === 'string')
+    if (typeof e === 'string') {
+      let str = e.toLowerCase().replace(/\s/g, '-');
       this.setState({
-        productLink: e,
+        productLink: str,
         latestModification: new Date(),
         hasEditedLink: true,
-      }); else this.setState({
-      productLink: e.target.value,
-      latestModification: new Date(),
-      hasEditedLink: true,
-    });
+      });
+    } else {
+      let str = e.target.value.toLowerCase().replace(/\s/g, '-');
+      this.setState({
+        productLink: str,
+        latestModification: new Date(),
+        hasEditedLink: true,
+      });
+    }
   };
 
   onProductDescriptionChange = (value) => {
@@ -260,7 +301,7 @@ class CreateProductView extends Component {
         this.state.tagInput.indexOf(',') !== -1) {
       let multipleTags = this.state.tagInput.split(',');
       for (let i = 0; i < multipleTags.length; i++) {
-        if (multipleTags[i])
+        if (multipleTags[i] && !tags.includes(multipleTags[i]))
           tags = [...tags, multipleTags[i]];
       }
     }
@@ -391,6 +432,11 @@ class CreateProductView extends Component {
                           fetchedCategories={this.state.fetchedCategories}
                           fetchingCategoriesError={this.state.fetchingCategoriesError}
                           categories={this.state.categories}
+                          fetchingSettings={this.state.fetchingSettings}
+                          fetchedSettings={this.state.fetchedSettings}
+                          fetchingSettingsError={this.state.fetchingSettingsError}
+                          settings={this.state.settings}
+                          currency={this.state.currency}
                           productName={this.state.productName}
                           productLink={this.state.productLink}
                           productCategory={this.state.productCategory}

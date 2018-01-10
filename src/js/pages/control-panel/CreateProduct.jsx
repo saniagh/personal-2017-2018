@@ -177,7 +177,8 @@ class CreateProduct extends Component {
                     <b>Permalink: </b>
                     {productLink.length === 0 ?
                         <span style={{ display: 'flex', marginLeft: 3 }}>
-                          products/{productName.value}
+                          products/{productName.value.toLowerCase().
+                            replace(/\s/g, '-')}
                         </span>
                         :
                         <span style={{ display: 'flex', marginLeft: 3 }}>
@@ -267,7 +268,10 @@ class CreateProduct extends Component {
                       )}
                     </FormItem>
                     <FormItem key="6"
-                              label="Regular Price(ADD_CURRENCY)"
+                              label={this.props.fetchedSettings ?
+                                  `Regular Price (` + this.props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The price that you want to sell this product for, without discounts and excluding shipping fees"
                               {...formItemLayout}>
                       {getFieldDecorator('Product\'s regular price', {
@@ -283,7 +287,10 @@ class CreateProduct extends Component {
                       )}
                     </FormItem>
                     <FormItem key="7"
-                              label="Sale Price(ADD_CURRENCY)"
+                              label={this.props.fetchedSettings ?
+                                  `Sale Price (` + this.props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The sale price with applied discounts."
                               {...formItemLayout}>
                       {getFieldDecorator('Product\'s sale price', {
@@ -293,7 +300,8 @@ class CreateProduct extends Component {
                           },
                         ],
                       })(
-                          <Input onChange={this.props.onSalePriceChange}/>,
+                          <Input onChange={this.props.onSalePriceChange}
+                                 placeholder="Use a dot to separate decimals."/>,
                       )}
                     </FormItem>
                   </TabPane>
@@ -334,7 +342,10 @@ class CreateProduct extends Component {
                   <TabPane key="2"
                            tab={<span><Icon type="car"/>Shipping</span>}>
                     <FormItem key="11"
-                              label="Shipping fee(ADD_CURRENCY)"
+                              label={this.props.fetchedSettings ?
+                                  `Shipping fee (` + this.props.currency[1] +
+                                  `)` :
+                                  `Loading`}
                               help="The money you charge for shipping."
                               style={{ padding: 10, }}
                               {...formItemLayout}>
@@ -345,7 +356,8 @@ class CreateProduct extends Component {
                           },
                         ],
                       })(
-                          <Input onChange={this.props.onShippingFeeChange}/>,
+                          <Input onChange={this.props.onShippingFeeChange}
+                                 placeholder="Use a dot to separate decimals."/>,
                       )}
                     </FormItem>
                     <FormItem key="12"
@@ -410,7 +422,7 @@ class CreateProduct extends Component {
                   loading={this.props.fetchingCategories}
                   bodyStyle={{
                     display: 'flex',
-                    width: cardMediaQuery.matches ? 285 : 300,
+                    width: cardMediaQuery.matches ? 269 : 300,
                     padding: cardMediaQuery.matches ? '8px 8px' : '8px 14px',
                   }}
                   style={{
@@ -446,7 +458,7 @@ class CreateProduct extends Component {
                   bodyStyle={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: cardMediaQuery.matches ? 285 : 300,
+                    width: cardMediaQuery.matches ? 269 : 300,
                     padding: 5,
                   }}
                   style={{
@@ -465,7 +477,7 @@ class CreateProduct extends Component {
                   bodyStyle={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: cardMediaQuery.matches ? 285 : 300,
+                    width: cardMediaQuery.matches ? 269 : 300,
                     padding: 5,
                   }}
                   style={{
@@ -512,7 +524,7 @@ class CreateProduct extends Component {
                   bodyStyle={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: cardMediaQuery.matches ? 285 : 300,
+                    width: cardMediaQuery.matches ? 270 : 300,
                     padding: 5,
                   }}
                   style={{
@@ -525,13 +537,13 @@ class CreateProduct extends Component {
                     <Card bordered={false}
                           noHovering={true}
                           bodyStyle={{
-                            width: cardMediaQuery.matches ? 275 : 290,
+                            width: cardMediaQuery.matches ? 260 : 290,
                             padding: 0,
                           }}>
                       <img className="product-thumbnail-create"
                            style={{
                              maxWidth: cardMediaQuery.matches ?
-                                 275 :
+                                 260 :
                                  290,
                            }}
                            src={this.props.imageUrl}

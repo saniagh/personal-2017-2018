@@ -64,12 +64,20 @@ class UploadC extends Component {
                    key="1">
             <div className="uploads-container">
               <div className="gallery-container">
-                <Gallery images={this.props.uploads}
-                         onSelectImage={this.props.onSelectImage}
-                         enableLightbox={false}
-                         onClickThumbnail={this.props.onSelectImage}
-                         multiple
-                />
+                <Card bordered={false}
+                      noHovering={true}
+                      loading={this.props.fetchingUploads}
+                      bodyStyle={{
+                        margin: 0,
+                        padding: 0,
+                      }}>
+                  <Gallery images={this.props.uploads}
+                           onSelectImage={this.props.onSelectImage}
+                           enableLightbox={false}
+                           onClickThumbnail={this.props.onSelectImage}
+                           multiple
+                  />
+                </Card>
               </div>
               <div className="info-container">
                 <div className="info-uploads">
