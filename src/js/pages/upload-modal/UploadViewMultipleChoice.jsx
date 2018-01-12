@@ -41,47 +41,6 @@ class UploadViewMultipleChoice extends Component {
     };
   }
 
-  onUpdate = () => {
-    this.setState({
-      fetchingUploads: true,
-    });
-    axios({
-      method: 'get',
-      url: '/upload/getAllUploads',
-    }).then((res) => {
-      this.setState({
-        uploads: res.data.uploads,
-        fetchingUploads: false,
-        fetchedUploads: true,
-        fetchingUploadsError: false,
-      });
-      let uploads = Object.keys(this.state.uploads).map((key) => {
-        return {
-          displayName: this.state.uploads[key].displayName,
-          url: this.state.uploads[key].url,
-          createdAt: this.state.uploads[key].createdAt,
-          src: this.state.uploads[key].url,
-          thumbnail: this.state.uploads[key].url,
-          thumbnailWidth: 320,
-          thumbnailHeight: 'auto',
-          caption: this.state.uploads[key].uniqueName,
-        };
-      });
-      this.setState({
-        uploads: uploads,
-      });
-    }).catch(() => {
-      this.setState({
-        fetchingUploads: false,
-        fetchingUploadsError: true,
-      });
-    });
-  };
-
-  componentDidMount() {
-    this.onUpdate();
-  }
-
   getSelectedImageUrls = () => {
     let selected = [];
     for (let i = 0; i < this.state.uploads.length; i++)
@@ -107,6 +66,63 @@ class UploadViewMultipleChoice extends Component {
     this.getSelectedImageUrls();
   };
 
+  onUpdate = () => {
+    this.setState({
+      fetchingUploads: true,
+    });
+    axios({
+      method: 'get',
+      url: '/upload/getAllUploads',
+    }).then((res) => {
+      this.setState({
+        uploads: res.data.uploads,
+        fetchingUploads: false,
+        fetchedUploads: true,
+        fetchingUploadsError: false,
+      });
+
+      let selectedKeys = [];
+
+      let uploads = Object.keys(this.state.uploads).map((key) => {
+
+        if (this.props.imageUrlsArray)
+          this.props.imageUrlsArray.map((image) => {
+            if (image === this.state.uploads[key].url)
+              selectedKeys.push(key);
+          });
+
+        return {
+          displayName: this.state.uploads[key].displayName,
+          url: this.state.uploads[key].url,
+          createdAt: this.state.uploads[key].createdAt,
+          src: this.state.uploads[key].url,
+          thumbnail: this.state.uploads[key].url,
+          thumbnailWidth: 320,
+          thumbnailHeight: 'auto',
+          caption: this.state.uploads[key].uniqueName,
+        };
+      });
+
+      this.setState({
+        uploads: uploads,
+      });
+
+      for (let i = 0; i <= selectedKeys.length; i++) {
+        this.onSelectImage(selectedKeys[i]);
+      }
+
+    }).catch(() => {
+      this.setState({
+        fetchingUploads: false,
+        fetchingUploadsError: true,
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.onUpdate();
+  }
+
   onChooseImagesFunction = () => {
     this.handlers.onChooseMultipleImagesHandler(this.state.selectedUrlsArray);
     this.handlers.onHideUploadsMultipleModal();
@@ -124,4 +140,10 @@ class UploadViewMultipleChoice extends Component {
   }
 }
 
-export default connect()(UploadViewMultipleChoice);
+const mapStateToProps = (state) => {
+  return {
+    imageUrlsArray: state.uploadReducer.imageUrlsArray,
+  };
+};
+
+export default connect(mapStateToProps)(UploadViewMultipleChoice);

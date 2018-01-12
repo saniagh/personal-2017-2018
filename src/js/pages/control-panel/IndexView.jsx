@@ -11,6 +11,7 @@ import Index from './Index.jsx';
 import CategoriesView from './CategoriesView.jsx';
 import ProductView from './ProductView.jsx';
 import CreateProductView from './CreateProductView.jsx';
+import EditProductView from './EditProductView.jsx';
 import SettingsView from './SettingsView.jsx';
 
 class IndexView extends Component {
@@ -164,6 +165,13 @@ class IndexView extends Component {
                   :
                   null
               }
+              {
+                this.context.router.route.location.pathname.indexOf(
+                    '/control-panel/products/edit-product') !== -1 ?
+                    <span>Edit product</span>
+                    :
+                    null
+              }
             </Header>
             <Content style={
               mediaQuery.matches ?
@@ -189,6 +197,9 @@ class IndexView extends Component {
               <Route exact
                      path={`${this.props.match.url}/products/add-a-product`}
                      component={CreateProductView}/>
+              <Route exact
+                     path={`${this.props.match.url}/products/edit-product/:productLink`}
+                     component={EditProductView}/>
               <Route exact
                      path={`${this.props.match.url}/settings`}
                      component={SettingsView}/>

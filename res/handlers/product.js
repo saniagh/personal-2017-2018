@@ -134,6 +134,22 @@ router.post('/quick-edit-product', (req, res) => {
   });
 });
 
+router.post('/edit-product', (req, res) => {
+  Product.find({ productLink: req.body.productLink }, (err, product) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else if (!product) {
+      return res.status(404).json({
+        message: 'No records found.',
+      });
+    } else return res.json({
+      product: product,
+    });
+  });
+});
+
 router.post('/quick-edit-product-save', (req, res) => {
   Product.updateOne({ _id: { $eq: req.body.id } }, {
     $set: {
@@ -147,6 +163,42 @@ router.post('/quick-edit-product-save', (req, res) => {
       stockStatus: req.body.stockStatus,
       availableInStore: req.body.availableInStore,
       tags: JSON.parse(req.body.tags),
+      productVisibility: req.body.productVisibility,
+    },
+  }, (err) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      success: true,
+    });
+  });
+});
+
+router.post('/edit-product-save', (req, res) => {
+  Product.updateOne({ _id: { $eq: req.body.id } }, {
+    $set: {
+      productName: req.body.productName,
+      productLink: req.body.productLink,
+      productCategory: JSON.parse(req.body.productCategory).length > 0 ?
+          JSON.parse(req.body.productCategory) :
+          ['Uncategorized'],
+      productDescription: req.body.productDescription,
+      productThumbnail: req.body.productThumbnail,
+      productPictures: JSON.parse(req.body.productPictures),
+      sku: req.body.sku,
+      productPrice: req.body.productPrice,
+      salePrice: req.body.salePrice,
+      stockStatus: req.body.stockStatus,
+      showStockQuantity: req.body.showStockQuantity,
+      stockQuantity: req.body.stockQuantity,
+      shippingFee: req.body.shippingFee,
+      availableInStore: req.body.availableInStore,
+      upSellLink: req.body.upSellLink,
+      crossSellLink: req.body.crossSellLink,
+      tags: JSON.parse(req.body.tags),
+      productFeatured: req.body.productFeatured,
       productVisibility: req.body.productVisibility,
     },
   }, (err) => {

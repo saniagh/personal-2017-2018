@@ -19,7 +19,7 @@ import {
 import axios from 'axios';
 import qs from 'qs';
 
-import CreateProduct from './CreateProduct.jsx';
+import EditProduct from './EditProduct.jsx';
 
 let createHandlers = function (dispatch) {
   let onShowUploadsModal = function () {
@@ -56,7 +56,7 @@ let createHandlers = function (dispatch) {
   };
 };
 
-class CreateProductView extends Component {
+class EditProductView extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -75,19 +75,25 @@ class CreateProductView extends Component {
       fetchingSettingsError: false,
       settings: [],
       currency: [],
+      fetchingProduct: false,
+      fetchedProduct: false,
+      fetchingProductError: false,
+      id: '',
       productName: {
         value: '',
         errorMsg: '',
       },
       productLink: '',
-      hasEditedLink: false,
+      editingProductLink: false,
       productCategory: [],
       productDescription: '',
+      productThumbnail: '',
+      productPictures: [],
       sku: '',
       productPrice: '',
       salePrice: '',
-      stockStatus: true,
-      showStockQuantity: true,
+      stockStatus: false,
+      showStockQuantity: false,
       stockQuantity: '',
       shippingFee: '',
       availableInStore: false,
@@ -100,7 +106,7 @@ class CreateProductView extends Component {
       tags: [],
       tagInput: '',
       productFeatured: false,
-      productVisibility: true,
+      productVisibility: false,
       latestModification: '',
       savingProduct: false,
       savedProduct: false,
@@ -110,9 +116,10 @@ class CreateProductView extends Component {
 
   componentDidMount() {
     this.setState({
-      fetchingCategories: true,
-      fetchingSettings: true,
       fetchingProducts: true,
+      fetchingSettings: true,
+      fetchingCategories: true,
+      fetchingProduct: true,
     });
     axios({
       method: 'get',
@@ -128,29 +135,6 @@ class CreateProductView extends Component {
       this.setState({
         fetchingCategories: false,
         fetchingCategoriesError: true,
-      });
-      notification.error({
-        message: 'Fatal error',
-        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
-      });
-    });
-    axios({
-      method: 'get',
-      url: '/settings/get-settings',
-    }).then((res) => {
-      this.setState({
-        fetchingSettings: false,
-        fetchedSettings: true,
-        fetchingSettingsError: false,
-        settings: res.data.settings,
-        currency: res.data.settings[0].currency,
-        loadedPage: true,
-      });
-    }).catch(() => {
-      this.setState({
-        fetchingSettings: false,
-        fetchedSettings: false,
-        fetchingSettingsError: true,
       });
       notification.error({
         message: 'Fatal error',
@@ -177,7 +161,96 @@ class CreateProductView extends Component {
         description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
       });
     });
+    axios({
+      method: 'get',
+      url: '/settings/get-settings',
+    }).then((res) => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: true,
+        fetchingSettingsError: false,
+        settings: res.data.settings,
+        currency: res.data.settings[0].currency,
+      });
+    }).catch(() => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: false,
+        fetchingSettingsError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+      });
+    });
+    axios({
+      method: 'post',
+      url: '/product/edit-product',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+      data: qs.stringify({
+        productLink: this.props.match.params.productLink,
+      }),
+    }).then((res) => {
+      this.setState({
+        fetchingProduct: false,
+        fetchedProduct: true,
+        fetchingProductError: false,
+      });
 
+      const product = res.data.product[0];
+
+      this.handlers.onChooseMultipleImagesHandler(product.productPictures);
+      this.handlers.onChooseImageHandler(product.productThumbnail);
+
+      let date = new Date(product.latestModification);
+
+      this.setState({
+        id: product._id,
+        productName: {
+          ...this.state.productName,
+          value: product.productName,
+        },
+        productLink: product.productLink,
+        productCategory: product.productCategory,
+        productDescription: product.productDescription,
+        productThumbnail: product.productThumbnail,
+        productPictures: product.productPictures,
+        sku: product.sku,
+        productPrice: product.productPrice,
+        salePrice: product.salePrice,
+        stockStatus: product.stockStatus,
+        showStockQuantity: product.showStockQuantity,
+        stockQuantity: product.stockQuantity,
+        shippingFee: product.shippingFee,
+        availableInStore: product.availableInStore,
+        upSellLink: product.upSellLink,
+        crossSellLink: product.crossSellLink,
+        tags: product.tags,
+        productFeatured: product.productFeatured,
+        productVisibility: product.productVisibility,
+        latestModification: date.toString(),
+      });
+
+    }).catch(() => {
+
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+      });
+
+      this.setState({
+        fetchingProduct: false,
+        fetchedProduct: false,
+        fetchingProductError: true,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.handlers.onChooseMultipleImagesHandler([]);
+    this.handlers.onChooseImageHandler('');
   }
 
   onRowSelection = (selectedRows) => {
@@ -213,7 +286,7 @@ class CreateProductView extends Component {
         latestModification: new Date(),
       });
 
-    if (this.state.hasEditedLink === false) {
+    if (this.state.productLink.length === 0) {
       let str = e.target.value.toLowerCase().replace(/\s/g, '-');
       this.setState({
         productLink: str,
@@ -237,6 +310,12 @@ class CreateProductView extends Component {
         hasEditedLink: true,
       });
     }
+  };
+
+  onEditProductLinkToggle = () => {
+    this.setState({
+      editingProductLink: !this.state.editingProductLink,
+    });
   };
 
   onProductDescriptionChange = (value) => {
@@ -395,17 +474,22 @@ class CreateProductView extends Component {
 
     axios({
       method: 'post',
-      url: '/product/add-product',
+      url: '/product/edit-product-save',
       headers: {
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
+        id: this.state.id,
         productName: this.state.productName.value,
         productLink: this.state.productLink,
         productCategory: JSON.stringify(this.state.productCategory),
         productDescription: this.state.productDescription,
-        productThumbnail: this.props.imageUrl,
-        productPictures: JSON.stringify(this.props.imageUrlsArray),
+        productThumbnail: this.props.imageUrl ?
+            this.props.imageUrl :
+            this.state.productThumbnail,
+        productPictures: JSON.stringify(this.props.imageUrlsArray ?
+            this.props.imageUrlsArray :
+            this.state.productPictures),
         sku: this.state.sku,
         productPrice: this.state.productPrice,
         salePrice: this.state.salePrice,
@@ -424,7 +508,7 @@ class CreateProductView extends Component {
 
       notification.success({
         message: 'Success!',
-        description: 'The product has been successfully created.',
+        description: 'The product has been successfully updated.',
       });
 
       // Important because the variable is shared between categories and adding a product
@@ -440,7 +524,7 @@ class CreateProductView extends Component {
 
       notification.error({
         message: 'Failure',
-        description: 'The product has not been added to the website.',
+        description: 'The product has not been updated.',
       });
 
       this.setState({
@@ -452,81 +536,87 @@ class CreateProductView extends Component {
   };
 
   render() {
-    return <CreateProduct router={this.context.router}
-                          fetchingCategories={this.state.fetchingCategories}
-                          fetchedCategories={this.state.fetchedCategories}
-                          fetchingCategoriesError={this.state.fetchingCategoriesError}
-                          categories={this.state.categories}
-                          fetchingSettings={this.state.fetchingSettings}
-                          fetchedSettings={this.state.fetchedSettings}
-                          fetchingSettingsError={this.state.fetchingSettingsError}
-                          settings={this.state.settings}
-                          currency={this.state.currency}
-                          productName={this.state.productName}
-                          productLink={this.state.productLink}
-                          productCategory={this.state.productCategory}
-                          productDescription={this.state.productDescription}
-                          sku={this.state.sku}
-                          productPrice={this.state.productPrice}
-                          salePrice={this.state.salePrice}
-                          stockStatus={this.state.stockStatus}
-                          showStockQuantity={this.state.showStockQuantity}
-                          stockQuantity={this.state.stockQuantity}
-                          shippingFee={this.state.shippingFee}
-                          availableInStore={this.state.availableInStore}
-                          fetchingProducts={this.state.fetchingProducts}
-                          fetchedProducts={this.state.fetchedProducts}
-                          fetchingProductsError={this.state.fetchingProductsError}
-                          products={this.state.products}
-                          upSellLink={this.state.upSellLink}
-                          crossSellLink={this.state.crossSellLink}
-                          tags={this.state.tags}
-                          tagInput={this.state.tagInput}
-                          productFeatured={this.state.productFeatured}
-                          productVisibility={this.state.productVisibility}
-                          latestModification={this.state.latestModification}
-                          isModalVisible={this.props.isModalVisible}
-                          imageUrl={this.props.imageUrl}
-                          isModalVisibleMultiple={this.props.isModalVisibleMultiple}
-                          imageUrlsArray={this.props.imageUrlsArray}
-                          savingProduct={this.state.savingProduct}
-                          savedProduct={this.state.savedProduct}
-                          savingProductError={this.state.savingProductError}
-                          onRowSelection={this.onRowSelection}
-                          onProductNameChange={this.onProductNameChange}
-                          onProductLinkChange={this.onProductLinkChange}
-                          onProductDescriptionChange={this.onProductDescriptionChange}
-                          onSKUChange={this.onSKUChange}
-                          onProductPriceChange={this.onProductPriceChange}
-                          onSalePriceChange={this.onSalePriceChange}
-                          onStockStatusChange={this.onStockStatusChange}
-                          onShowStockQuantityChange={this.onShowStockQuantityChange}
-                          onStockQuantityChange={this.onStockQuantityChange}
-                          onShippingFeeChange={this.onShippingFeeChange}
-                          onAvailableInStoreChange={this.onAvailableInStoreChange}
-                          onUpSellLinkChange={this.onUpSellLinkChange}
-                          onCrossSellLinkChange={this.onCrossSellLinkChange}
-                          onAddTag={this.onAddTag}
-                          handleKeyPressAddTag={this.handleKeyPressAddTag}
-                          onRemoveTag={this.onRemoveTag}
-                          onTagInputChange={this.onTagInputChange}
-                          onProductFeaturedToggle={this.onProductFeaturedToggle}
-                          onProductVisibilityChange={this.onProductVisibilityChange}
-                          onShowUploadsModal={this.onShowUploadsModal}
-                          onHideUploadsModal={this.onHideUploadsModal}
-                          onChooseImageHandler={this.handlers.onChooseImageHandler}
-                          onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
-                          onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}
-                          onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}
-                          onSave={this.onSave}/>;
+    return <EditProduct router={this.context.router}
+                        fetchingCategories={this.state.fetchingCategories}
+                        fetchedCategories={this.state.fetchedCategories}
+                        fetchingCategoriesError={this.state.fetchingCategoriesError}
+                        categories={this.state.categories}
+                        fetchingSettings={this.state.fetchingSettings}
+                        fetchedSettings={this.state.fetchedSettings}
+                        fetchingSettingsError={this.state.fetchingSettingsError}
+                        settings={this.state.settings}
+                        currency={this.state.currency}
+                        fetchingProduct={this.state.fetchingProduct}
+                        fetchedProduct={this.state.fetchedProduct}
+                        fetchingProductError={this.state.fetchingProductError}
+                        id={this.state.id}
+                        productName={this.state.productName}
+                        productLink={this.state.productLink}
+                        editingProductLink={this.state.editingProductLink}
+                        productCategory={this.state.productCategory}
+                        productDescription={this.state.productDescription}
+                        sku={this.state.sku}
+                        productPrice={this.state.productPrice}
+                        salePrice={this.state.salePrice}
+                        stockStatus={this.state.stockStatus}
+                        showStockQuantity={this.state.showStockQuantity}
+                        stockQuantity={this.state.stockQuantity}
+                        shippingFee={this.state.shippingFee}
+                        availableInStore={this.state.availableInStore}
+                        fetchingProducts={this.state.fetchingProducts}
+                        fetchedProducts={this.state.fetchedProducts}
+                        fetchingProductsError={this.state.fetchingProductsError}
+                        products={this.state.products}
+                        upSellLink={this.state.upSellLink}
+                        crossSellLink={this.state.crossSellLink}
+                        tags={this.state.tags}
+                        tagInput={this.state.tagInput}
+                        productFeatured={this.state.productFeatured}
+                        productVisibility={this.state.productVisibility}
+                        latestModification={this.state.latestModification}
+                        isModalVisible={this.props.isModalVisible}
+                        imageUrl={this.props.imageUrl}
+                        isModalVisibleMultiple={this.props.isModalVisibleMultiple}
+                        imageUrlsArray={this.props.imageUrlsArray}
+                        savingProduct={this.state.savingProduct}
+                        savedProduct={this.state.savedProduct}
+                        savingProductError={this.state.savingProductError}
+                        onRowSelection={this.onRowSelection}
+                        onProductNameChange={this.onProductNameChange}
+                        onProductLinkChange={this.onProductLinkChange}
+                        onEditProductLinkToggle={this.onEditProductLinkToggle}
+                        onProductDescriptionChange={this.onProductDescriptionChange}
+                        onSKUChange={this.onSKUChange}
+                        onProductPriceChange={this.onProductPriceChange}
+                        onSalePriceChange={this.onSalePriceChange}
+                        onStockStatusChange={this.onStockStatusChange}
+                        onShowStockQuantityChange={this.onShowStockQuantityChange}
+                        onStockQuantityChange={this.onStockQuantityChange}
+                        onShippingFeeChange={this.onShippingFeeChange}
+                        onAvailableInStoreChange={this.onAvailableInStoreChange}
+                        onUpSellLinkChange={this.onUpSellLinkChange}
+                        onCrossSellLinkChange={this.onCrossSellLinkChange}
+                        onAddTag={this.onAddTag}
+                        handleKeyPressAddTag={this.handleKeyPressAddTag}
+                        onRemoveTag={this.onRemoveTag}
+                        onTagInputChange={this.onTagInputChange}
+                        onProductFeaturedToggle={this.onProductFeaturedToggle}
+                        onProductVisibilityChange={this.onProductVisibilityChange}
+                        onShowUploadsModal={this.onShowUploadsModal}
+                        onHideUploadsModal={this.onHideUploadsModal}
+                        onChooseImageHandler={this.handlers.onChooseImageHandler}
+                        onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
+                        onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}
+                        onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}
+                        onSave={this.onSave}/>;
   }
 }
 
-CreateProductView.contextTypes = {
+EditProductView.contextTypes = {
   router: PropTypes.object.isRequired,
 };
 
-CreateProductView.propTypes = {
+EditProductView.propTypes = {
   isModalVisible: PropTypes.bool,
   imageUrl: PropTypes.string,
   isModalVisibleMultiple: PropTypes.bool,
@@ -542,4 +632,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(CreateProductView);
+export default connect(mapStateToProps)(EditProductView);

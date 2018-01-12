@@ -42,6 +42,7 @@ class Product extends Component {
         productName: {
           value: product.productName,
           id: product._id,
+          productLink: product.productLink,
         },
         sku: product.sku,
         stockStatus: product.stockStatus,
@@ -89,6 +90,7 @@ class Product extends Component {
             productName: {
               value: product.productName,
               id: product._id,
+              productLink: product.productLink,
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
@@ -130,6 +132,7 @@ class Product extends Component {
             productName: {
               value: product.productName,
               id: product._id,
+              productLink: product.productLink,
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
@@ -176,6 +179,7 @@ class Product extends Component {
           productName: {
             value: product.productName,
             id: product._id,
+            productLink: product.productLink,
           },
           sku: product.sku,
           stockStatus: product.stockStatus,
@@ -293,7 +297,13 @@ class Product extends Component {
           render: text =>
               <span>
                 <div>{text.value}</div>
+                <div>
                 <a onClick={() => this.props.onQuickUpdateInitiate(text.id)}>Quick Update</a>
+                  </div>
+                <div>
+                <Link
+                    to={`/control-panel/products/edit-product/${text.productLink}`}>Edit</Link>
+                  </div>
               </span>,
         },
         {

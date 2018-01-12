@@ -45,47 +45,6 @@ class UploadView extends Component {
     };
   }
 
-  onUpdate = () => {
-    this.setState({
-      fetchingUploads: true,
-    });
-    axios({
-      method: 'get',
-      url: '/upload/getAllUploads',
-    }).then((res) => {
-      this.setState({
-        uploads: res.data.uploads,
-        fetchingUploads: false,
-        fetchedUploads: true,
-        fetchingUploadsError: false,
-      });
-      let uploads = Object.keys(this.state.uploads).map((key) => {
-        return {
-          displayName: this.state.uploads[key].displayName,
-          url: this.state.uploads[key].url,
-          createdAt: this.state.uploads[key].createdAt,
-          src: this.state.uploads[key].url,
-          thumbnail: this.state.uploads[key].url,
-          thumbnailWidth: 320,
-          thumbnailHeight: 'auto',
-          caption: this.state.uploads[key].uniqueName,
-        };
-      });
-      this.setState({
-        uploads: uploads,
-      });
-    }).catch(() => {
-      this.setState({
-        fetchingUploads: false,
-        fetchingUploadsError: true,
-      });
-    });
-  };
-
-  componentDidMount() {
-    this.onUpdate();
-  }
-
   onSelectImage = (index, image) => {
     let images = this.state.uploads.slice();
     let img = images[index];
@@ -123,6 +82,56 @@ class UploadView extends Component {
     }
   };
 
+  onUpdate = () => {
+    this.setState({
+      fetchingUploads: true,
+    });
+    axios({
+      method: 'get',
+      url: '/upload/getAllUploads',
+    }).then((res) => {
+      this.setState({
+        uploads: res.data.uploads,
+        fetchingUploads: false,
+        fetchedUploads: true,
+        fetchingUploadsError: false,
+      });
+
+      let selectedKey;
+
+      let uploads = Object.keys(this.state.uploads).map((key) => {
+        if (this.props.imageUrl === this.state.uploads[key].url)
+          selectedKey = key;
+        return {
+          displayName: this.state.uploads[key].displayName,
+          url: this.state.uploads[key].url,
+          createdAt: this.state.uploads[key].createdAt,
+          src: this.state.uploads[key].url,
+          thumbnail: this.state.uploads[key].url,
+          thumbnailWidth: 320,
+          thumbnailHeight: 'auto',
+          caption: this.state.uploads[key].uniqueName,
+        };
+      });
+
+      this.setState({
+        uploads: uploads,
+      });
+
+      this.onSelectImage(selectedKey);
+
+    }).catch(() => {
+      this.setState({
+        fetchingUploads: false,
+        fetchingUploadsError: true,
+      });
+    });
+  };
+
+  componentDidMount() {
+    this.onUpdate();
+  }
+
   onSelectedDisplayNameChange = (e) => {
     this.setState({
       selectedDisplayName: e.target.value,
@@ -150,6 +159,7 @@ class UploadView extends Component {
   };
 
   render() {
+
     return <UploadC uploads={this.state.uploads}
                     fetchingUploads={this.state.fetchingUploads}
                     fetchedUploads={this.state.fetchedUploads}
@@ -164,4 +174,10 @@ class UploadView extends Component {
   }
 }
 
-export default connect()(UploadView);
+const mapStateToProps = (state) => {
+  return {
+    imageUrl: state.uploadReducer.imageUrl,
+  };
+};
+
+export default connect(mapStateToProps)(UploadView);

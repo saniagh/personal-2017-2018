@@ -16,6 +16,7 @@ import {
   Tooltip,
   Modal,
   Switch,
+  Avatar,
 } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -136,6 +137,49 @@ class CreateProduct extends Component {
         sm: { span: 14 },
       },
     };
+
+    let upSellOptions;
+    let crossSellOptions;
+
+    if (this.props.fetchingProducts) {
+      upSellOptions = <Option key="0">Loading...</Option>;
+      crossSellOptions = <Option key="0">Loading...</Option>;
+    }
+
+    if (this.props.fetchedProducts) {
+      upSellOptions = this.props.products.map((product, i) => {
+        return <Option key={i}
+                       value={product.productLink}>
+          <div>
+            <Avatar shape="square"
+                    style={{ cursor: 'pointer', verticalAlign: 'middle' }}
+                    src={product.productThumbnail}/>
+            <span style={{
+              marginLeft: 5,
+              verticalAlign: 'middle',
+              fontSize: 14,
+            }}>{product.productName +
+            product.sku}</span>
+          </div>
+        </Option>;
+      });
+      crossSellOptions = this.props.products.map((product, i) => {
+        return <Option key={i}
+                       value={product.productLink}>
+          <div>
+            <Avatar shape="square"
+                    style={{ cursor: 'pointer', verticalAlign: 'middle' }}
+                    src={product.productThumbnail}/>
+            <span style={{
+              marginLeft: 5,
+              verticalAlign: 'middle',
+              fontSize: 14,
+            }}>{product.productName +
+            product.sku}</span>
+          </div>
+        </Option>;
+      });
+    }
 
     const cardMediaQuery = window.matchMedia('(max-width: 1010px)');
 
@@ -372,7 +416,30 @@ class CreateProduct extends Component {
                   <TabPane key="3"
                            tab={<span><Icon
                                type="link"/>Linked Products</span>}>
-                    After I finish the process, I need to fetch all products in a select and modify these accordingly.
+                    <FormItem key="13"
+                              label="Up-sell product link"
+                              help="Similar product to the one you are adding."
+                              style={{ padding: 10, }}
+                              {...formItemLayout}>
+                      <Select showSearch
+                              style={{ height: 41 }}
+                              notFoundContent="No matches found."
+                              onChange={this.props.onUpSellLinkChange}>
+                        {upSellOptions}
+                      </Select>
+                    </FormItem>
+                    <FormItem key="14"
+                              label="Cross-sell product link"
+                              help="Product usually sold togheter with the one you are adding."
+                              style={{ padding: 10, }}
+                              {...formItemLayout}>
+                      <Select showSearch
+                              style={{ height: 41 }}
+                              notFoundContent="No matches found."
+                              onChange={this.props.onCrossSellLinkChange}>
+                        {crossSellOptions}
+                      </Select>
+                    </FormItem>
                   </TabPane>
                 </Tabs>
               </Card>
@@ -397,7 +464,7 @@ class CreateProduct extends Component {
               <span style={{ display: 'flex', fontSize: 14, paddingBottom: 8 }}>
                 <span>
                   <Form>
-                    <FormItem key="13"
+                    <FormItem key="15"
                               label={<span style={{
                                 fontSize: 14,
                                 fontWeight: 300,
