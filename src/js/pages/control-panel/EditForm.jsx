@@ -121,8 +121,16 @@ const EditForm = Form.create({
 
   const editorQuery1 = window.matchMedia('(max-width: 1788px)');
 
+  let formWidth = '100%';
+
+  if (editorQuery1.matches && !cardMediaQuery.matches) {
+    formWidth = '57%';
+  } else if (cardMediaQuery.matches) {
+    formWidth = '100%';
+  }
+
   return (
-      <Form style={{ width: editorQuery1.matches ? '57%' : '77%' }}>
+      <Form style={{ width: formWidth }}>
         <Card loading={props.fetchingProduct}
               bordered={false}
               noHovering={true}
