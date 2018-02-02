@@ -57,7 +57,7 @@ class IndexView extends Component {
                 mediaQuery.matches ?
                     {
                       overflow: 'auto',
-                      height: 'auto',
+                      height: '100vh',
                       background: '#fff',
                       position: 'fixed',
                       left: 0,
@@ -121,7 +121,7 @@ class IndexView extends Component {
                       </MenuItem>
                       <MenuItem key="/control-panel/products/add-a-product">
                         <Link to={`/control-panel/products/add-a-product`}/>
-                        <span>Add Product</span>
+                        <span>Add product</span>
                       </MenuItem>
                       <MenuItem key="/control-panel/categories">
                         <Link to={`/control-panel/categories`}/>
@@ -142,6 +142,12 @@ class IndexView extends Component {
           <Layout>
             <Header style={{ margin: '0 16px', fontSize: 24 }}>
               {this.context.router.route.location.pathname ===
+              '/control-panel' ?
+                  <span>Control Panel</span>
+                  :
+                  null
+              }
+              {this.context.router.route.location.pathname ===
               '/control-panel/categories' ?
                   <span>Products categories</span>
                   :
@@ -155,7 +161,7 @@ class IndexView extends Component {
               }
               {this.context.router.route.location.pathname ===
               '/control-panel/products/add-a-product' ?
-                  <span>Add Product</span>
+                  <span>Add product</span>
                   :
                   null
               }
@@ -180,6 +186,7 @@ class IndexView extends Component {
                     padding: 0,
                     background: '#fff',
                     minHeight: 280,
+                    flex: '1 0',
                   }
                   :
                   {
@@ -187,6 +194,7 @@ class IndexView extends Component {
                     padding: 24,
                     background: '#fff',
                     minHeight: 280,
+                    flex: '1 0',
                   }
             }>
               <Route exact path={`/control-panel/`} component={Index}/>

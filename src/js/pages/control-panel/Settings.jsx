@@ -19,9 +19,24 @@ class Settings extends Component {
   }
 
   render() {
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 4 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 14 },
+      },
+    };
+
+    const cardMediaQuery = window.matchMedia('(max-width: 1010px)');
+
     let selectOptions = this.props.currencyData.map((currency, i) => {
       return <Option key={i}
-                     value={currency.currency}>{currency.currency} ({currency.symbol})
+                     value={currency.currency}>{currency.currency}
+        ({currency.symbol})
       </Option>;
     });
 
@@ -30,7 +45,8 @@ class Settings extends Component {
               noHovering={true}
               loading={!this.props.loadedPage}>
           <Form>
-            <FormItem key="0">
+            <FormItem key="0"
+                      {...formItemLayout}>
               <div>
                 <Button type="primary"
                         onClick={this.props.onSave}
@@ -45,12 +61,13 @@ class Settings extends Component {
             </FormItem>
             <FormItem key="1"
                       label="Default settings"
-                      help="Click this button to reset all settings to default.">
+                      help="Click this button to reset all settings to default."
+                      {...formItemLayout}>
               <div>
                 <Popconfirm
                     title="Are you sure you want to reset all settings to default？"
                     okText="Yes" cancelText="No"
-                onConfirm={this.props.onResetDefault}>
+                    onConfirm={this.props.onResetDefault}>
                   <Button type="default">
                     Reset settings to default
                   </Button>
@@ -59,7 +76,8 @@ class Settings extends Component {
             </FormItem>
             <FormItem key="2"
                       label="Store's currency"
-                      help="Select one of the currencies listed above">
+                      help="Select one of the currencies listed above"
+                      {...formItemLayout}>
               {this.props.fetchedSettings ?
                   <Card bordered={false}
                         noHovering={true}
@@ -72,7 +90,7 @@ class Settings extends Component {
                     <Select showSearch
                             onChange={this.props.onCurrencyChange}
                             defaultValue={this.state.currency}
-                            style={{ width: 300 }}
+                            style={{ width: cardMediaQuery.matches ? '' : 300 }}
                             notFoundContent="No matches found.">
                       {selectOptions}
                     </Select>

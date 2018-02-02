@@ -17,6 +17,7 @@ class Navigation extends Component {
 
     this.state = {
       collapsed: false,
+      selectedKeys: [],
     };
   }
 
@@ -25,6 +26,20 @@ class Navigation extends Component {
       collapsed: !this.state.collapsed,
     });
   };
+
+  componentDidMount() {
+    this.setState(
+        { selectedKeys: [this.props.location.pathname] });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ selectedKeys: [nextProps.location.pathname] });
+    if (nextProps.location.pathname.indexOf('control-panel') !== -1)
+      this.setState({
+        selectedKeys: ['/control-panel'],
+      });
+    this.forceUpdate();
+  }
 
   handleMenuClick = (e) => {
     if (e.key === 'login') {
@@ -77,7 +92,8 @@ class Navigation extends Component {
                         theme="light"
                         mode="inline"
                         style={{ lineHeight: '64px' }}
-                        selectedKey={[`${this.props.router.route.location.pathname}`]}
+                        selectedKeys={this.state.selectedKeys}
+                        defaultSelectedKeys={this.state.selectedKeys}
                         onClick={this.handleMenuClick}
                     >
                       <MenuItem key="control-navigator"
@@ -129,7 +145,8 @@ class Navigation extends Component {
                         theme="light"
                         mode="inline"
                         style={{ lineHeight: '64px' }}
-                        selectedKey={[`${this.props.router.route.location.pathname}`]}
+                        selectedKeys={this.state.selectedKeys}
+                        defaultSelectedKeys={this.state.selectedKeys}
                         onClick={this.handleMenuClick}
                     >
                       <MenuItem key="control-navigator"
@@ -182,8 +199,8 @@ class Navigation extends Component {
                       theme="light"
                       mode="horizontal"
                       style={{ lineHeight: '64px' }}
-                      selectedKey={[`${this.props.router.route.location.pathname}`]}
-                      defaultSelectedKeys={[`${this.props.router.route.location.pathname}`]}
+                      selectedKeys={this.state.selectedKeys}
+                      defaultSelectedKeys={this.state.selectedKeys}
                       onClick={this.handleMenuClick}
                   >
                     <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
@@ -197,8 +214,8 @@ class Navigation extends Component {
                       theme="light"
                       mode="horizontal"
                       style={{ lineHeight: '64px' }}
-                      selectedKey={[`${this.props.router.route.location.pathname}`]}
-                      defaultSelectedKeys={[`${this.props.router.route.location.pathname}`]}
+                      selectedKeys={this.state.selectedKeys}
+                      defaultSelectedKeys={this.state.selectedKeys}
                       onClick={this.handleMenuClick}
                   >
                     <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>

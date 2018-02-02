@@ -132,6 +132,9 @@
 .ql-editor {
   min-height: 300px; }
 
+.quill {
+  max-width: 100%; }
+
 .div-as-link {
   color: blue;
   text-decoration: underline;
@@ -148,5 +151,20 @@
 
 .ant-modal {
   margin: 0 !important; }
+
+.card-responsive-list {
+  display: flex;
+  flex-wrap: wrap; }
+
+.card-responsive-list-item {
+  display: flex;
+  padding: 0.5em;
+  width: 100%; }
+  @media all and (min-width: 40em) {
+    .card-responsive-list-item .list-item {
+      width: 50%; } }
+  @media all and (min-width: 60em) {
+    .card-responsive-list-item .list-item {
+      width: 25%; } }
 
 /*# sourceMappingURL=main.css.map */

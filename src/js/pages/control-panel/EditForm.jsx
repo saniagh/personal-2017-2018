@@ -119,8 +119,10 @@ const EditForm = Form.create({
     'link', 'video', 'align',
   ];
 
+  const editorQuery1 = window.matchMedia('(max-width: 1788px)');
+
   return (
-      <Form style={{ width: '100%' }}>
+      <Form style={{ width: editorQuery1.matches ? '57%' : '77%' }}>
         <Card loading={props.fetchingProduct}
               bordered={false}
               noHovering={true}

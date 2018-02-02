@@ -62,6 +62,7 @@ class NavigationView extends Component {
     return <Navigation login={this.props.login}
                        signup={this.props.signup}
                        router={this.context.router}
+                       location={this.props.location}
                        onShowLoginModal={this.onShowLoginModal}
                        onHideLoginModal={this.onHideLoginModal}
                        onShowSignupModal={this.onShowSignupModal}

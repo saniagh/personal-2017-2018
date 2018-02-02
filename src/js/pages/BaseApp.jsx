@@ -6,6 +6,7 @@ import { Layout, notification } from 'antd';
 const { Content } = Layout;
 
 import NavigationView from './universal/NavigationView.jsx';
+import { smoothScroll } from '../modules/scrollFunction.js';
 
 import Routes from './Routes.jsx';
 
@@ -40,6 +41,10 @@ class BaseApp extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    smoothScroll();
+  }
+
   render() {
 
     const mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -49,7 +54,7 @@ class BaseApp extends Component {
           display: 'flex',
           flexDirection: 'column',
         }}>
-          <NavigationView/>
+          <NavigationView location={this.context.router.route.location}/>
           <Layout style={mediaQuery.matches ? {
             paddingTop: 64,
           } : {}}>

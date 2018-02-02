@@ -181,7 +181,16 @@ class CreateProduct extends Component {
       });
     }
 
-    const cardMediaQuery = window.matchMedia('(max-width: 1010px)');
+    const cardMediaQuery = window.matchMedia('(max-width: 1100px)');
+    const editorQuery1 = window.matchMedia('(max-width: 1788px)');
+
+    let formWidth = '100%';
+
+    if (editorQuery1.matches && !cardMediaQuery.matches) {
+      formWidth = '57%';
+    } else if (cardMediaQuery.matches) {
+      formWidth = '100%';
+    }
 
     return (
         <Card bordered={false}
@@ -191,7 +200,7 @@ class CreateProduct extends Component {
                 flexDirection: cardMediaQuery.matches ? 'column-reverse' : '',
                 padding: cardMediaQuery.matches ? 24 : 5,
               }}>
-          <Form style={{ width: '100%' }}>
+          <Form style={{ width: formWidth}}>
             <Card loading={this.props.fetchingCategories}
                   bordered={false}
                   noHovering={true}

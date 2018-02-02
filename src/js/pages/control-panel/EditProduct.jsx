@@ -96,7 +96,7 @@ class EditProduct extends Component {
       },
     };
 
-    const cardMediaQuery = window.matchMedia('(max-width: 1010px)');
+    const cardMediaQuery = window.matchMedia('(max-width: 1100px)');
 
     const fields = {
       id: this.props.id,
