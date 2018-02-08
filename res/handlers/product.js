@@ -1,4 +1,5 @@
 const Product = require('mongoose').model('Product');
+const ProductsTags = require('mongoose').model('ProductsTags');
 const express = require('express');
 
 const router = new express.Router();
@@ -50,6 +51,31 @@ router.post('/add-product', addProductFormValidation, (req, res) => {
       productVisibility: req.body.productVisibility,
       orderInList: 1,
     };
+
+    JSON.parse(req.body.tags).map((tag) => {
+      ProductsTags.find({ tagName: tag }, (err, tagFound) => {
+        if (err) {
+          return res.status(400).json({
+            message: 'Internal error',
+          });
+        } else if (tagFound.length === 0) {
+          // Save the tag if it doesn't exist
+          const tagData = {
+            tagName: tag,
+          };
+          const newTag = new ProductsTags(tagData);
+          newTag.save();
+
+        } else {
+
+          // Update the current tag to have +1 more usage
+          ProductsTags.updateOne({ tagName: tagFound[0].tagName }, {
+            $set: { usedNTimes: tagFound[0].usedNTimes + 1 },
+          }, () => {
+          });
+        }
+      });
+    });
 
     const newProduct = new Product(productData);
     newProduct.save((err) => {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
+import { notification } from 'antd';
 import { connect } from 'react-redux';
 import {
   onShowLoginModalAction,
@@ -40,6 +42,40 @@ class NavigationView extends Component {
     super(props);
 
     this.handlers = createHandlers(this.props.dispatch);
+
+    this.state = {
+      fetchingSettings: false,
+      fetchedSettings: false,
+      fetchingSettingsError: false,
+      siteNavigation: [],
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      fetchingSettings: true,
+    });
+    axios({
+      method: 'get',
+      url: '/settings/get-settings',
+    }).then((res) => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: true,
+        fetchingSettingsError: false,
+        siteNavigation: res.data.settings[0].siteNavigation,
+      });
+    }).catch(() => {
+      this.setState({
+        fetchingSettings: false,
+        fetchedSettings: false,
+        fetchingSettingsError: true,
+      });
+      notification.error({
+        message: 'Fatal error',
+        description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+      });
+    });
   }
 
   onShowLoginModal = () => {
@@ -59,7 +95,9 @@ class NavigationView extends Component {
   };
 
   render() {
-    return <Navigation login={this.props.login}
+    return <Navigation fetchedSettings={this.state.fetchedSettings}
+                       siteNavigation={this.state.siteNavigation}
+                       login={this.props.login}
                        signup={this.props.signup}
                        router={this.context.router}
                        location={this.props.location}

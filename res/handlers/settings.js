@@ -66,4 +66,20 @@ router.get('/update-to-default-settings', (req, res) => {
   });
 });
 
+router.post('/update-site-navigation', (req, res) => {
+  Settings.updateMany({}, {
+    $set: {
+      siteNavigation: JSON.parse(req.body.siteNavigation),
+    },
+  }, (err) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      success: true,
+    });
+  });
+});
+
 module.exports = router;

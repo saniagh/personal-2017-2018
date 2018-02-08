@@ -9,6 +9,9 @@ const ProductsCategoriesSchema = new mongoose.Schema({
     type: String,
     index: { unique: true },
   },
+  isPrimaryCategory: {
+    type: Boolean,
+  },
   categoryParent: {
     type: String,
     default: '',

@@ -17,6 +17,7 @@ router.post('/add-category', addCategoryFormValidation, (req, res) => {
   const productsCategoryData = {
     categoryName: req.body.categoryName,
     categoryDescriptor: req.body.categoryDescriptor,
+    isPrimaryCategory: !req.body.categoryParent,
     categoryParent: req.body.categoryParent,
     categoryDescription: req.body.categoryDescription,
     categoryMiniature: req.body.categoryMiniature,

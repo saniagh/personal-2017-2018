@@ -254,7 +254,7 @@ class Categories extends Component {
                 </FormItem>
                 <FormItem key="2"
                           label="Category's parent category"
-                          help="To create a hierarchy, specify another category as the parent of the one you are creating now. For example, Electronics would be a parent category for Smartphones or Computers">
+                          help="To create a hierarchy, specify another category as the parent of the one you are creating now. For example, Electronics would be a parent category for Smartphones or Computers. Any category not assigned a parent will be considered primary and will be shown on the categories navigation.">
                   <Select showSearch
                           notFoundContent="No matches found."
                           onChange={this.props.onCategoryParentChange}>

@@ -517,7 +517,7 @@ class CreateProductView extends Component {
                           onChooseImageHandler={this.handlers.onChooseImageHandler}
                           onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
                           onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}
-                          onChooseMultipleImagesHandler={this.onChooseMultipleImagesHandler}
+                          onChooseMultipleImagesHandler={this.handlers.onChooseMultipleImagesHandler}
                           onSave={this.onSave}/>;
   }
 }

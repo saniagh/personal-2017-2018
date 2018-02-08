@@ -32,10 +32,18 @@ class IndexView extends Component {
 
   componentDidMount() {
     this.setState({ selectedKeys: [this.props.location.pathname] });
+    if (this.props.location.pathname.indexOf('edit-product') !== -1)
+      this.setState({
+        selectedKeys: ['/control-panel/products'],
+      });
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ selectedKeys: [nextProps.location.pathname] });
+    if (nextProps.location.pathname.indexOf('edit-product') !== -1)
+      this.setState({
+        selectedKeys: ['/control-panel/products'],
+      });
     this.forceUpdate();
   }
 
@@ -45,100 +53,101 @@ class IndexView extends Component {
 
     return (
         <Layout>
-          <Sider
-              trigger={mediaQuery.matches && this.state.collapsed === false ?
-                  null :
-                  true}
-              collapsed={this.state.collapsed}
-              onCollapse={this.onCollapse}
-              breakpoint={mediaQuery.matches ? 'sm' : ''}
-              collapsedWidth={mediaQuery.matches ? 0 : ''}
-              style={
-                mediaQuery.matches ?
-                    {
-                      overflow: 'auto',
-                      height: '100vh',
-                      background: '#fff',
-                      position: 'fixed',
-                      left: 0,
-                      zIndex: 2,
-                      top: 0,
-                    }
-                    :
-                    { background: '#fff' }}
-          >
-            { //Triggers re-render of the menu preventing submenu closing itself
-              !this.state.collapsed ?
-                  <Menu theme="light"
-                        selectedKeys={this.state.selectedKeys}
-                        defaultSelectedKeys={this.state.selectedKeys}
-                        defaultOpenKeys={['/control-panel/products-submenu']}
-                        mode="inline"
-                        onClick={mediaQuery.matches ?
-                            this.onCollapse :
-                            console.log('')}>
-                    {mediaQuery.matches ?
-                        <MenuItem key="control-navigator"
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                  }}>
+          <nav className="top-navigation-mobile">
+            <Sider
+                trigger={mediaQuery.matches && this.state.collapsed === false ?
+                    null :
+                    true}
+                collapsed={this.state.collapsed}
+                onCollapse={this.onCollapse}
+                breakpoint={mediaQuery.matches ? 'sm' : ''}
+                collapsedWidth={mediaQuery.matches ? 0 : ''}
+                style={
+                  mediaQuery.matches ?
+                      {
+                        overflow: 'auto',
+                        height: '100vh',
+                        background: '#fff',
+                        position: 'fixed',
+                        left: 0,
+                        zIndex: 2,
+                        top: 0,
+                      }
+                      :
+                      { background: '#fff' }}
+            >
+              { //Triggers re-render of the menu preventing submenu closing itself
+                !this.state.collapsed ?
+                    <Menu theme="light"
+                          selectedKeys={this.state.selectedKeys}
+                          defaultSelectedKeys={this.state.selectedKeys}
+                          defaultOpenKeys={['/control-panel/products-submenu']}
+                          mode="inline"
+                          onClick={mediaQuery.matches ?
+                              this.onCollapse :
+                              console.log('')}>
+                      {mediaQuery.matches ?
+                          <MenuItem key="control-navigator"
+                                    style={{
+                                      display: 'flex',
+                                      justifyContent: 'center',
+                                    }}>
                 <span>
                 <Icon
                     className="trigger"
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                 />
                   </span>
-                        </MenuItem>
-                        :
-                        <MenuItem disabled={true}
-                                  style={{ cursor: 'default' }}>
-                          <div style={{ height: 32 }}/>
-                        </MenuItem>
-                    }
-                    <MenuItem key="/">
-                      <Link to={`/`}/>
-                      <Icon type="double-left"/>
-                      <span>Return to site</span>
-                    </MenuItem>
-                    <MenuItem key="/control-panel">
-                      <Link to={`/control-panel`}/>
-                      <Icon type="home"/>
-                      <span>Control Panel</span>
-                    </MenuItem>
-                    <SubMenu key="/control-panel/products-submenu"
-                             title={
-                               <span>
+                          </MenuItem>
+                          :
+                          <MenuItem disabled={true}
+                                    style={{ cursor: 'default' }}>
+                            <div style={{ height: 32 }}/>
+                          </MenuItem>
+                      }
+                      <MenuItem key="/">
+                        <Link to={`/`}/>
+                        <Icon type="double-left"/>
+                        <span>Return to site</span>
+                      </MenuItem>
+                      <MenuItem key="/control-panel">
+                        <Link to={`/control-panel`}/>
+                        <Icon type="home"/>
+                        <span>Control Panel</span>
+                      </MenuItem>
+                      <SubMenu key="/control-panel/products-submenu"
+                               title={
+                                 <span>
                            <Link to={`/control-panel/products`}/>
                            <Icon type="shopping-cart"/>
                          <span>
                            Products
                          </span>
                        </span>}>
-                      <MenuItem key="/control-panel/products">
-                        <Link to={`/control-panel/products`}/>
-                        <span>All products</span>
+                        <MenuItem key="/control-panel/products">
+                          <Link to={`/control-panel/products`}/>
+                          <span>All products</span>
+                        </MenuItem>
+                        <MenuItem key="/control-panel/products/add-a-product">
+                          <Link to={`/control-panel/products/add-a-product`}/>
+                          <span>Add product</span>
+                        </MenuItem>
+                        <MenuItem key="/control-panel/categories">
+                          <Link to={`/control-panel/categories`}/>
+                          <span>Categories</span>
+                        </MenuItem>
+                      </SubMenu>
+                      <MenuItem key="/control-panel/settings">
+                        <Link to={`/control-panel/settings`}/>
+                        <Icon type="setting"/>
+                        <span>Settings</span>
                       </MenuItem>
-                      <MenuItem key="/control-panel/products/add-a-product">
-                        <Link to={`/control-panel/products/add-a-product`}/>
-                        <span>Add product</span>
-                      </MenuItem>
-                      <MenuItem key="/control-panel/categories">
-                        <Link to={`/control-panel/categories`}/>
-                        <span>Categories</span>
-                      </MenuItem>
-                    </SubMenu>
-                    <MenuItem key="/control-panel/settings">
-                      <Link to={`/control-panel/settings`}/>
-                      <Icon type="setting"/>
-                      <span>Settings</span>
-                    </MenuItem>
-                  </Menu>
-                  :
-                  null
-            }
-
-          </Sider>
+                    </Menu>
+                    :
+                    null
+              }
+            </Sider>
+          </nav>
           <Layout>
             <Header style={{ margin: '0 16px', fontSize: 24 }}>
               {this.context.router.route.location.pathname ===

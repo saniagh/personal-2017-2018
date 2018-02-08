@@ -37,6 +37,7 @@ class UploadViewMultipleChoice extends Component {
       fetchingUploads: false,
       fetchedUploads: false,
       fetchingUploadsError: false,
+      hasSelectedNImages: 0,
       selectedUrlsArray: [],
     };
   }
@@ -49,15 +50,35 @@ class UploadViewMultipleChoice extends Component {
     this.setState({
       selectedUrlsArray: selected,
     });
+
+    if (this.props.modalFromSettings === true) {
+      this.props.addPicturesToColumn(selected);
+    }
   };
 
   onSelectImage = (index, image) => {
     let images = this.state.uploads.slice();
     let img = images[index];
-    if (img.hasOwnProperty('isSelected'))
+    if (img.hasOwnProperty('isSelected')) {
+
+      if (this.props.modalFromSettings && img.isSelected === true)
+        this.setState({
+          hasSelectedNImages: this.state.hasSelectedNImages - 1,
+        });
+      if (this.props.modalFromSettings && img.isSelected === false)
+        this.setState({
+          hasSelectedNImages: this.state.hasSelectedNImages + 1,
+        });
+
       img.isSelected = !img.isSelected;
-    else
-      img.isSelected = true;
+    } else {
+      if (this.props.modalFromSettings && this.state.hasSelectedNImages < 2) {
+        img.isSelected = true;
+        this.setState({
+          hasSelectedNImages: this.state.hasSelectedNImages + 1,
+        });
+      } else if (!this.props.modalFromSettings) img.isSelected = true;
+    }
 
     this.setState({
       uploads: images,
@@ -126,6 +147,18 @@ class UploadViewMultipleChoice extends Component {
   onChooseImagesFunction = () => {
     this.handlers.onChooseMultipleImagesHandler(this.state.selectedUrlsArray);
     this.handlers.onHideUploadsMultipleModal();
+
+    if (this.props.modalFromSettings === true) {
+
+      // Reset the reducer to avoid multiple options having the same pictures
+      this.handlers.onChooseMultipleImagesHandler([]);
+      this.props.getCurrentOptionKey(-1);
+      this.onUpdate();
+      this.setState({
+        selectedUrlsArray: [],
+        hasSelectedNImages: 0,
+      });
+    }
   };
 
   render() {
