@@ -82,4 +82,36 @@ router.post('/update-site-navigation', (req, res) => {
   });
 });
 
+router.post('/update-site-slider', (req, res) => {
+  Settings.updateMany({}, {
+    $set: {
+      sliderImages: JSON.parse(req.body.sliderImages),
+    },
+  }, (err) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      success: true,
+    });
+  });
+});
+
+router.post('/update-top-promotional-banner', (req, res) => {
+  Settings.updateMany({}, {
+    $set: {
+      topPromotionalBanner: JSON.parse(req.body.topPromotionalBanner),
+    },
+  }, (err) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      success: true,
+    });
+  });
+});
+
 module.exports = router;

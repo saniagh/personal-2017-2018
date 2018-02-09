@@ -34,6 +34,8 @@
 }
 
 .sub-header-promo-container {
+  position: relative;
+  top: 68px;
   @media (min-width: 1100px) {
     display: none;
   }
@@ -166,17 +168,21 @@ div {
     flex: 1;
     justify-content: center;
     float: none;
-    height: 60px;
+    max-height: 60px;
     padding: 4px 0 4px 0;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
-    img {
-      max-height: 60px;
+  }
+  img {
+    position: relative;
+    top: 16px;
+    @media (max-width: 1100px) {
+      top: 10px;
     }
   }
   float: left;
-  height: 80px;
+  max-height: 80px;
 }
 
 .top-header {
@@ -452,9 +458,11 @@ div {
   transition: color 0.3s;
   font-size: 12px;
 }
+
 .anticon-close-circle:hover {
   color: #999;
 }
+
 .anticon-close-circle:active {
   color: #666;
 }

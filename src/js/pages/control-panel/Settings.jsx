@@ -434,27 +434,33 @@ class Settings extends Component {
                                  }}/>
                             <figcaption
                                 className="site-navigation-image-caption">
-                              <Input placeholder="Photo caption"
-                                     value={pictureData.imageCaption}
-                                     suffix={suffixCaption}
-                                     onChange={this.props.onPictureCaptionChange(
-                                         currentKey - 1, index)}
-                                     style={{
-                                       marginTop: 20,
-                                       maxWidth: 300,
-                                     }}/>
-                              <Input placeholder="Photo links to: "
-                                     value={pictureData.imageAnchor}
-                                     suffix={suffixAnchor}
-                                     onChange={this.props.onPictureAnchorChange(
-                                         currentKey - 1, index)}
-                                     style={{
-                                       marginTop: 10,
-                                       maxWidth: 300,
-                                     }}/>
+                              <small>Recommended size for pictures is :
+                                200x310
+                              </small>
+                              <div>
+                                <Input placeholder="Photo caption"
+                                       value={pictureData.imageCaption}
+                                       suffix={suffixCaption}
+                                       onChange={this.props.onPictureCaptionChange(
+                                           currentKey - 1, index)}
+                                       style={{
+                                         marginTop: 20,
+                                         maxWidth: 300,
+                                       }}/>
+                              </div>
+                              <div>
+                                <Input placeholder="Photo links to: "
+                                       value={pictureData.imageAnchor}
+                                       suffix={suffixAnchor}
+                                       onChange={this.props.onPictureAnchorChange(
+                                           currentKey - 1, index)}
+                                       style={{
+                                         marginTop: 10,
+                                         maxWidth: 300,
+                                       }}/>
+                              </div>
                             </figcaption>
                           </figure>
-
                         </div>;
                       })
                 }
@@ -536,7 +542,50 @@ class Settings extends Component {
                 </FormItem>
               </Form>
             </TabPane>
-            <TabPane tab="Site navigation layout" key="2">
+            <TabPane tab="Promotional banners" key="2">
+              <Card noHovering={true}
+                    bodyStyle={{
+                      padding: cardMediaQuery.matches ?
+                          2 :
+                          '',
+                    }}>
+                <div style={{ marginBottom: 16 }}>
+                  <Button onClick={this.props.onSaveTopPromotionalBanner}
+                          type="primary">Save changes to top promotional
+                    banner</Button>
+                </div>
+                <div>
+                  <div>
+                    <Input placeholder="Promotional text"
+                           value={this.props.topPromotionalBanner.promoText}
+                           onChange={this.props.onTopBannerPromoTextChange}
+                           style={{
+                             marginTop: 10,
+                             maxWidth: 300,
+                           }}/>
+                  </div>
+                  <div>
+                    <Input placeholder="Promotional link text"
+                           value={this.props.topPromotionalBanner.promoLinkText}
+                           onChange={this.props.onTopBannerPromoLinkTextChange}
+                           style={{
+                             marginTop: 10,
+                             maxWidth: 300,
+                           }}/>
+                  </div>
+                  <div>
+                    <Input placeholder="Promotional link adress"
+                           value={this.props.topPromotionalBanner.promoLinkAnchor}
+                           onChange={this.props.onTopBannerPromoLinkAnchorChange}
+                           style={{
+                             marginTop: 10,
+                             maxWidth: 300,
+                           }}/>
+                  </div>
+                </div>
+              </Card>
+            </TabPane>
+            <TabPane tab="Site navigation layout" key="3">
               <div style={{ marginBottom: 16 }}>
                 <Button onClick={this.props.onSaveSiteNavigation}
                         type="primary">Save site navigation</Button>
@@ -549,6 +598,49 @@ class Settings extends Component {
                 {navigationTabs}
               </Tabs>
             </TabPane>
+            <TabPane tab="Homepage image slider" key="4">
+              <Card noHovering={true}
+                    bodyStyle={{
+                      padding: cardMediaQuery.matches ?
+                          2 :
+                          '',
+                    }}>
+                <div style={{ marginBottom: 16 }}>
+                  <Button onClick={this.props.onSaveSliderImages}
+                          type="primary">Save changes to homepage
+                    slider</Button>
+                </div>
+                <div className="div-as-link"
+                     onClick={ () => {
+                       this.props.onShowUploadsMultipleModal();
+                       this.props.onChangeSelectingSliderImages();
+                     }}>
+                  Click here to add/change the current pictures.
+                </div>
+                <div className="o-line">
+                  {
+                    this.props.sliderImages.map(
+                        (url, index) => {
+                          if (url)
+                            return <div key={index}
+                                        style={{
+                                          marginTop: cardMediaQuery.matches ?
+                                              20 :
+                                              0,
+                                          marginLeft: cardMediaQuery.matches ?
+                                              0 :
+                                              20,
+                                        }}>
+                              <figure>
+                                <img src={url} alt=""
+                                     style={{ maxWidth: '100%' }}/>
+                              </figure>
+                            </div>;
+                        })
+                  }
+                </div>
+              </Card>
+            </TabPane>
           </Tabs>
           <Modal title="Pick images to show in product's gallery"
                  wrapClassName="vertical-center-modal"
@@ -557,8 +649,15 @@ class Settings extends Component {
                  style={{ maxWidth: window.innerWidth }}
                  footer={null}
                  onOk={this.props.onHideUploadsMultipleModal}
-                 onCancel={this.props.onHideUploadsMultipleModal}>
+                 onCancel={() => {
+                   this.props.onHideUploadsMultipleModal();
+                   this.props.onChangeSelectingSliderImages();
+                   this.props.onSelectSliderImages();
+                 }}>
             <UploadViewMultipleChoice modalFromSettings={true}
+                                      selectingSliderImages={this.props.selectingSliderImages}
+                                      onChangeSelectingSliderImages={this.props.onChangeSelectingSliderImages}
+                                      onSelectSliderImages={this.props.onSelectSliderImages}
                                       addPicturesToColumn={this.props.addPicturesToColumn}
                                       getCurrentOptionKey={this.props.getCurrentOptionKey}/>
           </Modal>

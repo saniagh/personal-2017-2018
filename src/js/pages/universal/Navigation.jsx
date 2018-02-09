@@ -244,11 +244,12 @@ class Navigation extends Component {
                 zIndex: 1,
                 height: 68,
               }}>
-                <div className="site-logo">
-                  <Link to={`/`}>
-                    <img src="shop-logo.png"/>
-                  </Link>
-                </div>
+                <Link to={`/`}>
+                  <div className="site-logo">
+                    <img className="site-logo-img"
+                         src="/images/shop-logo.png"/>
+                  </div>
+                </Link>
                 {!Auth.isUserAuthenticated() ?
                     <Sider
                         trigger={mediaQuery.matches &&
@@ -360,6 +361,7 @@ class Navigation extends Component {
                       </Menu>
                     </Sider>
                 }
+
                 <Modal title="Authentication"
                        wrapClassName="vertical-center-modal"
                        visible={this.props.login.isModalVisible}
@@ -379,15 +381,69 @@ class Navigation extends Component {
                   <SignupView/>
                 </Modal>
               </Header>
+              {this.props.location.pathname.indexOf('control-panel') === -1 &&
+              this.props.fetchedSettings ?
+                  <div className="sub-header-promo-container">
+                    <div className="header-promo">
+                      <div className="header-promo-banner">
+                        <div className="o-row">
+                          <div className="o-column">
+                            <div className="o-line">
+                              <p className="header-promo-title">
+                                {this.props.topPromotionalBanner.promoText}
+                              </p>
+                              <div className="header-promo-link-container">
+                                <a href={this.props.topPromotionalBanner.promoLinkAnchor}
+                                   className="header-promo-link">
+                                  {this.props.topPromotionalBanner.promoLinkText}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  :
+                  null
+              }
             </nav>
             :
             <nav className="top-navigation">
+              {this.props.location.pathname.indexOf('control-panel') === -1 &&
+              this.props.fetchedSettings ?
+                  <div className="header-promo-container">
+                    <div className="header-promo">
+                      <div className="header-promo-banner">
+                        <div className="o-row">
+                          <div className="o-column">
+                            <div className="o-line">
+                              <p className="header-promo-title">
+                                {this.props.topPromotionalBanner.promoText}
+                              </p>
+                              <div className="header-promo-link-container">
+                                <a href={this.props.topPromotionalBanner.promoLinkAnchor}
+                                   className="header-promo-link">
+                                  {this.props.topPromotionalBanner.promoLinkText}
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  :
+                  null
+              }
+
               <Header style={{ height: 80 }}>
-                <div className="site-logo">
-                  <Link to={`/`}>
-                    <img src="shop-logo.png"/>
-                  </Link>
-                </div>
+                <Link to={`/`}>
+                  <div className="site-logo">
+                    <img className="site-logo-img"
+                         src="/images/shop-logo.png"/>
+                  </div>
+                </Link>
                 {!Auth.isUserAuthenticated() ?
                     <Menu
                         theme="light"

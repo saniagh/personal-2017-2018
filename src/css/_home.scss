@@ -1,7 +1,7 @@
 .index-main {
   margin: 0 auto;
   padding: 0 0 60px 0;
-  max-width: 1441px;
+  max-width: 1240px;
   background: #fff;
   position: relative;
 }
@@ -38,3 +38,144 @@
     padding: 0 8px;
   }
 }
+
+.index-promotion {
+  margin-top: 20px;
+  @media (max-width: 1330px) {
+    display: none;
+  }
+}
+
+.index-promotion-top {
+  height: 720px;
+  display: flex;
+  justify-content: space-around;
+
+  @media (max-width: 1330px) {
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  a {
+    @media (max-width: 1330px) {
+      text-align: center;
+    }
+  }
+
+  a:first-child {
+    display: block;
+    float: left;
+  }
+}
+
+.index-promotion-top-image {
+  width: 610px;
+  height: 720px;
+  @media (max-width: 1330px) {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.index-promotion-bottom {
+  position: relative;
+  margin-top: 20px;
+  text-align: right;
+  height: 180px;
+  @media (max-width: 1100px) {
+    display: none;
+  }
+}
+
+.index-promotion-bottom-image {
+  width: 100%;
+  height: auto;
+}
+
+.index-block-title {
+  @media (max-width: 1330px) {
+    display: none;
+  }
+  display: block;
+  margin-top: 60px;
+  font-size: 34px;
+  line-height: 34px;
+  color: #2d2d2d;
+  text-align: center;
+  font-family: OpenSans-Semibold, sans-serif;
+}
+
+.index-block-title:hover {
+  color: #2d2d2d;
+}
+
+.index-new-arrivals {
+  margin-top: 30px;
+
+  @media (max-width: 1330px) {
+    display: none;
+    height: auto;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  a {
+    display: block;
+    float: left;
+    margin-right: 20px;
+    width: 295px;
+    height: 400px;
+    @media (max-width: 1330px) {
+      text-align: center;
+      width: 100%;
+      height: auto;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  }
+
+  a:last-child {
+    margin: 0;
+    @media (max-width: 1330px) {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.index-new-arrivals-image {
+  width: 295px;
+  height: 400px;
+  @media (max-width: 1330px) {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.brand-item {
+  display: none;
+  @media (max-width: 1330px) {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 8px;
+
+    :last-child {
+      margin-bottom: 5px;
+    }
+
+    a {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      font-size: 0;
+      text-align: center;
+
+      img {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+}
+

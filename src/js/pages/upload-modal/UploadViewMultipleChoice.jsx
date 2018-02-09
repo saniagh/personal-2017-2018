@@ -39,6 +39,7 @@ class UploadViewMultipleChoice extends Component {
       fetchingUploadsError: false,
       hasSelectedNImages: 0,
       selectedUrlsArray: [],
+      selectedForSlider: [],
     };
   }
 
@@ -51,33 +52,71 @@ class UploadViewMultipleChoice extends Component {
       selectedUrlsArray: selected,
     });
 
-    if (this.props.modalFromSettings === true) {
+    if (this.props.modalFromSettings === true &&
+        this.props.selectingSliderImages === false) {
       this.props.addPicturesToColumn(selected);
     }
   };
 
   onSelectImage = (index, image) => {
+    let selectedForSlider = this.state.selectedForSlider;
     let images = this.state.uploads.slice();
     let img = images[index];
     if (img.hasOwnProperty('isSelected')) {
 
-      if (this.props.modalFromSettings && img.isSelected === true)
+      if (this.props.modalFromSettings === true &&
+          this.props.selectingSliderImages === false) {
+        if (img.isSelected === true) {
+          this.setState({
+            hasSelectedNImages: this.state.hasSelectedNImages - 1,
+          });
+          img.isSelected = !img.isSelected;
+        } else if (img.isSelected === false &&
+            this.state.hasSelectedNImages < 2) {
+          this.setState({
+            hasSelectedNImages: this.state.hasSelectedNImages + 1,
+          });
+          img.isSelected = !img.isSelected;
+        }
+      } else if (this.props.modalFromSettings === true &&
+          this.props.selectingSliderImages === true) {
+        if (img.isSelected === false) {
+          selectedForSlider.push(img.url);
+          this.props.onSelectSliderImages(selectedForSlider);
+        }
+        else if (img.isSelected === true) {
+          for (let i = 0; i < selectedForSlider.length; i++)
+            if (selectedForSlider[i] === img.url)
+              selectedForSlider[i] = '';
+          this.props.onSelectSliderImages(selectedForSlider);
+        }
+        img.isSelected = !img.isSelected;
         this.setState({
-          hasSelectedNImages: this.state.hasSelectedNImages - 1,
+          selectedForSlider: selectedForSlider,
         });
-      if (this.props.modalFromSettings && img.isSelected === false)
-        this.setState({
-          hasSelectedNImages: this.state.hasSelectedNImages + 1,
-        });
+      } else if (this.props.modalFromSettings === false &&
+          this.props.selectingSliderImages === false) {
+        img.isSelected = !img.isSelected;
+      }
 
-      img.isSelected = !img.isSelected;
     } else {
-      if (this.props.modalFromSettings && this.state.hasSelectedNImages < 2) {
+      if (this.props.modalFromSettings && this.state.hasSelectedNImages < 2 &&
+          this.props.selectingSliderImages === false) {
         img.isSelected = true;
         this.setState({
           hasSelectedNImages: this.state.hasSelectedNImages + 1,
         });
-      } else if (!this.props.modalFromSettings) img.isSelected = true;
+      } else if (this.props.modalFromSettings &&
+          this.props.selectingSliderImages) {
+        selectedForSlider.push(img.url);
+        this.props.onSelectSliderImages(selectedForSlider);
+        img.isSelected = true;
+        this.setState({
+          selectedForSlider: selectedForSlider,
+        });
+      } else if (!this.props.modalFromSettings) {
+        img.isSelected = true;
+      }
     }
 
     this.setState({
@@ -149,6 +188,10 @@ class UploadViewMultipleChoice extends Component {
     this.handlers.onHideUploadsMultipleModal();
 
     if (this.props.modalFromSettings === true) {
+
+      if (this.props.selectingSliderImages) {
+        this.props.onChangeSelectingSliderImages();
+      }
 
       // Reset the reducer to avoid multiple options having the same pictures
       this.handlers.onChooseMultipleImagesHandler([]);

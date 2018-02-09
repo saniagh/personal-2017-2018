@@ -9,6 +9,11 @@ import {
 import {
   onChooseMultipleImages,
 } from '../upload-modal/uploadActions.js';
+import {
+  onSiteNavigationChange,
+  onImagesSliderChange,
+  onTopPromotionalBannerChange,
+} from './settingsActions.js';
 import axios from 'axios';
 import qs from 'qs';
 
@@ -28,10 +33,25 @@ let createHandlers = function (dispatch) {
     dispatch(onChooseMultipleImages(imageUrlsArray));
   };
 
+  let onSiteNavigationChangeHandler = function () {
+    dispatch(onSiteNavigationChange());
+  };
+
+  let onImagesSliderChangeHandler = function () {
+    dispatch(onImagesSliderChange());
+  };
+
+  let onTopPromotionalBannerChangeHandler = function () {
+    dispatch(onTopPromotionalBannerChange());
+  };
+
   return {
     onShowUploadsMultipleModal,
     onHideUploadsMultipleModal,
     onChooseMultipleImagesHandler,
+    onSiteNavigationChangeHandler,
+    onImagesSliderChangeHandler,
+    onTopPromotionalBannerChangeHandler,
   };
 };
 
@@ -95,6 +115,20 @@ class SettingsView extends Component {
       savedSiteNavigation: false,
       savingSiteNavigation: false,
       savingSiteNavigationError: false,
+      selectingSliderImages: false,
+      sliderImages: [],
+      previousSliderImages: [],
+      savingSliderImages: false,
+      savedSliderImages: false,
+      savingSliderImagesError: false,
+      topPromotionalBanner: {
+        promoText: '',
+        promoLinkText: '',
+        promoLinkAnchor: '',
+      },
+      savingTopPromotionalBanner: false,
+      savedTopPromotionalBanner: false,
+      savingTopPromotionalBannerError: false,
     };
   }
 
@@ -131,6 +165,9 @@ class SettingsView extends Component {
             res.data.settings[0].siteNavigation :
             this.state.siteNavigation,
         loadedPage: true,
+        sliderImages: res.data.settings[0].sliderImages,
+        previousSliderImages: res.data.settings[0].sliderImages,
+        topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
       });
     }).catch(() => {
       this.setState({
@@ -144,6 +181,68 @@ class SettingsView extends Component {
       });
     });
   }
+
+  onTopBannerPromoTextChange = (e) => {
+    this.setState({
+      topPromotionalBanner: {
+        ...this.state.topPromotionalBanner,
+        promoText: e.target.value,
+      },
+    });
+  };
+
+  onTopBannerPromoLinkTextChange = (e) => {
+    this.setState({
+      topPromotionalBanner: {
+        ...this.state.topPromotionalBanner,
+        promoLinkText: e.target.value,
+      },
+    });
+  };
+
+  onTopBannerPromoLinkAnchorChange = (e) => {
+    this.setState({
+      topPromotionalBanner: {
+        ...this.state.topPromotionalBanner,
+        promoLinkAnchor: e.target.value,
+      },
+    });
+  };
+
+  onChangeSelectingSliderImages = () => {
+    if (this.state.selectingSliderImages === false) {
+      this.setState({
+        sliderImages: [],
+      });
+    }
+    this.setState({
+      selectingSliderImages: !this.state.selectingSliderImages,
+    });
+  };
+
+  onSelectSliderImages = (value) => {
+
+    let restoreFlag = true;
+
+    if (value && value.length > 0)
+      this.setState({
+        sliderImages: value,
+      });
+
+    // In case no image is selected, we need to restore the previous state
+    if (value)
+      for (let i = 0; i < value.length; i++) {
+        if (value[i])
+          restoreFlag = false;
+      } else this.setState({
+      sliderImages: this.state.previousSliderImages,
+    });
+
+    if (restoreFlag)
+      this.setState({
+        sliderImages: this.state.previousSliderImages,
+      });
+  };
 
   onCurrencyChange = (value) => {
     this.currencyData.map((currency, i) => {
@@ -691,6 +790,8 @@ class SettingsView extends Component {
       }),
     }).then(() => {
 
+      this.handlers.onSiteNavigationChangeHandler();
+
       notification.success({
         message: 'Success!',
         description: 'The site navigation has been successfully updated.',
@@ -712,6 +813,9 @@ class SettingsView extends Component {
           siteNavigation: res.data.settings[0].siteNavigation.length > 0 ?
               res.data.settings[0].siteNavigation :
               this.state.siteNavigation,
+          sliderImages: res.data.settings[0].sliderImages,
+          previousSliderImages: res.data.settings[0].sliderImages,
+          topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
         });
       }).catch(() => {
         this.setState({
@@ -745,6 +849,153 @@ class SettingsView extends Component {
     });
   };
 
+  onSaveSliderImages = () => {
+    this.setState({
+      savingSliderImages: true,
+    });
+    axios({
+      method: 'post',
+      url: '/settings/update-site-slider',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+      data: qs.stringify({
+        sliderImages: JSON.stringify(this.state.sliderImages),
+      }),
+    }).then(() => {
+
+      this.handlers.onImagesSliderChangeHandler();
+
+      notification.success({
+        message: 'Success!',
+        description: 'The homepage slider has been successfully updated.',
+      });
+
+      this.setState({
+        fetchingSettings: true,
+      });
+      axios({
+        method: 'get',
+        url: '/settings/get-settings',
+      }).then((res) => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: true,
+          fetchingSettingsError: false,
+          settings: res.data.settings,
+          currency: res.data.settings[0].currency,
+          siteNavigation: res.data.settings[0].siteNavigation.length > 0 ?
+              res.data.settings[0].siteNavigation :
+              this.state.siteNavigation,
+          sliderImages: res.data.settings[0].sliderImages,
+          previousSliderImages: res.data.settings[0].sliderImages,
+          topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
+        });
+      }).catch(() => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: false,
+          fetchingSettingsError: true,
+        });
+        notification.error({
+          message: 'Fatal error',
+          description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+        });
+      });
+
+      this.setState({
+        savingSliderImages: false,
+        savedSliderImages: true,
+        savingSliderImagesError: false,
+      });
+    }).catch(() => {
+
+      notification.error({
+        message: 'Failure.',
+        description: 'An error has occurred while saving the settings.',
+      });
+
+      this.setState({
+        savingSliderImages: false,
+        savedSliderImages: false,
+        savingSliderImagesError: true,
+      });
+    });
+  };
+
+  onSaveTopPromotionalBanner = () => {
+    this.setState({
+      savingTopPromotionalBanner: true,
+    });
+    axios({
+      method: 'post',
+      url: '/settings/update-top-promotional-banner',
+      headers: {
+        'Content-type': 'application/x-www-form-urlencoded',
+      },
+      data: qs.stringify({
+        topPromotionalBanner: JSON.stringify(this.state.topPromotionalBanner),
+      }),
+    }).then(() => {
+
+      this.handlers.onTopPromotionalBannerChangeHandler();
+
+      notification.success({
+        message: 'Success!',
+        description: 'The top promotional banner has been updated.',
+      });
+      this.setState({
+        fetchingSettings: true,
+      });
+      axios({
+        method: 'get',
+        url: '/settings/get-settings',
+      }).then((res) => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: true,
+          fetchingSettingsError: false,
+          settings: res.data.settings,
+          currency: res.data.settings[0].currency,
+          siteNavigation: res.data.settings[0].siteNavigation.length > 0 ?
+              res.data.settings[0].siteNavigation :
+              this.state.siteNavigation,
+          sliderImages: res.data.settings[0].sliderImages,
+          previousSliderImages: res.data.settings[0].sliderImages,
+          topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
+        });
+      }).catch(() => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: false,
+          fetchingSettingsError: true,
+        });
+        notification.error({
+          message: 'Fatal error',
+          description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+        });
+      });
+
+      this.setState({
+        savingTopPromotionalBanner: false,
+        savedTopPromotionalBanner: true,
+        savingTopPromotionalBannerError: false,
+      });
+    }).catch(() => {
+
+      notification.error({
+        message: 'Failure.',
+        description: 'An error has occurred while saving the settings.',
+      });
+
+      this.setState({
+        savingTopPromotionalBanner: false,
+        savedTopPromotionalBanner: false,
+        savingTopPromotionalBannerError: true,
+      });
+    });
+  };
+
   onShowUploadsMultipleModal = () => {
     this.handlers.onShowUploadsMultipleModal();
   };
@@ -769,6 +1020,14 @@ class SettingsView extends Component {
                      savingSiteNavigationError={this.state.savingSiteNavigationError}
                      currencyData={this.currencyData}
                      isModalVisibleMultiple={this.props.isModalVisibleMultiple}
+                     selectingSliderImages={this.state.selectingSliderImages}
+                     topPromotionalBanner={this.state.topPromotionalBanner}
+                     sliderImages={this.state.sliderImages}
+                     onTopBannerPromoTextChange={this.onTopBannerPromoTextChange}
+                     onTopBannerPromoLinkTextChange={this.onTopBannerPromoLinkTextChange}
+                     onTopBannerPromoLinkAnchorChange={this.onTopBannerPromoLinkAnchorChange}
+                     onChangeSelectingSliderImages={this.onChangeSelectingSliderImages}
+                     onSelectSliderImages={this.onSelectSliderImages}
                      onCurrencyChange={this.onCurrencyChange}
                      addSiteNavigationOption={this.addSiteNavigationOption}
                      removeSiteNavigationOption={this.removeSiteNavigationOption}
@@ -796,6 +1055,8 @@ class SettingsView extends Component {
                      onSaveGeneralSettings={this.onSaveGeneralSettings}
                      onResetDefault={this.onResetDefault}
                      onSaveSiteNavigation={this.onSaveSiteNavigation}
+                     onSaveSliderImages={this.onSaveSliderImages}
+                     onSaveTopPromotionalBanner={this.onSaveTopPromotionalBanner}
                      onShowUploadsMultipleModal={this.onShowUploadsMultipleModal}
                      onHideUploadsMultipleModal={this.onHideUploadsMultipleModal}/>;
   }

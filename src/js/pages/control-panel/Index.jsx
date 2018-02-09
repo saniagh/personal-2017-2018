@@ -34,7 +34,7 @@ class Index extends Component {
                 onClick={() => this.props.history.push(
                     '/control-panel/products')}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src="products.jpg"
+              <img src="/images/products.jpg"
                    style={{ maxWidth: '100%', height: 300 }}/>
             </div>
             <div style={{ padding: '0.5em', textAlign: 'center' }}>On this page
@@ -60,7 +60,7 @@ class Index extends Component {
                 onClick={() => this.props.history.push(
                     '/control-panel/products/add-a-product')}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src="add-product.jpg"
+              <img src="/images/add-product.jpg"
                    style={{ maxWidth: '100%', height: 300 }}/>
             </div>
             <div style={{ padding: '0.5em', textAlign: 'center' }}>On this page
@@ -86,7 +86,7 @@ class Index extends Component {
                 onClick={() => this.props.history.push(
                     '/control-panel/categories')}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src="categories.gif"
+              <img src="/images/categories.gif"
                    style={{ maxWidth: '100%', height: 300 }}/>
             </div>
             <div style={{ padding: '0.5em', textAlign: 'center' }}>Here you can
@@ -111,7 +111,7 @@ class Index extends Component {
                 onClick={() => this.props.history.push(
                     '/control-panel/settings')}>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img src="currency.jpg"
+              <img src="/images/currency.jpg"
                    style={{ maxWidth: '100%', height: 300 }}/>
             </div>
             <div style={{ padding: '0.5em', textAlign: 'center' }}>You can

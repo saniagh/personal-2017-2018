@@ -41,27 +41,6 @@ const Routes = withRouter((props) => {
     )].concat(extraBreadcrumbItems);
   return (
       <span>
-        <div className="sub-header-promo-container">
-            <div className="header-promo">
-              <div className="header-promo-banner">
-                <div className="o-row">
-                  <div className="o-column">
-                    <div className="o-line">
-                      <p className="header-promo-title">
-                        Promo banner text. Add functionality to settings!
-                      </p>
-                      <div className="header-promo-link-container">
-                        <Link to={`/`}
-                              className="header-promo-link">
-                          Promo link!
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         {location.pathname === '/' ?
             null
             :

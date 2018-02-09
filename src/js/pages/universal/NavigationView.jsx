@@ -9,6 +9,10 @@ import {
   onShowSignupModalAction,
   onHideSignupModalAction,
 } from './navigationActions.js';
+import {
+  onSiteNavigationChange,
+  onTopPromotionalBannerChange,
+} from '../control-panel/settingsActions.js';
 
 import Navigation from './Navigation.jsx';
 
@@ -29,11 +33,21 @@ let createHandlers = function (dispatch) {
     dispatch(onHideSignupModalAction());
   };
 
+  let onSiteNavigationChangeHandler = function () {
+    dispatch(onSiteNavigationChange());
+  };
+
+  let onTopPromotionalBannerChangeHandler = function () {
+    dispatch(onTopPromotionalBannerChange());
+  };
+
   return {
     onShowLoginModal,
     onHideLoginModal,
     onShowSignupModal,
     onHideSignupModal,
+    onSiteNavigationChangeHandler,
+    onTopPromotionalBannerChangeHandler,
   };
 };
 
@@ -48,6 +62,7 @@ class NavigationView extends Component {
       fetchedSettings: false,
       fetchingSettingsError: false,
       siteNavigation: [],
+      topPromotionalBanner: {},
     };
   }
 
@@ -64,6 +79,7 @@ class NavigationView extends Component {
         fetchedSettings: true,
         fetchingSettingsError: false,
         siteNavigation: res.data.settings[0].siteNavigation,
+        topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
       });
     }).catch(() => {
       this.setState({
@@ -76,6 +92,66 @@ class NavigationView extends Component {
         description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
       });
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.shouldUpdateSiteNavigation === true) {
+      this.setState({
+        fetchingSettings: true,
+      });
+      axios({
+        method: 'get',
+        url: '/settings/get-settings',
+      }).then((res) => {
+        this.handlers.onSiteNavigationChangeHandler();
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: true,
+          fetchingSettingsError: false,
+          siteNavigation: res.data.settings[0].siteNavigation,
+          topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
+        });
+      }).catch(() => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: false,
+          fetchingSettingsError: true,
+        });
+        notification.error({
+          message: 'Fatal error',
+          description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+        });
+      });
+    }
+
+    if (nextProps.shouldUpdateTopPromotionalBanner === true) {
+      this.setState({
+        fetchingSettings: true,
+      });
+      axios({
+        method: 'get',
+        url: '/settings/get-settings',
+      }).then((res) => {
+        this.handlers.onTopPromotionalBannerChangeHandler();
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: true,
+          fetchingSettingsError: false,
+          siteNavigation: res.data.settings[0].siteNavigation,
+          topPromotionalBanner: res.data.settings[0].topPromotionalBanner,
+        });
+      }).catch(() => {
+        this.setState({
+          fetchingSettings: false,
+          fetchedSettings: false,
+          fetchingSettingsError: true,
+        });
+        notification.error({
+          message: 'Fatal error',
+          description: 'An error has occurred while fetching shop\'s settings. Please contact an administrator.',
+        });
+      });
+    }
   }
 
   onShowLoginModal = () => {
@@ -97,6 +173,7 @@ class NavigationView extends Component {
   render() {
     return <Navigation fetchedSettings={this.state.fetchedSettings}
                        siteNavigation={this.state.siteNavigation}
+                       topPromotionalBanner={this.state.topPromotionalBanner}
                        login={this.props.login}
                        signup={this.props.signup}
                        router={this.context.router}
@@ -124,6 +201,8 @@ const mapStateToProps = (state) => {
   return {
     login: state.navigationReducer.login,
     signup: state.navigationReducer.signup,
+    shouldUpdateSiteNavigation: state.settingsReducer.shouldUpdateSiteNavigation,
+    shouldUpdateTopPromotionalBanner: state.settingsReducer.shouldUpdateTopPromotionalBanner,
   };
 };
 

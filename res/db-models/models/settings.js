@@ -7,6 +7,12 @@ const SettingsSchema = new mongoose.Schema({
   siteNavigation: {
     type: Array,
   },
+  sliderImages: {
+    type: Array,
+  },
+  topPromotionalBanner: {
+    type: Object,
+  },
 });
 
 module.exports = mongoose.model('Settings', SettingsSchema);

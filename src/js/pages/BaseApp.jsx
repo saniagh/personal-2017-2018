@@ -51,27 +51,6 @@ class BaseApp extends Component {
     const mediaQuery = window.matchMedia('(max-width: 1100px)');
     return (
         <div className="site-wrap" aria-hidden="false">
-          <div className="header-promo-container">
-            <div className="header-promo">
-              <div className="header-promo-banner">
-                <div className="o-row">
-                  <div className="o-column">
-                    <div className="o-line">
-                      <p className="header-promo-title">
-                        Promo banner text. Add functionality to settings!
-                      </p>
-                      <div className="header-promo-link-container">
-                        <Link to={`/`}
-                              className="header-promo-link">
-                          Promo link!
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <Layout style={{
             minHeight: '100vh',
             display: 'flex',
@@ -84,7 +63,10 @@ class BaseApp extends Component {
               <Layout>
                 <Content
                     style={mediaQuery.matches ?
-                        { padding: 0 } :
+                        {
+                          margin: this.context.router.route.location.pathname.indexOf(
+                              '/control-panel') !== -1 ? 0 : '87px 0 0',
+                        } :
                         { padding: '0 50px' }}>
                   <Routes/>
                 </Content>
