@@ -90,6 +90,46 @@ class Home extends Component {
                    src="/images/ariv4.jpg" alt=""/>
             </a>
           </div>
+          <div className="index-sales">
+            <a className="index-sales-top"
+               href="">
+              <img className="index-sales-top-image"
+                   src="/images/salestop.jpg" alt=""/>
+            </a>
+            <div className="index-sales-middle">
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle1.jpg" alt=""/>
+              </a>
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle2.jpg" alt=""/>
+              </a>
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle3.jpg" alt=""/>
+              </a>
+            </div>
+            <a className="index-sales-top"
+               href="">
+              <img className="index-sales-top-image"
+                   src="/images/salesbottom.jpg" alt=""/>
+            </a>
+            <div className="index-sales-middle">
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle4.jpg" alt=""/>
+              </a>
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle5.jpg" alt=""/>
+              </a>
+              <a href="">
+                <img className="index-sales-middle-image"
+                     src="/images/salesmiddle6.jpg" alt=""/>
+              </a>
+            </div>
+          </div>
 
 
           <div className="brand-item">

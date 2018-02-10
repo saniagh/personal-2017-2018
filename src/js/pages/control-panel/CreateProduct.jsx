@@ -200,7 +200,7 @@ class CreateProduct extends Component {
                 flexDirection: cardMediaQuery.matches ? 'column-reverse' : '',
                 padding: cardMediaQuery.matches ? 24 : 5,
               }}>
-          <Form style={{ width: formWidth}}>
+          <Form style={{ width: formWidth }}>
             <Card loading={this.props.fetchingCategories}
                   bordered={false}
                   noHovering={true}
@@ -565,7 +565,8 @@ class CreateProduct extends Component {
                   <span style={{ display: 'flex' }}>
                     <Input value={this.props.tagInput}
                            onChange={this.props.onTagInputChange}
-                           onKeyDown={this.props.handleKeyPressAddTag}/>
+                           onKeyDown={this.props.handleKeyPressAddTag}
+                           autoComplete="on"/>
                     <Button type="default"
                             onClick={() => this.props.onAddTag(
                                 this.props.tagInput)}>

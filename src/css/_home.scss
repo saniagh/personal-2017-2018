@@ -112,6 +112,7 @@
 
 .index-new-arrivals {
   margin-top: 30px;
+  height: 400px;
 
   @media (max-width: 1330px) {
     display: none;
@@ -152,6 +153,54 @@
   }
 }
 
+.index-sales {
+  margin-top: 40px;
+}
+
+.index-sales-top {
+  padding-top: 20px;
+  display: block;
+  height: 560px;
+  @media (max-width: 1330px) {
+    display: none;
+  }
+}
+
+.index-sales-top-image {
+  width: 1240px;
+  height: 540px;
+  @media (max-width: 1330px) {
+    display: none;
+  }
+}
+
+.index-sales-middle {
+  margin-top: 20px;
+  height: 600px;
+
+  @media (max-width: 1330px) {
+    display: none;
+  }
+
+  a {
+    display: block;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    width: 400px;
+    height: 600px;
+  }
+
+  a:last-child {
+    margin-right: 0;
+  }
+}
+
+.index-sales-middle-image {
+  width: 400px;
+  height: 600px;
+}
+
 .brand-item {
   display: none;
   @media (max-width: 1330px) {
@@ -178,4 +227,3 @@
     }
   }
 }
-

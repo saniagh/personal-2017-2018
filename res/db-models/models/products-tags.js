@@ -7,7 +7,7 @@ const ProductsTagsSchema = new mongoose.Schema({
   },
   usedNTimes: {
     type: Number,
-    default: 0,
+    default: 1,
   },
 });
 

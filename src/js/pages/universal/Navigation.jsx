@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import 'antd-mobile/dist/antd-mobile.css';
+import { Drawer, NavBar } from 'antd-mobile';
 import { Modal, Layout, Menu, Icon } from 'antd';
 const { Header, Sider } = Layout;
 const MenuItem = Menu.Item;
+const { SubMenu } = Menu;
 
 import LoginView from '../auth/login/LoginView.jsx';
 import SignupView from '../auth/signup/SignupView.jsx';
@@ -19,6 +22,9 @@ class Navigation extends Component {
       collapsed: false,
       selectedKeys: [],
       mouseIsOn: '',
+      overlayZIndex: -1,
+      drawerZIndex: -1,
+      hidePromoBanner: false,
     };
   }
 
@@ -35,17 +41,56 @@ class Navigation extends Component {
   };
 
   onCollapse = () => {
+    if (this.state.collapsed === true) {
+      setTimeout(() => {
+        this.setState({
+          overlayZIndex: -1,
+        });
+      }, 500);
+    } else this.setState({
+      overlayZIndex: 1,
+    });
+
+    if (this.state.collapsed === true) {
+      setTimeout(() => {
+        this.setState({
+          drawerZIndex: -1,
+        });
+      }, 500);
+    } else this.setState({
+      drawerZIndex: 1,
+    });
+
     this.setState({
       collapsed: !this.state.collapsed,
     });
   };
 
   componentDidMount() {
+
+    window.addEventListener('scroll', () => {
+      if (document.documentElement.scrollTop > 90) {
+        this.setState({
+          hidePromoBanner: true,
+        });
+      } else if (document.documentElement.scrollTop < 90 &&
+          this.state.hidePromoBanner === true)
+        this.setState({
+          hidePromoBanner: false,
+        });
+    });
+
     this.setState(
         { selectedKeys: [this.props.location.pathname] });
     if (this.props.location.pathname.indexOf('control-panel') !== -1)
       this.setState({
         selectedKeys: ['/control-panel'],
+      });
+
+    this.setState({ selectedKeys: [this.props.location.pathname] });
+    if (this.props.location.pathname.indexOf('edit-product') !== -1)
+      this.setState({
+        selectedKeys: ['/control-panel/products'],
       });
   }
 
@@ -55,18 +100,26 @@ class Navigation extends Component {
       this.setState({
         selectedKeys: ['/control-panel'],
       });
-    this.forceUpdate();
+
+    this.setState({ selectedKeys: [nextProps.location.pathname] });
+    if (nextProps.location.pathname.indexOf('edit-product') !== -1)
+      this.setState({
+        selectedKeys: ['/control-panel/products'],
+      });
   }
 
   handleMenuClick = (e) => {
     if (e.key === 'login') {
       this.props.onShowLoginModal();
+      this.onCollapse();
       this.forceUpdate();
     } else if (e.key === 'signup') {
       this.props.onShowSignupModal();
+      this.onCollapse();
       this.forceUpdate();
     } else if (e.key === 'logout') {
       this.props.router.history.replace('/');
+      this.onCollapse();
       Auth.deauthenticateUser();
       this.forceUpdate();
     } else
@@ -86,9 +139,6 @@ class Navigation extends Component {
 
     const mediaQuery = window.matchMedia('(max-width: 1100px)');
 
-    //first Header is for mobile
-    //second Header is for desktop
-
     let optionsList;
 
     if (this.props.fetchedSettings) {
@@ -105,11 +155,11 @@ class Navigation extends Component {
                    onMouseEnter={() => this.onHoverCategory(
                        option.optionName)}
                    onMouseLeave={this.onExitCategory}>
-          <Link to="/">
+          <a href={option.optionAnchor}>
             <span>
               {option.optionName}
             </span>
-          </Link>
+          </a>
           <div className="site-navigation-drop-down"
                style={{
                  display: this.state.mouseIsOn === option.optionName ?
@@ -235,15 +285,24 @@ class Navigation extends Component {
       });
     }
 
+    // first for mobile
+    // second for desktop
+
     return (
         mediaQuery.matches ?
             <nav className="top-navigation">
-              <Header style={{
-                position: 'fixed',
-                width: '100%',
-                zIndex: 1,
-                height: 68,
-              }}>
+              <NavBar
+                  style={{
+                    position: 'fixed',
+                    width: '100%',
+                    zIndex: 1,
+                    height: 68,
+                    backgroundColor: '#fff',
+                  }}
+                  icon={<Icon className="trigger"
+                              style={{ color: '#000' }}
+                              type='menu-unfold'
+                              onClick={this.onCollapse}/>}>
                 <Link to={`/`}>
                   <div className="site-logo">
                     <img className="site-logo-img"
@@ -251,115 +310,135 @@ class Navigation extends Component {
                   </div>
                 </Link>
                 {!Auth.isUserAuthenticated() ?
-                    <Sider
-                        trigger={mediaQuery.matches &&
-                        this.state.collapsed === false ?
-                            null :
-                            true}
-                        collapsible
-                        collapsed={this.state.collapsed}
-                        onCollapse={this.onCollapse}
-                        breakpoint={mediaQuery.matches ? 'sm' : ''}
-                        collapsedWidth={mediaQuery.matches ? 0 : ''}
-                        style={
-                          mediaQuery.matches ?
-                              {
-                                overflow: 'auto',
-                                height: '100vh',
-                                background: '#fff',
-                                position: 'fixed',
-                                left: 0,
-                                zIndex: 1,
-                                top: 0,
-                              }
-                              :
-                              {}}
-                    >
-                      <Menu
-                          theme="light"
-                          mode="inline"
-                          style={{ lineHeight: '64px' }}
-                          selectedKeys={this.state.selectedKeys}
-                          defaultSelectedKeys={this.state.selectedKeys}
-                          onClick={this.handleMenuClick}
-                      >
-                        <MenuItem key="control-navigator"
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                  }}>
+                    <Drawer className="my-drawer"
+                            style={{
+                              minHeight: document.documentElement.clientHeight,
+                              width: this.state.drawerZIndex === 1 ?
+                                  document.documentElement.clientWidth :
+                                  0,
+                              zIndex: this.state.drawerZIndex,
+                            }}
+                            contentStyle={{
+                              color: '#A6A6A6',
+                              textAlign: 'center',
+                              paddingTop: 42,
+                              zIndex: this.state.overlayZIndex === 1 ? 0 : -1,
+                            }}
+                            overlayStyle={{
+                              zIndex: this.state.overlayZIndex,
+                            }}
+                            sidebar={<Menu
+                                theme="light"
+                                mode="inline"
+                                style={{ lineHeight: '64px' }}
+                                selectedKeys={this.state.selectedKeys}
+                                defaultSelectedKeys={this.state.selectedKeys}
+                                onClick={this.handleMenuClick}
+                            >
+                              <MenuItem key="control-navigator"
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'center',
+                                        }}>
                 <span>
-                <Icon
-                    className="trigger"
-                    type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                />
+                <Icon className="trigger"
+                      type='menu-fold'/>
                   </span>
-                        </MenuItem>
-                        <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
-                        <MenuItem key="/client-area"><Link
-                            to={`/client-area`}/>Client
-                          Area</MenuItem>
-                        <MenuItem key="login">Login</MenuItem>
-                        <MenuItem key="signup">Signup</MenuItem>
-                      </Menu>
-                    </Sider>
+                              </MenuItem>
+                              <MenuItem key="/">
+                                <Link to={`/`}/>
+                                <span>Home</span>
+                              </MenuItem>
+                              <MenuItem key="/client-area">
+                                <Link to={`/client-area`}/>
+                                <span>Client area</span>
+                              </MenuItem>
+                              <MenuItem key="login">
+                                <span>Login</span>
+                              </MenuItem>
+                              <MenuItem key="signup">
+                                <span>Signup</span>
+                              </MenuItem>
+                            </Menu>}
+                            open={this.state.collapsed}
+                            onOpenChange={this.onCollapse}>
+                    </Drawer>
                     :
-                    <Sider
-                        trigger={mediaQuery.matches &&
-                        this.state.collapsed === false ?
-                            null :
-                            true}
-                        collapsible
-                        collapsed={this.state.collapsed}
-                        onCollapse={this.onCollapse}
-                        breakpoint={mediaQuery.matches ? 'sm' : ''}
-                        collapsedWidth={mediaQuery.matches ? 0 : ''}
-                        style={
-                          mediaQuery.matches ?
-                              {
-                                overflow: 'auto',
-                                height: '100vh',
-                                background: '#fff',
-                                position: 'fixed',
-                                left: 0,
-                                zIndex: 1,
-                                top: 0,
-                              }
-                              :
-                              {}}
-                    >
-                      <Menu
-                          theme="light"
-                          mode="inline"
-                          style={{ lineHeight: '64px' }}
-                          selectedKeys={this.state.selectedKeys}
-                          defaultSelectedKeys={this.state.selectedKeys}
-                          onClick={this.handleMenuClick}
-                      >
-                        <MenuItem key="control-navigator"
-                                  style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                  }}>
+                    <Drawer className="my-drawer"
+                            style={{
+                              minHeight: document.documentElement.clientHeight,
+                              width: this.state.drawerZIndex === 1 ?
+                                  document.documentElement.clientWidth :
+                                  0,
+                              zIndex: this.state.drawerZIndex,
+                            }}
+                            contentStyle={{
+                              color: '#A6A6A6',
+                              textAlign: 'center',
+                              paddingTop: 42,
+                              zIndex: this.state.overlayZIndex === 1 ? 0 : -1,
+                            }}
+                            overlayStyle={{
+                              zIndex: this.state.overlayZIndex,
+                            }}
+                            sidebar={<Menu
+                                theme="light"
+                                mode="inline"
+                                style={{ lineHeight: '64px' }}
+                                selectedKeys={this.state.selectedKeys}
+                                defaultSelectedKeys={this.state.selectedKeys}
+                                onClick={this.handleMenuClick}
+                            >
+                              <MenuItem key="control-navigator"
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'center',
+                                        }}>
                 <span>
-                <Icon
-                    className="trigger"
-                    type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                />
+                <Icon className="trigger"
+                      type='menu-fold'/>
                   </span>
-                        </MenuItem>
-                        <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
-                        <MenuItem key="/client-area"><Link
-                            to={`/client-area`}/>Client
-                          Area</MenuItem>
-
-                        <MenuItem key="/control-panel"><Link
-                            to={`/control-panel`}/>Control
-                          Panel</MenuItem>
-
-                        <MenuItem key="logout">Logout</MenuItem>
-                      </Menu>
-                    </Sider>
+                              </MenuItem>
+                              <MenuItem key="/">
+                                <Link to={`/`}/>
+                                <span>Home</span>
+                              </MenuItem>
+                              <MenuItem key="/client-area">
+                                <Link to={`/client-area`}/>
+                                <span>Client area</span>
+                              </MenuItem>
+                              <SubMenu key="/control-panel/submenu"
+                                       title="Site management">
+                                <MenuItem key="/control-panel">
+                                  <Link to="/control-panel"/>
+                                  <span>Control Panel Index</span>
+                                </MenuItem>
+                                <MenuItem key="/control-panel/products">
+                                  <Link to={`/control-panel/products`}/>
+                                  <span>All products</span>
+                                </MenuItem>
+                                <MenuItem
+                                    key="/control-panel/products/add-a-product">
+                                  <Link
+                                      to={`/control-panel/products/add-a-product`}/>
+                                  <span>Add product</span>
+                                </MenuItem>
+                                <MenuItem key="/control-panel/categories">
+                                  <Link to={`/control-panel/categories`}/>
+                                  <span>Categories</span>
+                                </MenuItem>
+                                <MenuItem key="/control-panel/settings">
+                                  <Link to={`/control-panel/settings`}/>
+                                  <span>Settings</span>
+                                </MenuItem>
+                              </SubMenu>
+                              <MenuItem key="logout">
+                                <span>Logout</span>
+                              </MenuItem>
+                            </Menu>}
+                            open={this.state.collapsed}
+                            onOpenChange={this.onCollapse}>
+                    </Drawer>
                 }
 
                 <Modal title="Authentication"
@@ -380,9 +459,10 @@ class Navigation extends Component {
                        onCancel={this.props.onHideSignupModal}>
                   <SignupView/>
                 </Modal>
-              </Header>
+              </NavBar>
               {this.props.location.pathname.indexOf('control-panel') === -1 &&
-              this.props.fetchedSettings ?
+              this.props.fetchedSettings &&
+              this.state.hidePromoBanner === false ?
                   <div className="sub-header-promo-container">
                     <div className="header-promo">
                       <div className="header-promo-banner">
@@ -411,7 +491,8 @@ class Navigation extends Component {
             :
             <nav className="top-navigation">
               {this.props.location.pathname.indexOf('control-panel') === -1 &&
-              this.props.fetchedSettings ?
+              this.props.fetchedSettings &&
+              this.state.hidePromoBanner === false ?
                   <div className="header-promo-container">
                     <div className="header-promo">
                       <div className="header-promo-banner">

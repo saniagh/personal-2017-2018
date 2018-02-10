@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-import { Layout, notification, BackTop } from 'antd';
+import { Layout, notification, BackTop, LocaleProvider } from 'antd';
+import enUS from 'antd/lib/locale-provider/en_US';
 const { Content, Footer } = Layout;
 
 import NavigationView from './universal/NavigationView.jsx';
+import FooterView from './universal/FooterView.jsx';
 import { smoothScroll } from '../modules/scrollFunction.js';
 
 import Routes from './Routes.jsx';
@@ -59,22 +61,30 @@ class BaseApp extends Component {
             <header className="top-header">
               <NavigationView location={this.context.router.route.location}/>
             </header>
-            <div id="main" role="main">
-              <Layout>
-                <Content
-                    style={mediaQuery.matches ?
-                        {
-                          margin: this.context.router.route.location.pathname.indexOf(
-                              '/control-panel') !== -1 ? 0 : '87px 0 0',
-                        } :
-                        { padding: '0 50px' }}>
-                  <Routes/>
-                </Content>
-              </Layout>
-            </div>
+            <LocaleProvider locale={enUS}>
+              <div id="main" role="main">
+                <Layout>
+                  <Content
+                      style={mediaQuery.matches ?
+                          {
+                            margin: this.context.router.route.location.pathname.indexOf(
+                                '/control-panel') !== -1 ?
+                                '68px 0 0' :
+                                '160px 0 0',
+                          } :
+                          {
+                            padding: this.context.router.route.location.pathname.indexOf(
+                                '/control-panel') === -1 ? '190px 50px 0' :
+                                '81px 50px 0',
+                          }}>
+                    <Routes/>
+                  </Content>
+                </Layout>
+              </div>
+            </LocaleProvider>
             <footer>
               <Footer style={{ textAlign: 'center' }}>
-                Bloo Shop @2018 Created by Valentin C.
+                <FooterView/>
               </Footer>
             </footer>
             <BackTop/>

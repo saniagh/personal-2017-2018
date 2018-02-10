@@ -1,11 +1,16 @@
 const Product = require('mongoose').model('Product');
 const ProductsTags = require('mongoose').model('ProductsTags');
+const ProductsCategories = require('mongoose').model('ProductsCategories');
 const express = require('express');
 
 const router = new express.Router();
 
 const addProductFormValidation = require(
     '../middleware/add-product-form-validation.js');
+
+const regularSearchFormValidation = require(
+    '../middleware/regular-sale-form-validation.js',
+);
 
 router.post('/add-product', addProductFormValidation, (req, res) => {
   if (!req.body.success)
@@ -52,29 +57,51 @@ router.post('/add-product', addProductFormValidation, (req, res) => {
       orderInList: 1,
     };
 
+    JSON.parse(req.body.productCategory).map((category) => {
+      ProductsCategories.find(
+          { categoryName: { $regex: category, $options: 'i' } },
+          (err, categoryFound) => {
+            if (err) {
+              return res.status(400).json({
+                message: 'Internal error',
+              });
+            } else {
+              ProductsCategories.updateOne(
+                  { categoryName: categoryFound[0].categoryName }, {
+                    $set: { usedNTimes: categoryFound[0].usedNTimes + 1 },
+                  }, () => {
+                  });
+            }
+          });
+    });
+
     JSON.parse(req.body.tags).map((tag) => {
-      ProductsTags.find({ tagName: tag }, (err, tagFound) => {
-        if (err) {
-          return res.status(400).json({
-            message: 'Internal error',
-          });
-        } else if (tagFound.length === 0) {
-          // Save the tag if it doesn't exist
-          const tagData = {
-            tagName: tag,
-          };
-          const newTag = new ProductsTags(tagData);
-          newTag.save();
+      ProductsTags.find({ tagName: { $regex: tag, $options: 'i' } },
+          (err, tagFound) => {
+            if (err) {
+              return res.status(400).json({
+                message: 'Internal error',
+              });
+            } else if (tagFound.length === 0) {
+              // Save the tag if it doesn't exist
 
-        } else {
+              const capitalizedTag = tag.charAt(0).toUpperCase() + tag.slice(1);
 
-          // Update the current tag to have +1 more usage
-          ProductsTags.updateOne({ tagName: tagFound[0].tagName }, {
-            $set: { usedNTimes: tagFound[0].usedNTimes + 1 },
-          }, () => {
+              const tagData = {
+                tagName: capitalizedTag,
+              };
+              const newTag = new ProductsTags(tagData);
+              newTag.save();
+
+            } else {
+
+              // Update the current tag to have +1 more usage
+              ProductsTags.updateOne({ tagName: tagFound[0].tagName }, {
+                $set: { usedNTimes: tagFound[0].usedNTimes + 1 },
+              }, () => {
+              });
+            }
           });
-        }
-      });
     });
 
     const newProduct = new Product(productData);
@@ -234,6 +261,59 @@ router.post('/edit-product-save', (req, res) => {
       });
     } else return res.json({
       success: true,
+    });
+  });
+});
+
+router.post('/get-products-regular-sale', regularSearchFormValidation,
+    (req, res) => {
+      if (!req.body.success)
+        return res.status(400).json({
+          message: req.body.message,
+          errors: req.body.errors,
+          success: false,
+        });
+
+      Product.find({
+        $or: [
+          {
+            productCategory: {
+              $regex: '.*' + req.body.searchTerm + '.*',
+              $options: 'i',
+            },
+          },
+          {
+            productName: {
+              $regex: '.*' + req.body.searchTerm + '.*',
+              $options: 'i',
+            },
+          },
+          {
+            tags: {
+              $regex: '.*' + req.body.searchTerm + '.*',
+              $options: 'i',
+            },
+          },
+        ],
+      }, (err, products) => {
+        if (err) {
+          return res.status(400).json({
+            message: 'An error has occurred.',
+          });
+        } else return res.json({
+          products: products,
+        });
+      }).sort({ featured: 1 });
+    });
+
+router.get('/get-all-tags', (req, res) => {
+  ProductsTags.find({}, (err, tags) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      tags: tags,
     });
   });
 });

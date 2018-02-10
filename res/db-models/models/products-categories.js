@@ -24,6 +24,10 @@ const ProductsCategoriesSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
+  usedNTimes: {
+    type: Number,
+    default: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

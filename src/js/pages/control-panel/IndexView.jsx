@@ -44,7 +44,6 @@ class IndexView extends Component {
       this.setState({
         selectedKeys: ['/control-panel/products'],
       });
-    this.forceUpdate();
   }
 
   render() {
@@ -53,7 +52,10 @@ class IndexView extends Component {
 
     return (
         <Layout>
-          <nav className="top-navigation-mobile">
+          <nav className="top-navigation-mobile"
+               style={{
+                 zIndex: 1,
+               }}>
             <Sider
                 trigger={mediaQuery.matches && this.state.collapsed === false ?
                     null :
