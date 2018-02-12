@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Collapse, Pagination } from 'antd';
+import { Select, Collapse, Pagination, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
 const Option = Select.Option;
@@ -41,6 +41,12 @@ class RegularSalePage extends Component {
             (120 * page),
       });
     }
+  };
+
+  onLoadMore = () => {
+    this.setState({
+      indexEnd: this.state.indexEnd + this.state.productsToShow,
+    });
   };
 
   render() {
@@ -198,6 +204,8 @@ class RegularSalePage extends Component {
       });
     }
 
+    const cardMediaQuery = window.matchMedia('(max-width: 1300px)');
+
     return (
         <div className="main-wrap">
           <div style={{ marginBottom: 40, height: 30 }}>
@@ -247,7 +255,8 @@ class RegularSalePage extends Component {
             <div className="fl">
               <strong className="sort-by-text">Sort by</strong>
               <Select defaultValue="featured"
-                      style={{ width: 144, }}>
+                      style={{ width: 144, }}
+                      onChange={this.props.changeSortByStatus}>
                 <Option value="featured">Featured</Option>
                 <Option value="onsale">On Sale</Option>
                 <Option value="lowhigh">Price low to high</Option>
@@ -279,10 +288,22 @@ class RegularSalePage extends Component {
               </ul>
             </div>
             <div className="pagination-container">
-              <Pagination current={this.state.pageNumber}
-                          onChange={this.onPageChange}
-                          pageSize={this.state.productsToShow}
-                          total={this.props.products.length}/>
+              {cardMediaQuery.matches ?
+                  <Button onClick={this.props.products.length >
+                  this.state.indexEnd ? this.onLoadMore : () => {
+                  }}
+                          type="primary"
+                          disabled={this.props.products.length <
+                          this.state.indexEnd}>
+                    {this.props.products.length >
+                    this.state.indexEnd ? 'View more' : 'No more to show'}
+                  </Button>
+                  :
+                  <Pagination current={this.state.pageNumber}
+                              onChange={this.onPageChange}
+                              pageSize={this.state.productsToShow}
+                              total={this.props.products.length}/>
+              }
             </div>
           </section>
         </div>

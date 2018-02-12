@@ -10,6 +10,7 @@ class Home extends Component {
 
     this.state = {
       isMouseOnCarousel: false,
+      anchorHeight: 0,
     };
   }
 
@@ -21,21 +22,33 @@ class Home extends Component {
 
   render() {
 
+    let element = document.getElementById('height-div');
+
+    let anchorHeight = 0;
+
+    if (element) {
+      anchorHeight = element.offsetHeight;
+    }
+
     let sliderItems = '';
     let arrayWithNoEmpty = [];
 
     if (this.props.fetchedSettings) {
 
       for (let i = 0; i < this.props.sliderImages.length; i++) {
-        if (this.props.sliderImages[i])
+        if (this.props.sliderImages[i].imageUrl)
           arrayWithNoEmpty.push(this.props.sliderImages[i]);
       }
 
       sliderItems = arrayWithNoEmpty.map((url, index) => {
-        return <div key={index}
-                    className="slide-div">
-          <img src={url}/>
-        </div>;
+        return <a key={index}
+                  href={url.imageAnchor}
+                  style={{ height: anchorHeight, }}>
+          <div className="slide-div"
+               id="height-div">
+            <img src={url.imageUrl}/>
+          </div>
+        </a>;
       });
     }
 

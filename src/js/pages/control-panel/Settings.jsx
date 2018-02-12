@@ -621,7 +621,7 @@ class Settings extends Component {
                   {
                     this.props.sliderImages.map(
                         (url, index) => {
-                          if (url)
+                          if (url.imageUrl)
                             return <div key={index}
                                         style={{
                                           marginTop: cardMediaQuery.matches ?
@@ -632,9 +632,25 @@ class Settings extends Component {
                                               20,
                                         }}>
                               <figure>
-                                <img src={url} alt=""
+                                <img src={url.imageUrl} alt=""
                                      style={{ maxWidth: '100%' }}/>
                               </figure>
+                              <figcaption
+                                  className="site-navigation-image-caption"
+                                  style={{
+                                    top: 0,
+                                  }}>
+                                <div>
+                                  <Input placeholder="Photo links to: "
+                                         value={url.imageAnchor}
+                                         onChange={this.props.onSlideImageCaptionChange(
+                                             index)}
+                                         style={{
+                                           marginTop: 10,
+                                           maxWidth: 300,
+                                         }}/>
+                                </div>
+                              </figcaption>
                             </div>;
                         })
                   }

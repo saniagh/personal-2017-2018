@@ -224,10 +224,19 @@ class SettingsView extends Component {
 
     let restoreFlag = true;
 
-    if (value && value.length > 0)
-      this.setState({
-        sliderImages: value,
+    if (value && value.length > 0) {
+      const newSliderImages = value.map((image) => {
+        return {
+          imageUrl: image,
+          imageAnchor: '',
+        };
       });
+
+      this.setState({
+        sliderImages: newSliderImages,
+      });
+
+    }
 
     // In case no image is selected, we need to restore the previous state
     if (value)
@@ -242,6 +251,20 @@ class SettingsView extends Component {
       this.setState({
         sliderImages: this.state.previousSliderImages,
       });
+  };
+
+  onSlideImageCaptionChange = (i) => (e) => {
+    const newSliderImages = this.state.sliderImages.map(
+        (image, k) => {
+          if (i !== k) return image;
+          return {
+            ...image,
+            imageAnchor: e.target.value,
+          };
+        });
+    this.setState({
+      sliderImages: newSliderImages,
+    });
   };
 
   onCurrencyChange = (value) => {
@@ -1028,6 +1051,7 @@ class SettingsView extends Component {
                      onTopBannerPromoLinkAnchorChange={this.onTopBannerPromoLinkAnchorChange}
                      onChangeSelectingSliderImages={this.onChangeSelectingSliderImages}
                      onSelectSliderImages={this.onSelectSliderImages}
+                     onSlideImageCaptionChange={this.onSlideImageCaptionChange}
                      onCurrencyChange={this.onCurrencyChange}
                      addSiteNavigationOption={this.addSiteNavigationOption}
                      removeSiteNavigationOption={this.removeSiteNavigationOption}

@@ -454,7 +454,7 @@ class Product extends Component {
                 </Button>
               </Link>
             </div>
-            <Input style={{ width: '30em' }}
+            <Input style={{ width: '30em', padding: '0 0 0 10px' }}
                    value={this.state.searchQuery}
                    onChange={this.onSearchQueryChange}
                    placeholder="Search products by name"

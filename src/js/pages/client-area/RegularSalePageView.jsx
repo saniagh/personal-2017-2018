@@ -47,6 +47,77 @@ class RegularSalePageView extends Component {
     };
   }
 
+  changeSortByStatus = (value) => {
+    this.setState({
+      sortBy: value,
+    });
+
+    if (value === 'featured') {
+      let newProducts = [];
+      for (let i = 0; i < this.state.products.length; i++) {
+        if (this.state.products[i].productFeatured === true)
+          newProducts.push(this.state.products[i]);
+      }
+
+      for (let i = 0; i < this.state.products.length; i++) {
+        if (this.state.products[i].productFeatured === false)
+          newProducts.push(this.state.products[i]);
+      }
+
+      this.setState({
+        products: newProducts,
+      });
+    }
+
+    if (value === 'onsale') {
+      let newProducts = [];
+      for (let i = 0; i < this.state.products.length; i++) {
+        if (this.state.products[i].salePrice)
+          newProducts.push(this.state.products[i]);
+      }
+
+      for (let i = 0; i < this.state.products.length; i++) {
+        if (!this.state.products[i].salePrice)
+          newProducts.push(this.state.products[i]);
+      }
+
+      this.setState({
+        products: newProducts,
+      });
+    }
+
+    if (value === 'lowhigh') {
+      let newProducts = this.state.products;
+      newProducts.sort((a, b) => {
+        return a.productPrice - b.productPrice;
+      });
+      newProducts.sort((a, b) => {
+        if (a.salePrice && b.salePrice)
+          return a.salePrice - b.salePrice;
+      });
+
+      this.setState({
+        products: newProducts,
+      });
+    }
+
+    if (value === 'highlow') {
+      let newProducts = this.state.products;
+      newProducts.sort((a, b) => {
+        return a.productPrice - b.productPrice;
+      });
+      newProducts.sort((a, b) => {
+        if (a.salePrice && b.salePrice)
+          return a.salePrice - b.salePrice;
+      });
+
+      this.setState({
+        products: newProducts.reverse(),
+      });
+    }
+
+  };
+
   componentDidMount() {
     this.setState({
       fetchingCategories: true,
@@ -82,6 +153,11 @@ class RegularSalePageView extends Component {
       // This will search all products that have either
       // a name like searchTerm, a tag, or a category
       const searchTerm = this.props.match.params.searchTerm.replace('%', ' ');
+
+      this.setState({
+        searchTerm: searchTerm,
+      });
+
       axios({
         method: 'post',
         url: '/product/get-products-regular-sale',
@@ -181,6 +257,7 @@ class RegularSalePageView extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
     if (nextProps.shouldUpdateTopPromotionalBanner === true) {
       this.setState({
         fetchingSettings: true,
@@ -209,6 +286,69 @@ class RegularSalePageView extends Component {
         });
       });
     }
+
+    if (nextProps.match.params.searchTerm !== this.state.searchTerm) {
+      this.setState({
+        fetchingProducts: true,
+      });
+
+      const searchTerm = nextProps.match.params.searchTerm.replace('%', ' ');
+
+      this.setState({
+        searchTerm: searchTerm,
+      });
+
+      axios({
+        method: 'post',
+        url: '/product/get-products-regular-sale',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+        },
+        data: qs.stringify({
+          searchTerm: searchTerm,
+        }),
+      }).then((res) => {
+
+        if (this.state.sortBy === 'featured') {
+          let newProducts = [];
+          for (let i = 0; i < res.data.products.length; i++) {
+            if (res.data.products[i].productFeatured === true)
+              newProducts.push(res.data.products[i]);
+          }
+
+          for (let i = 0; i < res.data.products.length; i++) {
+            if (res.data.products[i].productFeatured === false)
+              newProducts.push(res.data.products[i]);
+          }
+
+          this.setState({
+            fetchingProducts: false,
+            fetchedProducts: true,
+            fetchingProductsError: false,
+            products: newProducts,
+          });
+        } else {
+          this.setState({
+            fetchingProducts: false,
+            fetchedProducts: true,
+            fetchingProductsError: false,
+            products: res.data.products,
+          });
+        }
+      }).catch(() => {
+
+        notification.error({
+          message: 'Fatal error',
+          description: 'An error has occurred. Please reload.',
+        });
+
+        this.setState({
+          fetchingProducts: false,
+          fetchedProducts: false,
+          fetchingProductsError: true,
+        });
+      });
+    }
   }
 
   fetchProductsOnDemandFilter = (searchTerm) => () => {
@@ -219,6 +359,11 @@ class RegularSalePageView extends Component {
       // This will search all products that have either
       // a name like searchTerm, a tag, or a category
       const searchTerm1 = searchTerm.replace('%', ' ');
+
+      this.setState({
+        searchTerm: searchTerm1,
+      });
+
       axios({
         method: 'post',
         url: '/product/get-products-regular-sale',
@@ -283,6 +428,8 @@ class RegularSalePageView extends Component {
                             siteNavigation={this.state.siteNavigation}
                             fetchedTags={this.state.fetchedTags}
                             tags={this.state.tags}
+                            sortBy={this.state.sortBy}
+                            changeSortByStatus={this.changeSortByStatus}
                             fetchProductsOnDemandFilter={this.fetchProductsOnDemandFilter}/>;
   }
 }

@@ -2,6 +2,11 @@
   width: 1240px;
   margin-left: auto;
   margin-right: auto;
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    padding: 0 8px;
+  }
 }
 
 .results-count-wrap {
@@ -20,6 +25,10 @@
 .aside-nav {
   width: 168px;
 
+  @media (max-width: 1300px) {
+    display: none;
+  }
+
   &.fl {
     float: left;
   }
@@ -31,6 +40,11 @@
   color: #333;
   font-size: 24px;
   float: right;
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    float: none;
+  }
 }
 
 .sort-by {
@@ -47,6 +61,13 @@
 
   &.fr {
     float: right;
+  }
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
 }
 
@@ -124,6 +145,15 @@
   &.fr {
     float: right;
   }
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    padding: 0 8px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    float: none;
+  }
 }
 
 .margin-top30 {
@@ -141,6 +171,10 @@
 
 .products-list {
   width: 1055px;
+
+  @media (max-width: 1300px) {
+    width: 100%;
+  }
 }
 
 .products-list-item {
@@ -149,6 +183,15 @@
   height: 420px;
   margin: 0 16px 10px 0;
   position: relative;
+
+  @media (max-width: 1300px) {
+    width: 50%;
+    float: left;
+    padding: 0 10px;
+    position: relative;
+    margin: 0 0 20px 0;
+    height: auto;
+  }
 }
 
 .pr {
@@ -158,9 +201,27 @@
 .products-box-link {
   display: block;
   text-align: center;
+
+  @media (max-width: 1300px) {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    display: block;
+    overflow: hidden;
+  }
+
   img {
     width: 240px;
     height: 319px;
+
+    @media (max-width: 1300px) {
+      width: 100%;
+      min-height: 170px;
+      max-width: 300px;
+      max-height: 450px;
+      vertical-align: top;
+      height: auto;
+    }
   }
 }
 
@@ -228,6 +289,10 @@
     text-overflow: ellipsis;
     width: 216px;
     display: block;
+
+    @media (max-width: 1300px) {
+      width: 100%;
+    }
   }
 
   a:hover {
@@ -487,4 +552,18 @@
       }
     }
   }
+
+  .ant-btn {
+    background-color: #333 !important;
+    border-color: #333 !important;
+    color: #fff !important;
+  }
+  .ant-btn-primary[disabled] {
+    opacity: 0.4;
+  }
+
+  @media (max-width: 1300px) {
+    text-align: center;
+  }
+
 }
