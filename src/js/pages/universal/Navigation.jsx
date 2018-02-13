@@ -140,149 +140,201 @@ class Navigation extends Component {
     const mediaQuery = window.matchMedia('(max-width: 1100px)');
 
     let optionsList;
+    let drawerOptions;
 
     if (this.props.fetchedSettings) {
-      optionsList = this.props.siteNavigation.map((option, index) => {
 
-        let leftDistance = this.offset(
-            document.getElementById(option.optionName) ?
-                document.getElementById(option.optionName) :
-                false);
+      if (mediaQuery.matches) {
+        drawerOptions = this.props.siteNavigation.map((option, index) => {
+          return <SubMenu key={option.optionName.toLowerCase()}
+                          title={<a className="drawer-link"
+                                    href={option.optionAnchor}>{option.optionName}</a>}>
+            {option.siteNavigationColumn1.map((line, i) => {
+              if (line.lineType === 'title')
+                return <SubMenu key={line.lineText.toLowerCase()}
+                                title={<span>{line.lineText}</span>}>
+                  {option.siteNavigationColumn1.map((normalLine, j) => {
+                    if (normalLine.lineType === 'normal')
+                      return <MenuItem key={normalLine.lineText.toLowerCase()}>
+                        <a href={normalLine.lineAnchor}/>
+                        <span>{normalLine.lineText}</span>
+                      </MenuItem>;
+                  })}
+                </SubMenu>;
+            })}
+            {option.siteNavigationColumn2.map((line, i) => {
+              if (line.lineType === 'title')
+                return <SubMenu key={line.lineText.toLowerCase()}
+                                title={<span>{line.lineText}</span>}>
+                  {option.siteNavigationColumn2.map((normalLine, j) => {
+                    if (normalLine.lineType === 'normal')
+                      return <MenuItem key={normalLine.lineText.toLowerCase()}>
+                        <a href={normalLine.lineAnchor}/>
+                        <span>{normalLine.lineText}</span>
+                      </MenuItem>;
+                  })}
+                </SubMenu>;
+            })}
+            {option.siteNavigationColumn3.map((line, i) => {
+              if (line.lineType === 'title')
+                return <SubMenu key={line.lineText.toLowerCase()}
+                                title={<span>{line.lineText}</span>}>
+                  {option.siteNavigationColumn3.map((normalLine, j) => {
+                    if (normalLine.lineType === 'normal')
+                      return <MenuItem key={normalLine.lineText.toLowerCase()}>
+                        <a href={normalLine.lineAnchor}/>
+                        <span>{normalLine.lineText}</span>
+                      </MenuItem>;
+                  })}
+                </SubMenu>;
+            })}
+          </SubMenu>;
+        });
 
-        return <li key={index}
-                   id={option.optionName}
-                   className="site-navigation-list-item"
-                   onMouseEnter={() => this.onHoverCategory(
-                       option.optionName)}
-                   onMouseLeave={this.onExitCategory}>
-          <a href={option.optionAnchor}>
+      } else {
+        optionsList = this.props.siteNavigation.map((option, index) => {
+
+          let leftDistance = this.offset(
+              document.getElementById(option.optionName) ?
+                  document.getElementById(option.optionName) :
+                  false);
+
+          return <li key={index}
+                     id={option.optionName}
+                     className="site-navigation-list-item"
+                     onMouseEnter={() => this.onHoverCategory(
+                         option.optionName)}
+                     onMouseLeave={this.onExitCategory}>
+            <a href={option.optionAnchor}>
             <span>
               {option.optionName}
             </span>
-          </a>
-          <div className="site-navigation-drop-down"
-               style={{
-                 display: this.state.mouseIsOn === option.optionName ?
-                     'block' :
-                     'none',
-                 left: 0 - leftDistance.left,
-                 width: window.innerWidth,
-               }}>
-            <div className="site-navigation-drop-down-option">
-              <div className="site-navigation-categories-wrap">
-                <div className="site-navigation-categories-left">
-                  <ul className="site-navigation-categories-list">
-                    {option.siteNavigationColumn1.map((line, i) => {
-                      if (line.lineType === 'title')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-title">
-                          {line.lineAnchor ?
-                              <a href={line.lineAnchor}>
-                                <span>{line.lineText}</span>
-                              </a>
-                              :
-                              <Link to={this.props.location.pathname}
-                                    style={{
-                                      cursor: 'default',
-                                      textDecoration: 'none',
-                                    }}>
+            </a>
+            <div className="site-navigation-drop-down"
+                 style={{
+                   display: this.state.mouseIsOn === option.optionName ?
+                       'block' :
+                       'none',
+                   left: 0 - leftDistance.left,
+                   width: window.innerWidth,
+                 }}>
+              <div className="site-navigation-drop-down-option">
+                <div className="site-navigation-categories-wrap">
+                  <div className="site-navigation-categories-left">
+                    <ul className="site-navigation-categories-list">
+                      {option.siteNavigationColumn1.map((line, i) => {
+                        if (line.lineType === 'title')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-title">
+                            {line.lineAnchor ?
+                                <a href={line.lineAnchor}>
+                                  <span>{line.lineText}</span>
+                                </a>
+                                :
+                                <Link to={this.props.location.pathname}
+                                      style={{
+                                        cursor: 'default',
+                                        textDecoration: 'none',
+                                      }}>
                                 <span
                                     style={{ borderBottom: 0 }}>{line.lineText}</span>
-                              </Link>
-                          }
+                                </Link>
+                            }
 
-                        </li>;
-                      else if (line.lineType === 'normal')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-item">
-                          <a href={line.lineAnchor}>
-                            <span>{line.lineText}</span>
-                          </a>
-                        </li>;
-                    })}
-                  </ul>
-                  <ul className="site-navigation-categories-list">
-                    {option.siteNavigationColumn2.map((line, i) => {
-                      if (line.lineType === 'title')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-title">
-                          {line.lineAnchor ?
-                              <a href={line.lineAnchor}>
-                                <span>{line.lineText}</span>
-                              </a>
-                              :
-                              <Link to={this.props.location.pathname}
-                                    style={{
-                                      cursor: 'default',
-                                      textDecoration: 'none',
-                                    }}>
+                          </li>;
+                        else if (line.lineType === 'normal')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-item">
+                            <a href={line.lineAnchor}>
+                              <span>{line.lineText}</span>
+                            </a>
+                          </li>;
+                      })}
+                    </ul>
+                    <ul className="site-navigation-categories-list">
+                      {option.siteNavigationColumn2.map((line, i) => {
+                        if (line.lineType === 'title')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-title">
+                            {line.lineAnchor ?
+                                <a href={line.lineAnchor}>
+                                  <span>{line.lineText}</span>
+                                </a>
+                                :
+                                <Link to={this.props.location.pathname}
+                                      style={{
+                                        cursor: 'default',
+                                        textDecoration: 'none',
+                                      }}>
                                 <span
                                     style={{ borderBottom: 0 }}>{line.lineText}</span>
-                              </Link>
-                          }
-                        </li>;
-                      else if (line.lineType === 'normal')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-item">
-                          <a href={line.lineAnchor}>
-                            <span>{line.lineText}</span>
-                          </a>
-                        </li>;
-                    })}
-                  </ul>
-                  <ul className="site-navigation-categories-list">
-                    {option.siteNavigationColumn3.map((line, i) => {
-                      if (line.lineType === 'title')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-title">
-                          {line.lineAnchor ?
-                              <a href={line.lineAnchor}>
-                                <span>{line.lineText}</span>
-                              </a>
-                              :
-                              <Link to={this.props.location.pathname}
-                                    style={{
-                                      cursor: 'default',
-                                      textDecoration: 'none',
-                                    }}>
+                                </Link>
+                            }
+                          </li>;
+                        else if (line.lineType === 'normal')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-item">
+                            <a href={line.lineAnchor}>
+                              <span>{line.lineText}</span>
+                            </a>
+                          </li>;
+                      })}
+                    </ul>
+                    <ul className="site-navigation-categories-list">
+                      {option.siteNavigationColumn3.map((line, i) => {
+                        if (line.lineType === 'title')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-title">
+                            {line.lineAnchor ?
+                                <a href={line.lineAnchor}>
+                                  <span>{line.lineText}</span>
+                                </a>
+                                :
+                                <Link to={this.props.location.pathname}
+                                      style={{
+                                        cursor: 'default',
+                                        textDecoration: 'none',
+                                      }}>
                                 <span
                                     style={{ borderBottom: 0 }}>{line.lineText}</span>
-                              </Link>
+                                </Link>
+                            }
+                          </li>;
+                        else if (line.lineType === 'normal')
+                          return <li key={i}
+                                     className="site-navigation-categories-list-item">
+                            <a href={line.lineAnchor}>
+                              <span>{line.lineText}</span>
+                            </a>
+                          </li>;
+                      })}
+                    </ul>
+                  </div>
+                  <div
+                      className="site-navigation-categories-pictures fl imgWrap">
+                    {option.siteNavigationPictures.map((picture, i) => {
+                      return <a href={picture.imageAnchor}>
+                        <figure>
+                          <img src={picture.imageUrl}
+                               title={picture.imageCaption}/>
+                          {picture.imageCaption ?
+                              <figcaption
+                                  className="site-navigation-image-caption">
+                                {picture.imageCaption}
+                              </figcaption>
+                              :
+                              null
                           }
-                        </li>;
-                      else if (line.lineType === 'normal')
-                        return <li key={i}
-                                   className="site-navigation-categories-list-item">
-                          <a href={line.lineAnchor}>
-                            <span>{line.lineText}</span>
-                          </a>
-                        </li>;
+                        </figure>
+                      </a>;
                     })}
-                  </ul>
-                </div>
-                <div className="site-navigation-categories-pictures fl imgWrap">
-                  {option.siteNavigationPictures.map((picture, i) => {
-                    return <a href={picture.imageAnchor}>
-                      <figure>
-                        <img src={picture.imageUrl}
-                             title={picture.imageCaption}/>
-                        {picture.imageCaption ?
-                            <figcaption
-                                className="site-navigation-image-caption">
-                              {picture.imageCaption}
-                            </figcaption>
-                            :
-                            null
-                        }
-                      </figure>
-                    </a>;
-                  })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </li>;
-      });
+          </li>;
+        });
+      }
     }
 
     // first for mobile
@@ -312,7 +364,7 @@ class Navigation extends Component {
                 {!Auth.isUserAuthenticated() ?
                     <Drawer className="my-drawer"
                             style={{
-                              minHeight: document.documentElement.clientHeight,
+                              minHeight: '100vh',
                               width: this.state.drawerZIndex === 1 ?
                                   document.documentElement.clientWidth :
                                   0,
@@ -366,7 +418,7 @@ class Navigation extends Component {
                     :
                     <Drawer className="my-drawer"
                             style={{
-                              minHeight: document.documentElement.clientHeight,
+                              minHeight: '100vh',
                               width: this.state.drawerZIndex === 1 ?
                                   document.documentElement.clientWidth :
                                   0,
@@ -407,12 +459,16 @@ class Navigation extends Component {
                                 <Link to={`/client-area`}/>
                                 <span>Client area</span>
                               </MenuItem>
+                              <SubMenu key="categories-navigation"
+                                       title="Browse Categories">
+                                {drawerOptions}
+                              </SubMenu>
                               <SubMenu key="/control-panel/submenu"
-                                       title="Site management">
-                                <MenuItem key="/control-panel">
-                                  <Link to="/control-panel"/>
-                                  <span>Control Panel Index</span>
-                                </MenuItem>
+                                       title={
+                                         <Link to={`/control-panel`}
+                                               className="drawer-link">
+                                           Control Panel
+                                         </Link>}>
                                 <MenuItem key="/control-panel/products">
                                   <Link to={`/control-panel/products`}/>
                                   <span>All products</span>
