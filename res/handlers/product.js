@@ -203,6 +203,22 @@ router.post('/edit-product', (req, res) => {
   });
 });
 
+router.post('/view-product', (req, res) => {
+  Product.find({ _id: req.body.productId }, (err, product) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else if (!product) {
+      return res.status(404).json({
+        message: 'No records found.',
+      });
+    } else return res.json({
+      product: product,
+    });
+  });
+});
+
 router.post('/quick-edit-product-save', (req, res) => {
   Product.updateOne({ _id: { $eq: req.body.id } }, {
     $set: {

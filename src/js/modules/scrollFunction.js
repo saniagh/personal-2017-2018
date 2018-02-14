@@ -1,8 +1,8 @@
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       ||
+window.requestAnimFrame = (function () {
+  return window.requestAnimationFrame ||
       window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame    ||
-      function( callback ){
+      window.mozRequestAnimationFrame ||
+      function (callback) {
         window.setTimeout(callback, 1000 / 60);
       };
 })();
@@ -13,7 +13,8 @@ export function smoothScroll(scrollTargetY, speed, easing) {
       speed = speed || 2000,
       easing = easing || 'easeInOutQuint',
       currentTime = 0;
-  let time = Math.max(.1, Math.min(Math.abs(scrollY - scrollTargetY) / speed, .8));
+  let time = Math.max(.1,
+      Math.min(Math.abs(scrollY - scrollTargetY) / speed, .8));
   let easingEquations = {
     easeOutSine: function (pos) {
       return Math.sin(pos * (Math.PI / 2));
@@ -26,8 +27,9 @@ export function smoothScroll(scrollTargetY, speed, easing) {
         return 0.5 * Math.pow(pos, 5);
       }
       return 0.5 * (Math.pow((pos - 2), 5) + 2);
-    }
+    },
   };
+
   function tick() {
     currentTime += 1 / 60;
 
@@ -42,5 +44,6 @@ export function smoothScroll(scrollTargetY, speed, easing) {
       window.scrollTo(0, scrollTargetY);
     }
   }
+
   tick();
 }

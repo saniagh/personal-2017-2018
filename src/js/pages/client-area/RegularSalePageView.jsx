@@ -429,6 +429,8 @@ class RegularSalePageView extends Component {
                             fetchedTags={this.state.fetchedTags}
                             tags={this.state.tags}
                             sortBy={this.state.sortBy}
+                            history={this.props.history}
+                            location={this.props.location}
                             changeSortByStatus={this.changeSortByStatus}
                             fetchProductsOnDemandFilter={this.fetchProductsOnDemandFilter}/>;
   }

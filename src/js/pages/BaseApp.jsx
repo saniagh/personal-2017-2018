@@ -45,7 +45,10 @@ class BaseApp extends Component {
   }
 
   componentWillReceiveProps() {
-    smoothScroll();
+    if (this.context.router.route.location.pathname.indexOf('/browse-shop') ===
+        -1) {
+      smoothScroll();
+    }
   }
 
   render() {

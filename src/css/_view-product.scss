@@ -1,0 +1,38 @@
+.product-section {
+  width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.product-info {
+  border-top: 1px solid #ddd;
+  margin-top: 35px;
+}
+
+.product-description-title {
+  font-size: 14px;
+  color: #333;
+  text-transform: uppercase;
+  height: 14px;
+  line-height: 1;
+  padding: 18px 0;
+  font-weight: 600;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.product-description {
+  font-size: 14px;
+  height: auto;
+  padding-bottom: 18px;
+  visibility: visible;
+  opacity: 1;
+  line-height: 24px;
+}

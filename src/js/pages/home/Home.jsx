@@ -54,127 +54,138 @@ class Home extends Component {
 
     return (
         <div className="index-main">
-          <div onMouseEnter={this.onMouseCarouselHover}
-               onMouseLeave={this.onMouseCarouselHover}>
-            <Carousel interval={3000}
-                      autoPlay
-                      infiniteLoop
-                      showThumbs={false}
-                      showStatus={false}
-                      showArrows={this.state.isMouseOnCarousel}>
-              {sliderItems}
-            </Carousel>
-          </div>
-          <div className="index-promotion">
-            <div className="index-promotion-top">
-              <a href="">
-                <img className="index-promotion-top-image"
-                     src="/images/prom1.jpg" alt=""/>
-              </a>
-              <a href="">
-                <img className="index-promotion-top-image"
-                     src="/images/prom2.jpg" alt=""/>
+          <Card bordered={false}
+                noHovering={true}
+                loading={!this.props.fetchedSettings}
+                style={{
+                  padding: 0,
+                }}
+                bodyStyle={{
+                  margin: 0,
+                  padding: 0,
+                }}>
+            <div onMouseEnter={this.onMouseCarouselHover}
+                 onMouseLeave={this.onMouseCarouselHover}>
+              <Carousel interval={3000}
+                        autoPlay
+                        infiniteLoop
+                        showThumbs={false}
+                        showStatus={false}
+                        showArrows={this.state.isMouseOnCarousel}>
+                {sliderItems}
+              </Carousel>
+            </div>
+            <div className="index-promotion">
+              <div className="index-promotion-top">
+                <a href="">
+                  <img className="index-promotion-top-image"
+                       src="/images/prom1.jpg" alt=""/>
+                </a>
+                <a href="">
+                  <img className="index-promotion-top-image"
+                       src="/images/prom2.jpg" alt=""/>
+                </a>
+              </div>
+              <div className="index-promotion-bottom">
+                <img className="index-promotion-bottom-image"
+                     src="/images/prom3.jpg" alt=""/>
+              </div>
+              <a className="index-block-title"
+                 href="">
+                What are you looking for ?
               </a>
             </div>
-            <div className="index-promotion-bottom">
-              <img className="index-promotion-bottom-image"
-                   src="/images/prom3.jpg" alt=""/>
-            </div>
-            <a className="index-block-title"
-               href="">
-              What are you looking for ?
-            </a>
-          </div>
-          <div className="index-new-arrivals">
-            <a href="">
-              <img className="index-new-arrivals-image"
-                   src="/images/ariv1.jpg" alt=""/>
-            </a>
-            <a href="">
-              <img className="index-new-arrivals-image"
-                   src="/images/ariv2.jpg" alt=""/>
-            </a>
-            <a href="">
-              <img className="index-new-arrivals-image"
-                   src="/images/ariv3.jpg" alt=""/>
-            </a>
-            <a href="">
-              <img className="index-new-arrivals-image"
-                   src="/images/ariv4.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="index-sales">
-            <a className="index-sales-top"
-               href="">
-              <img className="index-sales-top-image"
-                   src="/images/salestop.jpg" alt=""/>
-            </a>
-            <div className="index-sales-middle">
+            <div className="index-new-arrivals">
               <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle1.jpg" alt=""/>
+                <img className="index-new-arrivals-image"
+                     src="/images/ariv1.jpg" alt=""/>
               </a>
               <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle2.jpg" alt=""/>
+                <img className="index-new-arrivals-image"
+                     src="/images/ariv2.jpg" alt=""/>
               </a>
               <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle3.jpg" alt=""/>
+                <img className="index-new-arrivals-image"
+                     src="/images/ariv3.jpg" alt=""/>
+              </a>
+              <a href="">
+                <img className="index-new-arrivals-image"
+                     src="/images/ariv4.jpg" alt=""/>
               </a>
             </div>
-            <a className="index-sales-top"
-               href="">
-              <img className="index-sales-top-image"
-                   src="/images/salesbottom.jpg" alt=""/>
-            </a>
-            <div className="index-sales-middle">
-              <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle4.jpg" alt=""/>
+            <div className="index-sales">
+              <a className="index-sales-top"
+                 href="">
+                <img className="index-sales-top-image"
+                     src="/images/salestop.jpg" alt=""/>
               </a>
-              <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle5.jpg" alt=""/>
+              <div className="index-sales-middle">
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle1.jpg" alt=""/>
+                </a>
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle2.jpg" alt=""/>
+                </a>
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle3.jpg" alt=""/>
+                </a>
+              </div>
+              <a className="index-sales-top"
+                 href="">
+                <img className="index-sales-top-image"
+                     src="/images/salesbottom.jpg" alt=""/>
               </a>
-              <a href="">
-                <img className="index-sales-middle-image"
-                     src="/images/salesmiddle6.jpg" alt=""/>
-              </a>
+              <div className="index-sales-middle">
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle4.jpg" alt=""/>
+                </a>
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle5.jpg" alt=""/>
+                </a>
+                <a href="">
+                  <img className="index-sales-middle-image"
+                       src="/images/salesmiddle6.jpg" alt=""/>
+                </a>
+              </div>
             </div>
-          </div>
 
 
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand1m.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand2m.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand3m.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand4m.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand5m.jpg" alt=""/>
-            </a>
-          </div>
-          <div className="brand-item">
-            <a href="">
-              <img src="/images/brand6m.jpg" alt=""/>
-            </a>
-          </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand1m.jpg" alt=""/>
+              </a>
+            </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand2m.jpg" alt=""/>
+              </a>
+            </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand3m.jpg" alt=""/>
+              </a>
+            </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand4m.jpg" alt=""/>
+              </a>
+            </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand5m.jpg" alt=""/>
+              </a>
+            </div>
+            <div className="brand-item">
+              <a href="">
+                <img src="/images/brand6m.jpg" alt=""/>
+              </a>
+            </div>
+          </Card>
         </div>
     );
   }

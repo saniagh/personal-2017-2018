@@ -956,20 +956,37 @@ figure {
 .product-price {
   margin-top: 7px;
   font-size: 14px; }
+  .product-price.preview {
+    font-size: 18px;
+    margin-top: 0; }
+  .product-price.full {
+    font-weight: 400; }
 
 .price-now {
-  font-size: 16px; }
+  font-size: 14px; }
+  .price-now.preview {
+    font-size: 20px; }
+  .price-now.full {
+    font-size: 36px;
+    color: #333; }
+
+.old-price {
+  color: #9d9d9d;
+  font-size: 12px;
+  margin-left: 8px; }
+  .old-price.preview {
+    font-size: 14px;
+    opacity: 0.6; }
+  .old-price.full {
+    font-size: 14px;
+    opacity: 0.7;
+    font-weight: 300; }
 
 .sale-flag {
   padding: 0 0 0 5px;
   color: #b7602a;
   text-transform: uppercase;
   font-size: 14px; }
-
-.old-price {
-  color: #9d9d9d;
-  font-size: 12px;
-  margin-left: 8px; }
 
 .aside-section {
   width: 100%;
@@ -1133,6 +1150,155 @@ figure {
 @media (max-width: 1300px) {
   .pagination-container {
     text-align: center; } }
+
+.preview-wrap {
+  padding: 20px;
+  display: flex;
+  justify-content: center; }
+
+.preview-gallery {
+  width: 478px; }
+  .preview-gallery.full {
+    width: 50%; }
+
+.preview-details {
+  width: 506px;
+  margin-left: 20px; }
+  .preview-details.full {
+    margin-left: 70px;
+    width: 50%; }
+
+.preview-product-details h1 {
+  font-size: 16px;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 400; }
+
+.percentage-spacing {
+  margin-left: 10px;
+  font-size: 14px; }
+
+.ant-rate-star-full {
+  color: red !important; }
+
+.ant-rate-star-half {
+  color: red !important; }
+
+.preview-order-box {
+  margin-top: 60px; }
+
+.preview-order-box-list-item {
+  padding: 0 !important;
+  line-height: 30px !important; }
+  .preview-order-box-list-item label {
+    float: left;
+    width: 72px;
+    font-size: 13px;
+    line-height: 28px; }
+
+.pt20 {
+  padding-top: 20px; }
+
+.preview-add-cart-div {
+  margin-top: 8px; }
+
+.preview-add-card-button {
+  font-size: 18px;
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  padding: 8px 5px;
+  margin-right: 15px;
+  transition: background-color .1s 0s ease, color .1s 0s ease;
+  background-color: #333;
+  color: #fff;
+  border: 2px solid #333;
+  width: 500px;
+  border-radius: 0;
+  outline: 0;
+  overflow: hidden;
+  cursor: pointer;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+  .preview-add-card-button.full {
+    height: 60px;
+    width: 380px;
+    border: 2px solid #333;
+    -webkit-transition: all .2s 0s ease;
+    -moz-transition: all .2s 0s ease;
+    transition: all .2s 0s ease;
+    position: relative;
+    background-color: #333;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    padding: 0 5px; }
+
+.preview-add-card-button:hover {
+  background-color: #fff;
+  color: #333; }
+
+.preview-add-card-button:active {
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff; }
+
+.preview-link-to-full {
+  float: right;
+  padding-top: 5px;
+  font-size: 14px; }
+  .preview-link-to-full a {
+    color: #333; }
+  .preview-link-to-full a:hover {
+    color: rgba(51, 51, 51, 0.9); }
+
+.preview-product-list {
+  background-color: #f7f7f7;
+  padding: 20px; }
+
+.fr {
+  float: right; }
+
+.image-gallery-slide img {
+  height: auto !important;
+  width: 100% !important;
+  background: #fff !important; }
+
+.product-section {
+  width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center; }
+
+.mt15 {
+  margin-top: 15px; }
+
+.product-info {
+  border-top: 1px solid #ddd;
+  margin-top: 35px; }
+
+.product-description-title {
+  font-size: 14px;
+  color: #333;
+  text-transform: uppercase;
+  height: 14px;
+  line-height: 1;
+  padding: 18px 0;
+  font-weight: 600;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+
+.product-description {
+  font-size: 14px;
+  height: auto;
+  padding-bottom: 18px;
+  visibility: visible;
+  opacity: 1;
+  line-height: 24px; }
 
 .signup-form {
   width: 100%;
