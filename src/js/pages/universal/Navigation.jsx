@@ -392,24 +392,27 @@ class Navigation extends Component {
                                           display: 'flex',
                                           justifyContent: 'center',
                                         }}>
-                <span>
-                <Icon className="trigger"
-                      type='menu-fold'/>
-                  </span>
+                                <span>
+                                  <Icon className="trigger"
+                                        type='menu-fold'/>
+                                </span>
                               </MenuItem>
                               <MenuItem key="/">
                                 <Link to={`/`}/>
+                                <Icon type="home"/>
                                 <span>Home</span>
                               </MenuItem>
-                              <MenuItem key="/client-area">
-                                <Link to={`/client-area`}/>
-                                <span>Client area</span>
-                              </MenuItem>
                               <MenuItem key="login">
-                                <span>Login</span>
+                                <Icon type="login"/>
+                                <span>
+                                  Login
+                                </span>
                               </MenuItem>
                               <MenuItem key="signup">
-                                <span>Signup</span>
+                                <Icon type="user-add"/>
+                                <span>
+                                  Signup
+                                </span>
                               </MenuItem>
                             </Menu>}
                             open={this.state.collapsed}
@@ -453,42 +456,53 @@ class Navigation extends Component {
                               </MenuItem>
                               <MenuItem key="/">
                                 <Link to={`/`}/>
+                                <Icon type="home"/>
                                 <span>Home</span>
                               </MenuItem>
                               <MenuItem key="/client-area">
                                 <Link to={`/client-area`}/>
-                                <span>Client area</span>
+                                <Icon type="car"/>
+                                <span>Shipment Info</span>
                               </MenuItem>
                               <SubMenu key="categories-navigation"
-                                       title="Browse Categories">
+                                       title={<span>
+                                         <Icon type="shop"/>
+                                         <span>Browse Shop</span>
+                                       </span>}>
                                 {drawerOptions}
                               </SubMenu>
                               <SubMenu key="/control-panel/submenu"
                                        title={
                                          <Link to={`/control-panel`}
                                                className="drawer-link">
-                                           Control Panel
+                                           <Icon type="appstore"/>
+                                           <span>Control Panel</span>
                                          </Link>}>
                                 <MenuItem key="/control-panel/products">
                                   <Link to={`/control-panel/products`}/>
+                                  <Icon type="skin" />
                                   <span>All products</span>
                                 </MenuItem>
                                 <MenuItem
                                     key="/control-panel/products/add-a-product">
                                   <Link
                                       to={`/control-panel/products/add-a-product`}/>
+                                  <Icon type="plus" />
                                   <span>Add product</span>
                                 </MenuItem>
                                 <MenuItem key="/control-panel/categories">
                                   <Link to={`/control-panel/categories`}/>
+                                  <Icon type="filter" />
                                   <span>Categories</span>
                                 </MenuItem>
                                 <MenuItem key="/control-panel/settings">
                                   <Link to={`/control-panel/settings`}/>
+                                  <Icon type="setting"/>
                                   <span>Settings</span>
                                 </MenuItem>
                               </SubMenu>
                               <MenuItem key="logout">
+                                <Icon type="logout"/>
                                 <span>Logout</span>
                               </MenuItem>
                             </Menu>}
@@ -585,35 +599,67 @@ class Navigation extends Component {
                     <Menu
                         theme="light"
                         mode="horizontal"
-                        style={{ lineHeight: '78px', float: 'right' }}
+                        style={{
+                          lineHeight: '48px',
+                          position: 'relative',
+                          top: '15px',
+                          float: 'right',
+                        }}
                         selectedKeys={this.state.selectedKeys}
                         defaultSelectedKeys={this.state.selectedKeys}
                         onClick={this.handleMenuClick}
                     >
-                      <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
-                      <MenuItem key="/client-area"><Link to={`/client-area`}/>Client
-                        Area</MenuItem>
-                      <MenuItem key="login">Login</MenuItem>
-                      <MenuItem key="signup">Signup</MenuItem>
+                      <MenuItem key="/">
+                        <Link to={`/`}/>
+                        <Icon type="home"/>
+                        <span>Home</span>
+                      </MenuItem>
+                      <MenuItem key="login">
+                        <Icon type="login"/>
+                        <span>
+                          Login
+                        </span>
+                      </MenuItem>
+                      <MenuItem key="signup">
+                        <Icon type="user-add"/>
+                        <span>
+                          Signup
+                        </span>
+                      </MenuItem>
                     </Menu>
                     :
                     <Menu
                         theme="light"
                         mode="horizontal"
-                        style={{ lineHeight: '78px', float: 'right' }}
+                        style={{
+                          lineHeight: '48px',
+                          position: 'relative',
+                          top: '15px',
+                          float: 'right',
+                        }}
                         selectedKeys={this.state.selectedKeys}
                         defaultSelectedKeys={this.state.selectedKeys}
                         onClick={this.handleMenuClick}
                     >
-                      <MenuItem key="/"><Link to={`/`}/>Home</MenuItem>
-                      <MenuItem key="/client-area"><Link to={`/client-area`}/>Client
-                        Area</MenuItem>
-
-                      <MenuItem key="/control-panel"><Link
-                          to={`/control-panel`}/>Control
-                        Panel</MenuItem>
-
-                      <MenuItem key="logout">Logout</MenuItem>
+                      <MenuItem key="/">
+                        <Link to={`/`}/>
+                        <Icon type="home"/>
+                        <span>Home</span>
+                      </MenuItem>
+                      <MenuItem key="/client-area">
+                        <Link to={`/client-area`}/>
+                        <Icon type="car"/>
+                        <span>Shipment Info</span>
+                      </MenuItem>
+                      <MenuItem key="/control-panel">
+                        <Link to={`/control-panel`}/>
+                        <Icon type="appstore"/>
+                        <span>Control Panel</span>
+                      </MenuItem>
+                      <MenuItem key="logout">
+                        <Icon type="logout"/>
+                        <span>Logout</span>
+                      </MenuItem>
                     </Menu>
                 }
               </Header>

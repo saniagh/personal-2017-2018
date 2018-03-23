@@ -36,3 +36,38 @@
   opacity: 1;
   line-height: 24px;
 }
+
+.cross-and-up-product {
+  width: 50%;
+  float: left;
+  padding: 0 10px;
+  position: relative;
+  margin: 0 0 20px 0;
+  height: auto;
+
+  @media (max-width: 1300px) {
+    width: 100%;
+  }
+}
+
+.w100 {
+  width: 100% !important;
+}
+
+.tac {
+  text-align: center;
+}
+
+.mt30 {
+  margin-top: 30px;
+}
+
+.section-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 600;
+  margin-bottom: 9px;
+}

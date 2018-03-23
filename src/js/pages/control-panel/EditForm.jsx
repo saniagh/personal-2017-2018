@@ -63,7 +63,7 @@ const EditForm = Form.create({
     upSellOptions = props.products.map((product, i) => {
       if (product.sku !== props.sku)
         return <Option key={i}
-                       value={product.productLink}>
+                       value={product._id}>
           <div>
             <Avatar shape="square"
                     style={{ cursor: 'pointer', verticalAlign: 'middle' }}
@@ -72,15 +72,14 @@ const EditForm = Form.create({
               marginLeft: 5,
               verticalAlign: 'middle',
               fontSize: 14,
-            }}>{product.productName +
-            product.sku}</span>
+            }}>{product.productName + ' ' + product.sku}</span>
           </div>
         </Option>;
     });
     crossSellOptions = props.products.map((product, i) => {
       if (product.sku !== props.sku)
         return <Option key={i}
-                       value={product.productLink}>
+                       value={product._id}>
           <div>
             <Avatar shape="square"
                     style={{ cursor: 'pointer', verticalAlign: 'middle' }}
@@ -89,8 +88,7 @@ const EditForm = Form.create({
               marginLeft: 5,
               verticalAlign: 'middle',
               fontSize: 14,
-            }}>{product.productName +
-            product.sku}</span>
+            }}>{product.productName + ' ' + product.sku}</span>
           </div>
         </Option>;
     });

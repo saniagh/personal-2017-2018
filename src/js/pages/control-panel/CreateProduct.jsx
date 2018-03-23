@@ -149,7 +149,7 @@ class CreateProduct extends Component {
     if (this.props.fetchedProducts) {
       upSellOptions = this.props.products.map((product, i) => {
         return <Option key={i}
-                       value={product.productLink}>
+                       value={product._id}>
           <div>
             <Avatar shape="square"
                     style={{ cursor: 'pointer', verticalAlign: 'middle' }}
@@ -158,14 +158,13 @@ class CreateProduct extends Component {
               marginLeft: 5,
               verticalAlign: 'middle',
               fontSize: 14,
-            }}>{product.productName +
-            product.sku}</span>
+            }}>{product.productName + ' ' + product.sku}</span>
           </div>
         </Option>;
       });
       crossSellOptions = this.props.products.map((product, i) => {
         return <Option key={i}
-                       value={product.productLink}>
+                       value={product._id}>
           <div>
             <Avatar shape="square"
                     style={{ cursor: 'pointer', verticalAlign: 'middle' }}
@@ -174,8 +173,7 @@ class CreateProduct extends Component {
               marginLeft: 5,
               verticalAlign: 'middle',
               fontSize: 14,
-            }}>{product.productName +
-            product.sku}</span>
+            }}>{product.productName + ' ' + product.sku}</span>
           </div>
         </Option>;
       });

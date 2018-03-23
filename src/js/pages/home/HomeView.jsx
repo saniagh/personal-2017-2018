@@ -44,6 +44,78 @@ class HomeView extends Component {
       fetchingSettingsError: false,
       settings: [],
       sliderImages: [],
+      leftIndexPromotionsDesktop: {
+        imageUrl: '',
+        imageAnchor: '',
+      },
+      rightIndexPromotionsDesktop: {
+        imageUrl: '',
+        imageAnchor: '',
+      },
+      footerIndexPromotionsDesktop: {
+        imageUrl: '',
+        imageAnchor: '',
+      },
+      indexPromotionsNewArrivals: [
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+      ],
+      indexSalesTopPosterDesktop: {
+        imageUrl: '',
+        imageAnchor: '',
+      },
+      indexSalesMiddleImagesDesktop: [
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+      ],
+      indexSalesMiddlePosterDesktop: {
+        imageUrl: '',
+        imageAnchor: '',
+      },
+      indexSalesBottomImagesDesktop: [
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+      ],
+      indexImagesMobile: [
+        {
+          imageUrl: '',
+          imageAnchor: '',
+        },
+      ],
     };
   }
 
@@ -61,6 +133,15 @@ class HomeView extends Component {
         fetchingSettingsError: false,
         settings: res.data.settings,
         sliderImages: res.data.settings[0].sliderImages,
+        leftIndexPromotionsDesktop: res.data.settings[0].leftIndexPromotionsDesktop,
+        rightIndexPromotionsDesktop: res.data.settings[0].rightIndexPromotionsDesktop,
+        footerIndexPromotionsDesktop: res.data.settings[0].footerIndexPromotionsDesktop,
+        indexPromotionsNewArrivals: res.data.settings[0].indexPromotionsNewArrivals,
+        indexSalesTopPosterDesktop: res.data.settings[0].indexSalesTopPosterDesktop,
+        indexSalesMiddleImagesDesktop: res.data.settings[0].indexSalesMiddleImagesDesktop,
+        indexSalesMiddlePosterDesktop: res.data.settings[0].indexSalesMiddlePosterDesktop,
+        indexSalesBottomImagesDesktop: res.data.settings[0].indexSalesBottomImagesDesktop,
+        indexImagesMobile: res.data.settings[0].indexImagesMobile,
       });
     }).catch(() => {
       this.setState({
@@ -93,6 +174,15 @@ class HomeView extends Component {
           fetchingSettingsError: false,
           settings: res.data.settings,
           sliderImages: res.data.settings[0].sliderImages,
+          leftIndexPromotionsDesktop: res.data.settings[0].leftIndexPromotionsDesktop,
+          rightIndexPromotionsDesktop: res.data.settings[0].rightIndexPromotionsDesktop,
+          footerIndexPromotionsDesktop: res.data.settings[0].footerIndexPromotionsDesktop,
+          indexPromotionsNewArrivals: res.data.settings[0].indexPromotionsNewArrivals,
+          indexSalesTopPosterDesktop: res.data.settings[0].indexSalesTopPosterDesktop,
+          indexSalesMiddleImagesDesktop: res.data.settings[0].indexSalesMiddleImagesDesktop,
+          indexSalesMiddlePosterDesktop: res.data.settings[0].indexSalesMiddlePosterDesktop,
+          indexSalesBottomImagesDesktop: res.data.settings[0].indexSalesBottomImagesDesktop,
+          indexImagesMobile: res.data.settings[0].indexImagesMobile,
         });
       }).catch(() => {
         this.setState({
@@ -122,6 +212,15 @@ class HomeView extends Component {
                  signup={this.props.signup}
                  fetchedSettings={this.state.fetchedSettings}
                  sliderImages={this.state.sliderImages}
+                 leftIndexPromotionsDesktop={this.state.leftIndexPromotionsDesktop}
+                 rightIndexPromotionsDesktop={this.state.rightIndexPromotionsDesktop}
+                 footerIndexPromotionsDesktop={this.state.footerIndexPromotionsDesktop}
+                 indexPromotionsNewArrivals={this.state.indexPromotionsNewArrivals}
+                 indexSalesTopPosterDesktop={this.state.indexSalesTopPosterDesktop}
+                 indexSalesMiddleImagesDesktop={this.state.indexSalesMiddleImagesDesktop}
+                 indexSalesMiddlePosterDesktop={this.state.indexSalesMiddlePosterDesktop}
+                 indexSalesBottomImagesDesktop={this.state.indexSalesBottomImagesDesktop}
+                 indexImagesMobile={this.state.indexImagesMobile}
                  onShowLoginModal={this.onShowLoginModal}
                  onHideLoginModal={this.onHideLoginModal}/>;
   }

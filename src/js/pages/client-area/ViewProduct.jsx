@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Rate, Icon, Button, Input, Card } from 'antd';
 
@@ -121,6 +122,119 @@ class ViewProduct extends Component {
               </div>
             </div>
           </section>
+          {this.props.upSellProduct || this.props.crossSellProduct ?
+              <section className="product-section mt30">
+                <ul className="list-style-none w100">
+                  {this.props.upSellProduct ?
+                      <li className="cross-and-up-product">
+                        <div className="pr">
+                          <h4 className="section-title">
+                            Similar product
+                          </h4>
+                          <div className="products-box">
+                            <Link
+                                onClick={this.props.onClickUpOrCross(
+                                    this.props.upSellProduct._id)}
+                                to={`/product/${this.props.upSellProduct.productLink}&${this.props.upSellProduct._id}`}
+                                className="products-box-link">
+                              <img
+                                  src={this.props.upSellProduct.productThumbnail}
+                                  alt=""/>
+                            </Link>
+                          </div>
+                        </div>
+                        <p className="product-title tac">
+                          <Link className="w100"
+                                onClick={this.props.onClickUpOrCross(
+                                    this.props.upSellProduct._id)}
+                                to={`/product/${this.props.upSellProduct.productLink}&${this.props.upSellProduct._id}`}>
+                            {this.props.upSellProduct.productName}
+                          </Link>
+                        </p>
+                        <p className="product-price tac">
+                          <span className="price-now">
+                            <strong>
+                              {this.props.currency[1]}
+                              {this.props.upSellProduct.salePrice ?
+                                  this.props.upSellProduct.salePrice :
+                                  this.props.upSellProduct.productPrice}
+                            </strong>
+                          </span>
+                          {this.props.upSellProduct.salePrice ?
+                              <span>
+                                <span className="sale-flag">(SALE)</span>
+                                <del className="old-price">
+                                  <strong>
+                                    {this.props.currency[1]}
+                                    {this.props.upSellProduct.productPrice}
+                                  </strong>
+                                </del>
+                              </span>
+                              :
+                              null}
+                        </p>
+                      </li>
+                      :
+                      null
+                  }
+                  {this.props.crossSellProduct ?
+                      <li className="cross-and-up-product">
+                        <div className="pr">
+                          <h4 className="section-title">
+                            Usually sold togheter with
+                          </h4>
+                          <div className="products-box">
+                            <Link
+                                onClick={this.props.onClickUpOrCross(
+                                    this.props.crossSellProduct._id)}
+                                to={`/product/${this.props.crossSellProduct.productLink}&${this.props.crossSellProduct._id}`}
+                                className="products-box-link">
+                              <img
+                                  src={this.props.crossSellProduct.productThumbnail}
+                                  alt=""/>
+                            </Link>
+                          </div>
+                        </div>
+                        <p className="product-title tac">
+                          <Link className="w100"
+                                onClick={this.props.onClickUpOrCross(
+                                    this.props.crossSellProduct._id)}
+                                to={`/product/${this.props.crossSellProduct.productLink}&${this.props.crossSellProduct._id}`}>
+                            {this.props.crossSellProduct.productName}
+                          </Link>
+                        </p>
+                        <p className="product-price tac">
+                          <span className="price-now">
+                            <strong>
+                              {this.props.currency[1]}
+                              {this.props.crossSellProduct.salePrice ?
+                                  this.props.crossSellProduct.salePrice :
+                                  this.props.crossSellProduct.productPrice}
+                            </strong>
+                          </span>
+                          {this.props.crossSellProduct.salePrice ?
+                              <span>
+                                <span className="sale-flag">(SALE)</span>
+                                <del className="old-price">
+                                  <strong>
+                                    {this.props.currency[1]}
+                                    {this.props.crossSellProduct.productPrice}
+                                  </strong>
+                                </del>
+                              </span>
+                              :
+                              null}
+                        </p>
+                      </li>
+                      :
+                      null
+                  }
+                </ul>
+              </section>
+              :
+              null
+          }
+
         </div>
     );
   }

@@ -156,6 +156,11 @@ class UploadView extends Component {
   onChooseImageFunction = () => {
     this.handlers.onChooseImageHandler(this.state.selectedUrl);
     this.handlers.onHideUploadsModal();
+
+    if (this.props.fromIndexPromotionsDesktop) {
+      this.props.onIndexPromotionsDesktopChooseOne(this.state.selectedUrl);
+      this.props.onChangeIsSingleModalVisible();
+    }
   };
 
   render() {

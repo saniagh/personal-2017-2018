@@ -114,4 +114,71 @@ router.post('/update-top-promotional-banner', (req, res) => {
   });
 });
 
+router.post('/update-index-images-desktop', (req, res) => {
+  Settings.updateMany({}, {
+        $set: {
+          leftIndexPromotionsDesktop: JSON.parse(
+              req.body.leftIndexPromotionsDesktop),
+          rightIndexPromotionsDesktop: JSON.parse(
+              req.body.rightIndexPromotionsDesktop),
+          footerIndexPromotionsDesktop: JSON.parse(
+              req.body.footerIndexPromotionsDesktop),
+          indexPromotionsNewArrivals: JSON.parse(
+              req.body.indexPromotionsNewArrivals),
+          indexSalesTopPosterDesktop: JSON.parse(
+              req.body.indexSalesTopPosterDesktop),
+          indexSalesMiddleImagesDesktop: JSON.parse(
+              req.body.indexSalesMiddleImagesDesktop),
+          indexSalesMiddlePosterDesktop: JSON.parse(
+              req.body.indexSalesMiddlePosterDesktop),
+          indexSalesBottomImagesDesktop: JSON.parse(
+              req.body.indexSalesBottomImagesDesktop),
+        },
+      }, (err) => {
+        if (err) {
+          return res.status(400).json({
+            message: 'An error has occurred.',
+          });
+        } else return res.json({
+          success: true,
+        });
+      },
+  );
+});
+
+router.post('/update-index-images-mobile', (req, res) => {
+  Settings.updateMany({}, {
+        $set: {
+          indexImagesMobile: JSON.parse(req.body.indexImagesMobile),
+        },
+      }, (err) => {
+        if (err) {
+          return res.status(400).json({
+            message: 'An error has occurred.',
+          });
+        } else return res.json({
+          success: true,
+        });
+      },
+  );
+});
+
+router.post('/update-footer', (req, res) => {
+  Settings.updateMany({}, {
+    $set: {
+      footerLeftColumn: JSON.parse(req.body.footerLeftColumn),
+      footerCenterColumn: JSON.parse(req.body.footerCenterColumn),
+      footerRightColumn: JSON.parse(req.body.footerRightColumn),
+    },
+  }, (err) => {
+    if (err) {
+      return res.status(400).json({
+        message: 'An error has occurred.',
+      });
+    } else return res.json({
+      success: true,
+    });
+  });
+});
+
 module.exports = router;

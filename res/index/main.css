@@ -102,7 +102,8 @@
 
 .index-new-arrivals {
   margin-top: 30px;
-  height: 400px; }
+  height: 400px;
+  clear: both; }
   @media (max-width: 1330px) {
     .index-new-arrivals {
       display: none;
@@ -128,6 +129,65 @@
       .index-new-arrivals a:last-child {
         margin-bottom: 0; } }
 
+.index-new-arrivals-control-panel {
+  margin-top: 30px;
+  clear: both; }
+  @media (max-width: 1330px) {
+    .index-new-arrivals-control-panel {
+      flex-direction: column;
+      justify-content: center; } }
+  .index-new-arrivals-control-panel a {
+    display: block;
+    float: left;
+    margin-right: 20px;
+    width: 295px;
+    height: 400px; }
+    @media (max-width: 1330px) {
+      .index-new-arrivals-control-panel a {
+        text-align: center;
+        width: 100%;
+        height: auto;
+        margin-right: 0;
+        margin-bottom: 10px; } }
+  .index-new-arrivals-control-panel a:last-child {
+    margin: 0; }
+    @media (max-width: 1330px) {
+      .index-new-arrivals-control-panel a:last-child {
+        margin-bottom: 0; } }
+
+.index-new-arrivals-anchor {
+  display: block;
+  float: left;
+  margin-right: 4%;
+  width: 22%;
+  height: 400px;
+  cursor: pointer; }
+  @media (max-width: 1700px) {
+    .index-new-arrivals-anchor {
+      text-align: center;
+      width: 45%;
+      height: auto;
+      margin-right: 2.5%;
+      margin-left: 2.5%;
+      margin-bottom: 10px; } }
+  @media (max-width: 1300px) {
+    .index-new-arrivals-anchor {
+      text-align: center;
+      width: 75%;
+      height: auto;
+      margin-bottom: 10px;
+      margin-right: 12.5%;
+      margin-left: 12.5%; } }
+
+.index-new-arrivals-anchor:last-child {
+  margin-right: 0; }
+  @media (max-width: 1700px) {
+    .index-new-arrivals-anchor:last-child {
+      margin-right: 2.5%; } }
+  @media (max-width: 1300px) {
+    .index-new-arrivals-anchor:last-child {
+      margin-right: 12.5%; } }
+
 .index-new-arrivals-image {
   width: 295px;
   height: 400px; }
@@ -135,6 +195,10 @@
     .index-new-arrivals-image {
       max-width: 100%;
       height: auto; } }
+
+.index-new-arrivals-image-control-panel {
+  width: 100%;
+  height: auto; }
 
 .index-sales {
   margin-top: 40px; }
@@ -147,12 +211,28 @@
     .index-sales-top {
       display: none; } }
 
+.index-sales-top-control-panel {
+  display: block; }
+  @media (max-width: 1720px) {
+    .index-sales-top-control-panel {
+      width: 100%;
+      height: auto; } }
+
 .index-sales-top-image {
   width: 1240px;
   height: 540px; }
   @media (max-width: 1330px) {
     .index-sales-top-image {
       display: none; } }
+
+.index-sales-top-image-control-panel {
+  width: 100%;
+  height: 540px;
+  cursor: pointer; }
+  @media (max-width: 1720px) {
+    .index-sales-top-image-control-panel {
+      width: 100%;
+      height: auto; } }
 
 .index-sales-middle {
   margin-top: 20px;
@@ -170,9 +250,46 @@
   .index-sales-middle a:last-child {
     margin-right: 0; }
 
+.index-sales-middle-control-panel {
+  margin-top: 20px; }
+  @media (max-width: 1720px) {
+    .index-sales-middle-control-panel {
+      width: 100%; } }
+  .index-sales-middle-control-panel a {
+    display: block;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    width: 400px;
+    height: 600px; }
+  .index-sales-middle-control-panel a:last-child {
+    margin-right: 0; }
+
+.index-sales-middle-control-panel-anchor {
+  display: block;
+  float: left;
+  margin-bottom: 20px;
+  margin-right: 5%;
+  width: 30%;
+  height: auto;
+  cursor: pointer; }
+  @media (max-width: 1300px) {
+    .index-sales-middle-control-panel-anchor {
+      margin-right: 12.5%;
+      margin-left: 12.5%;
+      width: 75%;
+      height: auto; } }
+
+.index-sales-middle-control-panel-anchor:last-child {
+  margin-right: 0; }
+
 .index-sales-middle-image {
   width: 400px;
   height: 600px; }
+
+.index-sales-middle-image-control-panel {
+  width: 100%;
+  height: auto; }
 
 .brand-item {
   display: none; }
@@ -714,6 +831,66 @@ figure {
 
 .drawer-link {
   color: rgba(0, 0, 0, 0.65); }
+
+.control-panel-promotional-images-desktop {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 50%;
+  height: auto;
+  float: left;
+  cursor: pointer; }
+  @media (max-width: 1460px) {
+    .control-panel-promotional-images-desktop {
+      text-align: center;
+      width: 75%;
+      height: auto;
+      margin-right: 12.5%;
+      margin-left: 12.5%;
+      margin-bottom: 10px; } }
+  .control-panel-promotional-images-desktop img {
+    width: 100%; }
+  .control-panel-promotional-images-desktop :nth-child(1) {
+    padding-right: 10px; }
+  .control-panel-promotional-images-desktop :nth-child(2) {
+    padding-left: 10px; }
+
+.control-panel-promotional-images-desktop:nth-child(2) {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 50%;
+  height: auto;
+  float: left;
+  cursor: pointer; }
+  .control-panel-promotional-images-desktop:nth-child(2) img {
+    width: 100%; }
+
+.control-panel-promotional-images-footer-desktop {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 100%;
+  padding-top: 10px;
+  clear: both;
+  cursor: pointer; }
+  .control-panel-promotional-images-footer-desktop img {
+    width: 100%;
+    max-height: 500px; }
+
+.control-panel-promotions-header-3 {
+  font-size: 24px;
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  clear: both; }
+
+.control-panel-promotions-header-4 {
+  font-size: 18px;
+  text-align: center;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  clear: both; }
 
 .main-wrap {
   width: 1240px;
@@ -1299,6 +1476,35 @@ figure {
   visibility: visible;
   opacity: 1;
   line-height: 24px; }
+
+.cross-and-up-product {
+  width: 50%;
+  float: left;
+  padding: 0 10px;
+  position: relative;
+  margin: 0 0 20px 0;
+  height: auto; }
+  @media (max-width: 1300px) {
+    .cross-and-up-product {
+      width: 100%; } }
+
+.w100 {
+  width: 100% !important; }
+
+.tac {
+  text-align: center; }
+
+.mt30 {
+  margin-top: 30px; }
+
+.section-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 600;
+  margin-bottom: 9px; }
 
 .signup-form {
   width: 100%;

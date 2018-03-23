@@ -128,14 +128,17 @@ class IndexView extends Component {
                        </span>}>
                         <MenuItem key="/control-panel/products">
                           <Link to={`/control-panel/products`}/>
+                          <Icon type="skin" />
                           <span>All products</span>
                         </MenuItem>
                         <MenuItem key="/control-panel/products/add-a-product">
                           <Link to={`/control-panel/products/add-a-product`}/>
+                          <Icon type="plus" />
                           <span>Add product</span>
                         </MenuItem>
                         <MenuItem key="/control-panel/categories">
                           <Link to={`/control-panel/categories`}/>
+                          <Icon type="filter" />
                           <span>Categories</span>
                         </MenuItem>
                       </SubMenu>

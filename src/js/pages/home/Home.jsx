@@ -77,18 +77,23 @@ class Home extends Component {
             </div>
             <div className="index-promotion">
               <div className="index-promotion-top">
-                <a href="">
+                <a href={this.props.leftIndexPromotionsDesktop.imageAnchor}>
                   <img className="index-promotion-top-image"
-                       src="/images/prom1.jpg" alt=""/>
+                       src={this.props.leftIndexPromotionsDesktop.imageUrl}
+                       alt=""/>
                 </a>
-                <a href="">
+                <a href={this.props.rightIndexPromotionsDesktop.imageAnchor}>
                   <img className="index-promotion-top-image"
-                       src="/images/prom2.jpg" alt=""/>
+                       src={this.props.rightIndexPromotionsDesktop.imageUrl}
+                       alt=""/>
                 </a>
               </div>
               <div className="index-promotion-bottom">
-                <img className="index-promotion-bottom-image"
-                     src="/images/prom3.jpg" alt=""/>
+                <a href={this.props.footerIndexPromotionsDesktop.imageAnchor}>
+                  <img className="index-promotion-bottom-image"
+                       src={this.props.footerIndexPromotionsDesktop.imageUrl}
+                       alt=""/>
+                </a>
               </div>
               <a className="index-block-title"
                  href="">
@@ -96,95 +101,55 @@ class Home extends Component {
               </a>
             </div>
             <div className="index-new-arrivals">
-              <a href="">
-                <img className="index-new-arrivals-image"
-                     src="/images/ariv1.jpg" alt=""/>
-              </a>
-              <a href="">
-                <img className="index-new-arrivals-image"
-                     src="/images/ariv2.jpg" alt=""/>
-              </a>
-              <a href="">
-                <img className="index-new-arrivals-image"
-                     src="/images/ariv3.jpg" alt=""/>
-              </a>
-              <a href="">
-                <img className="index-new-arrivals-image"
-                     src="/images/ariv4.jpg" alt=""/>
-              </a>
+              {this.props.indexPromotionsNewArrivals.map((item, index) => {
+                return <a href={item.imageAnchor}
+                          key={index}>
+                  <img className="index-new-arrivals-image"
+                       src={item.imageUrl} alt=""/>
+                </a>;
+              })}
             </div>
             <div className="index-sales">
               <a className="index-sales-top"
-                 href="">
+                 href={this.props.indexSalesTopPosterDesktop.imageAnchor}>
                 <img className="index-sales-top-image"
-                     src="/images/salestop.jpg" alt=""/>
+                     src={this.props.indexSalesTopPosterDesktop.imageUrl}
+                     alt=""/>
               </a>
               <div className="index-sales-middle">
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle1.jpg" alt=""/>
-                </a>
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle2.jpg" alt=""/>
-                </a>
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle3.jpg" alt=""/>
-                </a>
+                {this.props.indexSalesMiddleImagesDesktop.map((item, index) => {
+                  return <a href={item.imageAnchor}
+                            key={index}>
+                    <img className="index-sales-middle-image"
+                         src={item.imageUrl} alt=""/>
+                  </a>;
+                })}
               </div>
               <a className="index-sales-top"
-                 href="">
+                 href={this.props.indexSalesMiddlePosterDesktop.imageAnchor}>
                 <img className="index-sales-top-image"
-                     src="/images/salesbottom.jpg" alt=""/>
+                     src={this.props.indexSalesMiddlePosterDesktop.imageUrl}
+                     alt=""/>
               </a>
               <div className="index-sales-middle">
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle4.jpg" alt=""/>
-                </a>
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle5.jpg" alt=""/>
-                </a>
-                <a href="">
-                  <img className="index-sales-middle-image"
-                       src="/images/salesmiddle6.jpg" alt=""/>
-                </a>
+                {this.props.indexSalesBottomImagesDesktop.map((item, index) => {
+                  return <a href={item.imageAnchor}
+                            key={index}>
+                    <img className="index-sales-middle-image"
+                         src={item.imageUrl} alt=""/>
+                  </a>;
+                })}
               </div>
             </div>
 
-
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand1m.jpg" alt=""/>
-              </a>
-            </div>
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand2m.jpg" alt=""/>
-              </a>
-            </div>
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand3m.jpg" alt=""/>
-              </a>
-            </div>
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand4m.jpg" alt=""/>
-              </a>
-            </div>
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand5m.jpg" alt=""/>
-              </a>
-            </div>
-            <div className="brand-item">
-              <a href="">
-                <img src="/images/brand6m.jpg" alt=""/>
-              </a>
-            </div>
+            {this.props.indexImagesMobile.map((item, index) => {
+              return <div className="brand-item"
+                          key={index}>
+                <a href={item.imageAnchor}>
+                  <img src={item.imageUrl} alt=""/>
+                </a>
+              </div>;
+            })}
           </Card>
         </div>
     );
