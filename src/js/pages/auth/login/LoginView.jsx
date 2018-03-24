@@ -6,6 +6,7 @@ import {
   onLoginPasswordChangeAction,
   onLoginRequestAction,
   onClearStatusErrorsMessageLoginAction,
+  onRememberMeChangeAction,
 } from '../authActions.js';
 import {
   onHideLoginModalAction,
@@ -23,8 +24,8 @@ let createHandlers = function (dispatch) {
     dispatch(onLoginPasswordChangeAction(password));
   };
 
-  let onLogin = function (usernameOrEmail, password) {
-    dispatch(onLoginRequestAction(usernameOrEmail, password));
+  let onLogin = function (usernameOrEmail, password, rememberMe) {
+    dispatch(onLoginRequestAction(usernameOrEmail, password, rememberMe));
   };
 
   let onClearStatusErrorsMessage = function () {
@@ -39,6 +40,10 @@ let createHandlers = function (dispatch) {
     dispatch(onShowSignupModalAction());
   };
 
+  let onRememberMeChangeHandler = function () {
+    dispatch(onRememberMeChangeAction());
+  };
+
   return {
     onUsernameOrEmailChange,
     onPasswordChange,
@@ -46,6 +51,7 @@ let createHandlers = function (dispatch) {
     onHideLoginModal,
     onShowSignupModal,
     onClearStatusErrorsMessage,
+    onRememberMeChangeHandler,
   };
 };
 
@@ -64,11 +70,10 @@ class LoginView extends Component {
   };
 
   onRedirect = () => {
-    this.context.router.history.replace('/');
   };
 
   onLogin = () => {
-    this.handlers.onLogin(this.props.usernameOrEmail, this.props.password);
+    this.handlers.onLogin(this.props.usernameOrEmail, this.props.password, this.props.rememberMe);
   };
 
   onClearStatusErrorsMessage = () => {
@@ -94,6 +99,7 @@ class LoginView extends Component {
                   onRedirect={this.onRedirect}
                   onLogin={this.onLogin}
                   onClearStatusErrorsMessage={this.onClearStatusErrorsMessage}
+                  onRememberMeChangeHandler={this.handlers.onRememberMeChangeHandler}
                   onHideLoginModal={this.onHideLoginModal}
                   onShowSignupModal={this.onShowSignupModal}/>;
   }
@@ -112,6 +118,7 @@ const mapStateToProps = (state) => {
   return {
     usernameOrEmail: state.authReducer.login.usernameOrEmail,
     password: state.authReducer.login.password,
+    rememberMe: state.authReducer.login.rememberMe,
     status: state.authReducer.login.status,
     errors: state.authReducer.login.errors,
     message: state.authReducer.login.message,

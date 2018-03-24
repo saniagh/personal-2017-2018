@@ -121,7 +121,9 @@ class Login extends Component {
         <FormItem key="2"
                   {...tailFormItemLayout}>
           <div className="login-form-remember-forgot">
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox onChange={this.props.onRememberMeChangeHandler}>
+              Remember me
+            </Checkbox>
             <a className="login-form-forgot"
                onClick={() => {
                  this.props.onHideLoginModal();

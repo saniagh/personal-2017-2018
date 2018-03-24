@@ -8,11 +8,17 @@ import {
   onHideLoginModalAction,
   onShowSignupModalAction,
   onHideSignupModalAction,
+  onOpenShoppingCartAction,
+  onCloseShoppingCartAction,
 } from './navigationActions.js';
 import {
   onSiteNavigationChange,
   onTopPromotionalBannerChange,
 } from '../control-panel/settingsActions.js';
+
+import {
+  onGetUserCredentials,
+} from './userActions.js';
 
 import Navigation from './Navigation.jsx';
 
@@ -41,6 +47,18 @@ let createHandlers = function (dispatch) {
     dispatch(onTopPromotionalBannerChange());
   };
 
+  let onOpenShoppingCartHandler = function () {
+    dispatch(onOpenShoppingCartAction());
+  };
+
+  let onCloseShoppingCartHandler = function () {
+    dispatch(onCloseShoppingCartAction());
+  };
+
+  let onGetUserCredentialsHandler = function (id, username, email, isAdmin) {
+    dispatch(onGetUserCredentials(id, username, email, isAdmin));
+  };
+
   return {
     onShowLoginModal,
     onHideLoginModal,
@@ -48,6 +66,9 @@ let createHandlers = function (dispatch) {
     onHideSignupModal,
     onSiteNavigationChangeHandler,
     onTopPromotionalBannerChangeHandler,
+    onOpenShoppingCartHandler,
+    onCloseShoppingCartHandler,
+    onGetUserCredentialsHandler,
   };
 };
 
@@ -178,10 +199,13 @@ class NavigationView extends Component {
                        signup={this.props.signup}
                        router={this.context.router}
                        location={this.props.location}
+                       shoppingCartProducts={this.props.shoppingCartProducts}
                        onShowLoginModal={this.onShowLoginModal}
                        onHideLoginModal={this.onHideLoginModal}
                        onShowSignupModal={this.onShowSignupModal}
-                       onHideSignupModal={this.onHideSignupModal}/>;
+                       onHideSignupModal={this.onHideSignupModal}
+                       onOpenShoppingCart={this.handlers.onOpenShoppingCartHandler}
+                       onGetUserCredentialsHandler={this.handlers.onGetUserCredentialsHandler}/>;
   }
 }
 NavigationView.propTypes = {
@@ -203,6 +227,7 @@ const mapStateToProps = (state) => {
     signup: state.navigationReducer.signup,
     shouldUpdateSiteNavigation: state.settingsReducer.shouldUpdateSiteNavigation,
     shouldUpdateTopPromotionalBanner: state.settingsReducer.shouldUpdateTopPromotionalBanner,
+    shoppingCartProducts: state.navigationReducer.shoppingCart.products,
   };
 };
 

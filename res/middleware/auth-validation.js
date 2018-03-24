@@ -6,20 +6,32 @@ module.exports = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
 
   if (token !== null) {
-    return jwt.verify(token, dbConfig.jwtSecret, (err, decode) => {
-      if (err || !decode) {
-        return res.status(401).end();
+    return jwt.verify(token, dbConfig.jwtSecret, (err, decoded) => {
+      if (err || !decoded) {
+        return res.status(401).json({
+          tokenExpired: true,
+        });
       }
 
       const query = {
-        _id: decode.sub,
+        _id: decoded.id,
       };
 
       return User.findOne(query, (err, user) => {
         if (err || !user) {
           return res.status(401).end();
-        } else return next();
+        } else {
+
+          req.body.id = user._id;
+          req.body.username = user.username;
+          req.body.email = user.email;
+          req.body.isAdmin = user.isAdmin;
+
+          return next();
+        }
       });
     });
-  } else return next();
+  }
+
+  return next();
 };

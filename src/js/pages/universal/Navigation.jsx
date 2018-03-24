@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import 'antd-mobile/dist/antd-mobile.css';
 import { Drawer, NavBar } from 'antd-mobile';
-import { Modal, Layout, Menu, Icon } from 'antd';
+import { Modal, Layout, Menu, Icon, Badge } from 'antd';
 const { Header, Sider } = Layout;
 const MenuItem = Menu.Item;
 const { SubMenu } = Menu;
@@ -118,9 +118,13 @@ class Navigation extends Component {
       this.onCollapse();
       this.forceUpdate();
     } else if (e.key === 'logout') {
+      this.props.onGetUserCredentialsHandler('', '', '', false);
       this.props.router.history.replace('/');
       this.onCollapse();
       Auth.deauthenticateUser();
+      this.forceUpdate();
+    } else if (e.key === 'shopping-cart') {
+      this.props.onOpenShoppingCart();
       this.forceUpdate();
     } else
       this.onCollapse();
@@ -346,11 +350,29 @@ class Navigation extends Component {
               <NavBar
                   style={{
                     position: 'fixed',
-                    width: '100%',
+                    width: '100vw',
+                    transition: 'all 600ms cubic-bezier(0.23, 1, 0.32, 1)',
                     zIndex: 1,
                     height: 68,
                     backgroundColor: '#fff',
                   }}
+                  rightContent={
+                    [
+                      <span
+                          onClick={this.props.onOpenShoppingCart}>
+                                      <Badge
+                                          count={this.props.shoppingCartProducts.length}>
+                                        <Icon type="shopping-cart"
+                                              style={{
+                                                fontSize: 20,
+                                                color: '#000',
+                                                position: 'relative',
+                                                right: 5,
+                                              }}/>
+                                      </Badge>
+                      </span>,
+                    ]
+                  }
                   icon={<Icon className="trigger"
                               style={{ color: '#000' }}
                               type='menu-unfold'
@@ -402,6 +424,13 @@ class Navigation extends Component {
                                 <Icon type="home"/>
                                 <span>Home</span>
                               </MenuItem>
+                              <SubMenu key="categories-navigation"
+                                       title={<span>
+                                         <Icon type="shop"/>
+                                         <span>Browse Shop</span>
+                                       </span>}>
+                                {drawerOptions}
+                              </SubMenu>
                               <MenuItem key="login">
                                 <Icon type="login"/>
                                 <span>
@@ -462,7 +491,7 @@ class Navigation extends Component {
                               <MenuItem key="/client-area">
                                 <Link to={`/client-area`}/>
                                 <Icon type="car"/>
-                                <span>Shipment Info</span>
+                                <span>My orders</span>
                               </MenuItem>
                               <SubMenu key="categories-navigation"
                                        title={<span>
@@ -480,19 +509,19 @@ class Navigation extends Component {
                                          </Link>}>
                                 <MenuItem key="/control-panel/products">
                                   <Link to={`/control-panel/products`}/>
-                                  <Icon type="skin" />
+                                  <Icon type="skin"/>
                                   <span>All products</span>
                                 </MenuItem>
                                 <MenuItem
                                     key="/control-panel/products/add-a-product">
                                   <Link
                                       to={`/control-panel/products/add-a-product`}/>
-                                  <Icon type="plus" />
+                                  <Icon type="plus"/>
                                   <span>Add product</span>
                                 </MenuItem>
                                 <MenuItem key="/control-panel/categories">
                                   <Link to={`/control-panel/categories`}/>
-                                  <Icon type="filter" />
+                                  <Icon type="filter"/>
                                   <span>Categories</span>
                                 </MenuItem>
                                 <MenuItem key="/control-panel/settings">
@@ -614,6 +643,12 @@ class Navigation extends Component {
                         <Icon type="home"/>
                         <span>Home</span>
                       </MenuItem>
+                      <MenuItem key="shopping-cart">
+                        <Badge count={this.props.shoppingCartProducts.length}>
+                          <Icon type="shopping-cart"/>
+                          <span >Shopping cart</span>
+                        </Badge>
+                      </MenuItem>
                       <MenuItem key="login">
                         <Icon type="login"/>
                         <span>
@@ -649,7 +684,13 @@ class Navigation extends Component {
                       <MenuItem key="/client-area">
                         <Link to={`/client-area`}/>
                         <Icon type="car"/>
-                        <span>Shipment Info</span>
+                        <span>My orders</span>
+                      </MenuItem>
+                      <MenuItem key="shopping-cart">
+                        <Badge count={this.props.shoppingCartProducts.length}>
+                          <Icon type="shopping-cart"/>
+                          <span >Shopping cart</span>
+                        </Badge>
                       </MenuItem>
                       <MenuItem key="/control-panel">
                         <Link to={`/control-panel`}/>

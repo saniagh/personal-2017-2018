@@ -9,6 +9,7 @@ const loginFormValidationMiddleware = require(
     '../middleware/login-form-validation.js');
 const signupFormValidationMiddleware = require(
     '../middleware/signup-form-validation.js');
+const authValidationMiddleware = require('../middleware/auth-validation.js');
 
 router.post('/login', loginFormValidationMiddleware, (req, res, next) => {
   if (!req.body.success)
@@ -68,6 +69,21 @@ router.post('/signup', signupFormValidationMiddleware, (req, res, next) => {
       success: true,
     });
   })(req, res, next);
+});
+
+router.post('/auth-validation', authValidationMiddleware, (req, res) => {
+  return res.json({
+    tokenExpired: false,
+  });
+});
+
+router.post('/decode-credentials', authValidationMiddleware, (req, res) => {
+  return res.json({
+    id: req.body.id,
+    username: req.body.username,
+    email: req.body.email,
+    isAdmin: req.body.isAdmin,
+  });
 });
 
 module.exports = router;

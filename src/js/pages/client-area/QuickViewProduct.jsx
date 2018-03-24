@@ -101,7 +101,9 @@ class QuickViewProduct extends Component {
               }
               </p>
               <div className="preview-add-cart-div">
-                <button className="preview-add-card-button">
+                <button className="preview-add-card-button"
+                        onClick={this.props.onAddProductToCart(
+                            this.props.product, this.props.orderQty)}>
                   ADD TO CART
                 </button>
               </div>

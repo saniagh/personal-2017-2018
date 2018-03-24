@@ -13,7 +13,11 @@ import {
   ON_SIGNUP_SUCCESS,
   ON_SIGNUP_FAILURE,
   ON_CLEAR_STATUS_ERRORS_MESSAGE_SIGNUP,
+  ON_REMEMBER_ME_CHANGE,
 } from '../../modules/actionTypes.js';
+
+import { onGetUserCredentials } from '../universal/userActions.js';
+
 import axios from 'axios';
 import qs from 'qs';
 import Auth from '../../modules/Auth.js';
@@ -52,7 +56,7 @@ export function onLoginFailure(errors, message) {
   };
 }
 
-export function onLoginRequestAction(usernameOrEmail, password) {
+export function onLoginRequestAction(usernameOrEmail, password, rememberMe) {
   return function (dispatch) {
     dispatch(onLoginInitiate());
     return axios({
@@ -64,10 +68,31 @@ export function onLoginRequestAction(usernameOrEmail, password) {
       data: qs.stringify({
         usernameOrEmail: usernameOrEmail,
         password: password,
+        rememberMe: rememberMe,
       }),
     }).then((res) => {
       Auth.authenticateUser(res.data.token);
-      dispatch(onLoginSuccess());
+
+      axios({
+        method: 'post',
+        url: '/authentication/decode-credentials',
+        headers: {
+          'Authorization': `bearer ${res.data.token}`,
+          'Content-type': 'application/x-www-form-urlencoded',
+        },
+      }).then((res) => {
+        const response = res.data;
+        dispatch(onGetUserCredentials(response.id,
+            response.username, response.email, response.isAdmin));
+        dispatch(onLoginSuccess());
+      }).catch(() => {
+        // if something went wrong then there is something wrong with the server or with the jwt
+        // it's best to deauthenticate the user
+        // this is not likely to run if the first one fails, but this is just a fail check
+        Auth.deauthenticateUser();
+        location.reload();
+      });
+
     }).catch((err) => {
       dispatch(
           onLoginFailure(err.response.data.errors, err.response.data.message));
@@ -149,13 +174,39 @@ export function onSignupRequestAction(
       }),
     }).then((res) => {
       Auth.authenticateUser(res.data.token);
-      dispatch(onSignupSuccess());
+
+      axios({
+        method: 'post',
+        url: '/authentication/decode-credentials',
+        headers: {
+          'Authorization': `bearer ${res.data.token}`,
+          'Content-type': 'application/x-www-form-urlencoded',
+        },
+      }).then((res) => {
+        const response = res.data;
+        dispatch(onGetUserCredentials(response.id,
+            response.username, response.email, response.isAdmin));
+        dispatch(onSignupSuccess());
+      }).catch(() => {
+        // if something went wrong then there is something wrong with the server or with the jwt
+        // it's best to deauthenticate the user
+        // this is not likely to run if the first one fails, but this is just a fail check
+        Auth.deauthenticateUser();
+        location.reload();
+      });
+
     }).catch((err) => {
       dispatch(
           onSignupFailure(
               err.response.data.errors ? err.response.data.errors : {},
               err.response.data.message));
     });
+  };
+}
+
+export function onRememberMeChangeAction() {
+  return {
+    type: ON_REMEMBER_ME_CHANGE,
   };
 }
 

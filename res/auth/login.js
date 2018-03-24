@@ -6,6 +6,7 @@ const dbConfig = require('../../db-config');
 module.exports = new PassportLocalStrategy({
   usernameField: 'usernameOrEmail',
   passwordField: 'password',
+  rememberMe: 'rememberMe',
   session: false,
   passReqToCallback: true,
 }, (req, usernameOrEmail, password, done) => {
@@ -49,11 +50,14 @@ module.exports = new PassportLocalStrategy({
           }
 
           const payload = {
+            id: user._id,
             username: user.username,
+            email: user.email,
+            isAdmin: user.isAdmin,
           };
 
           const token = jwt.sign(payload, dbConfig.jwtSecret,
-              { expiresIn: 7200 });
+              req.body.rememberMe === 'true' ? null : { expiresIn: 7200 * 12 });
 
           return done(null, token);
         });

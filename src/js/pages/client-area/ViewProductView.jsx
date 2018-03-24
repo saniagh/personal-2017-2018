@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 import qs from 'qs';
 import { notification, Card } from 'antd';
 
+import { smoothScroll } from '../../modules/scrollFunction.js';
+
+import {
+  onAddProductToCart,
+} from '../universal/navigationActions.js';
+
 import ViewProduct from './ViewProduct.jsx';
+
+let createHandlers = function (dispatch) {
+  let onAddProductToCartHandler = function (product, qty) {
+    dispatch(onAddProductToCart(product, qty));
+  };
+
+  return {
+    onAddProductToCartHandler,
+  };
+};
 
 class ViewProductView extends Component {
   constructor(props) {
     super(props);
+
+    this.handlers = createHandlers(this.props.dispatch);
 
     this.state = {
       product: '',
@@ -97,6 +116,7 @@ class ViewProductView extends Component {
   }
 
   componentDidMount() {
+    smoothScroll();
     this.setState({
       fetchingProduct: true,
       fetchingSettings: true,
@@ -274,6 +294,16 @@ class ViewProductView extends Component {
     });
   };
 
+  onAddProductToCart = (product, qty) => () => {
+    this.handlers.onAddProductToCartHandler(product, qty);
+    notification.success({
+      duration: 5,
+      message: 'Success!',
+      description: `${this.state.orderQty} ${this.state.product.productName} ${this.state.orderQty ===
+      1 ? 'has' : 'have'} been added to your shopping cart!`,
+    });
+  };
+
   render() {
     if (this.state.fetchedProduct === true)
       return <ViewProduct product={this.state.product}
@@ -284,12 +314,13 @@ class ViewProductView extends Component {
                           onIncrementQty={this.onIncrementQty}
                           onDecrementQty={this.onDecrementQty}
                           onQtyChange={this.onQtyChange}
-                          onClickUpOrCross={this.onClickUpOrCross}/>;
+                          onClickUpOrCross={this.onClickUpOrCross}
+                          onAddProductToCart={this.onAddProductToCart}/>;
     else return <Card loading={true}
                       bordered={false}
                       noHovering={true}/>;
   }
 }
 
-export default ViewProductView;
+export default connect()(ViewProductView);
 

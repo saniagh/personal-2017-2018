@@ -5,6 +5,7 @@ import ClientAreaView from './client-area/ClientAreaView.jsx';
 import RegularSalePageView from './client-area/RegularSalePageView.jsx';
 import IndexView from './control-panel/IndexView.jsx';
 import ViewProductView from './client-area/ViewProductView.jsx';
+import CheckoutView from './client-area/CheckoutView.jsx';
 
 const Routes = withRouter(() => {
   return <Switch>
@@ -16,6 +17,9 @@ const Routes = withRouter(() => {
     <Route exact
            path={`/product/:productName&:productId`}
            component={ViewProductView}/>
+    <Route exact
+           path={`/checkout`}
+           component={CheckoutView}/>
   </Switch>;
 
 });

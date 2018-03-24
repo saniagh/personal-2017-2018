@@ -13,6 +13,7 @@ import {
   ON_SIGNUP_SUCCESS,
   ON_SIGNUP_FAILURE,
   ON_CLEAR_STATUS_ERRORS_MESSAGE_SIGNUP,
+  ON_REMEMBER_ME_CHANGE,
 } from '../../modules/actionTypes.js';
 
 export default function authReducer(
@@ -20,6 +21,7 @@ export default function authReducer(
       login: {
         usernameOrEmail: '',
         password: '',
+        rememberMe: false,
         errors: {},
         message: '',
         status: 'NOT_ATTEMPTED',
@@ -157,6 +159,14 @@ export default function authReducer(
           status: 'NOT_ATTEMPTED',
           errors: {},
           message: '',
+        },
+      };
+    case ON_REMEMBER_ME_CHANGE:
+      return {
+        ...state,
+        login: {
+          ...state.login,
+          rememberMe: !state.login.rememberMe,
         },
       };
     default:

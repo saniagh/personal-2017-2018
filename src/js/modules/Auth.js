@@ -9,6 +9,8 @@ export default class Auth {
 
   static deauthenticateUser() {
     localStorage.removeItem('token');
+    localStorage.removeItem('products');
+    localStorage.removeItem('cartLastModified');
   }
 
   static isUserAuthenticated() {

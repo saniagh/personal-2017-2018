@@ -15,6 +15,7 @@ module.exports = new PassportLocalStrategy({
     email: req.body.email.trim(),
     password: req.body.password.trim(),
     registerDate: Date.now(),
+    isAdmin: false,
   };
 
   const newUser = new User(user);
@@ -24,7 +25,10 @@ module.exports = new PassportLocalStrategy({
     }
 
     const payload = {
+      id: user._id,
       username: user.username,
+      email: user.email,
+      isAdmin: user.isAdmin,
     };
 
     const token = jwt.sign(payload, dbConfig.jwtSecret,
