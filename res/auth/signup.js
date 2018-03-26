@@ -24,16 +24,17 @@ module.exports = new PassportLocalStrategy({
       return done(err);
     }
 
-    const payload = {
-      id: user._id,
-      username: user.username,
-      email: user.email,
-      isAdmin: user.isAdmin,
-    };
+    User.findOne({ username: req.body.username.trim() }, (err, user) => {
+      const payload = {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      };
+      const token = jwt.sign(payload, dbConfig.jwtSecret,
+          { expiresIn: 7200 * 12 });
 
-    const token = jwt.sign(payload, dbConfig.jwtSecret,
-        { expiresIn: 7200 * 12 });
-
-    return done(null, token);
+      return done(null, token);
+    });
   });
 });

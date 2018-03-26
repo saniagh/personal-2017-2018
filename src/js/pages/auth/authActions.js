@@ -145,6 +145,7 @@ export function onSignupInitiate() {
 }
 
 export function onSignupSuccess() {
+  location.reload();
   return { type: ON_SIGNUP_SUCCESS };
 }
 
@@ -174,27 +175,7 @@ export function onSignupRequestAction(
       }),
     }).then((res) => {
       Auth.authenticateUser(res.data.token);
-
-      axios({
-        method: 'post',
-        url: '/authentication/decode-credentials',
-        headers: {
-          'Authorization': `bearer ${res.data.token}`,
-          'Content-type': 'application/x-www-form-urlencoded',
-        },
-      }).then((res) => {
-        const response = res.data;
-        dispatch(onGetUserCredentials(response.id,
-            response.username, response.email, response.isAdmin));
-        dispatch(onSignupSuccess());
-      }).catch(() => {
-        // if something went wrong then there is something wrong with the server or with the jwt
-        // it's best to deauthenticate the user
-        // this is not likely to run if the first one fails, but this is just a fail check
-        Auth.deauthenticateUser();
-        location.reload();
-      });
-
+      dispatch(onSignupSuccess());
     }).catch((err) => {
       dispatch(
           onSignupFailure(

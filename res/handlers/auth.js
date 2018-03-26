@@ -63,11 +63,12 @@ router.post('/signup', signupFormValidationMiddleware, (req, res, next) => {
         message: 'Could not process form.',
         success: false,
       });
-    } else return res.json({
-      message: 'You have successfully signed up.',
-      token,
-      success: true,
-    });
+    } else {
+      return res.status(200).json({
+        success: true,
+        token,
+      });
+    }
   })(req, res, next);
 });
 
