@@ -200,6 +200,7 @@ class NavigationView extends Component {
                        router={this.context.router}
                        location={this.props.location}
                        shoppingCartProducts={this.props.shoppingCartProducts}
+                       isAdmin={this.props.isAdmin}
                        onShowLoginModal={this.onShowLoginModal}
                        onHideLoginModal={this.onHideLoginModal}
                        onShowSignupModal={this.onShowSignupModal}
@@ -228,6 +229,7 @@ const mapStateToProps = (state) => {
     shouldUpdateSiteNavigation: state.settingsReducer.shouldUpdateSiteNavigation,
     shouldUpdateTopPromotionalBanner: state.settingsReducer.shouldUpdateTopPromotionalBanner,
     shoppingCartProducts: state.navigationReducer.shoppingCart.products,
+    isAdmin: state.userReducer.isAdmin,
   };
 };
 

@@ -14,6 +14,8 @@ import CreateProductView from './CreateProductView.jsx';
 import EditProductView from './EditProductView.jsx';
 import SettingsView from './SettingsView.jsx';
 
+import { connect } from 'react-redux';
+
 class IndexView extends Component {
   constructor(props) {
     super(props);
@@ -36,6 +38,10 @@ class IndexView extends Component {
       this.setState({
         selectedKeys: ['/control-panel/products'],
       });
+
+    if (this.props.isAdmin === false) {
+      this.context.router.history.replace('/');
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,6 +50,10 @@ class IndexView extends Component {
       this.setState({
         selectedKeys: ['/control-panel/products'],
       });
+
+    if (nextProps.isAdmin === false) {
+      this.context.router.history.replace('/');
+    }
   }
 
   render() {
@@ -128,17 +138,17 @@ class IndexView extends Component {
                        </span>}>
                         <MenuItem key="/control-panel/products">
                           <Link to={`/control-panel/products`}/>
-                          <Icon type="skin" />
+                          <Icon type="skin"/>
                           <span>All products</span>
                         </MenuItem>
                         <MenuItem key="/control-panel/products/add-a-product">
                           <Link to={`/control-panel/products/add-a-product`}/>
-                          <Icon type="plus" />
+                          <Icon type="plus"/>
                           <span>Add product</span>
                         </MenuItem>
                         <MenuItem key="/control-panel/categories">
                           <Link to={`/control-panel/categories`}/>
-                          <Icon type="filter" />
+                          <Icon type="filter"/>
                           <span>Categories</span>
                         </MenuItem>
                       </SubMenu>
@@ -236,4 +246,10 @@ IndexView.contextTypes = {
   router: PropTypes.object.isRequired,
 };
 
-export default IndexView;
+const mapStateToProps = (state) => {
+  return {
+    isAdmin: state.userReducer.isAdmin,
+  };
+};
+
+export default connect(mapStateToProps)(IndexView);

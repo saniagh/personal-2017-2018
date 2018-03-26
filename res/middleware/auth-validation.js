@@ -19,7 +19,6 @@ module.exports = (req, res, next) => {
 
       return User.findOne(query, (err, user) => {
         if (err || !user) {
-          console.log(user);
           return res.status(401).end();
         } else {
 

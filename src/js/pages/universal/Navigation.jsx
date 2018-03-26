@@ -500,36 +500,40 @@ class Navigation extends Component {
                                        </span>}>
                                 {drawerOptions}
                               </SubMenu>
-                              <SubMenu key="/control-panel/submenu"
-                                       title={
-                                         <Link to={`/control-panel`}
-                                               className="drawer-link">
-                                           <Icon type="appstore"/>
-                                           <span>Control Panel</span>
-                                         </Link>}>
-                                <MenuItem key="/control-panel/products">
-                                  <Link to={`/control-panel/products`}/>
-                                  <Icon type="skin"/>
-                                  <span>All products</span>
-                                </MenuItem>
-                                <MenuItem
-                                    key="/control-panel/products/add-a-product">
-                                  <Link
-                                      to={`/control-panel/products/add-a-product`}/>
-                                  <Icon type="plus"/>
-                                  <span>Add product</span>
-                                </MenuItem>
-                                <MenuItem key="/control-panel/categories">
-                                  <Link to={`/control-panel/categories`}/>
-                                  <Icon type="filter"/>
-                                  <span>Categories</span>
-                                </MenuItem>
-                                <MenuItem key="/control-panel/settings">
-                                  <Link to={`/control-panel/settings`}/>
-                                  <Icon type="setting"/>
-                                  <span>Settings</span>
-                                </MenuItem>
-                              </SubMenu>
+                              {this.props.isAdmin ?
+                                  <SubMenu key="/control-panel/submenu"
+                                           title={
+                                             <Link to={`/control-panel`}
+                                                   className="drawer-link">
+                                               <Icon type="appstore"/>
+                                               <span>Control Panel</span>
+                                             </Link>}>
+                                    <MenuItem key="/control-panel/products">
+                                      <Link to={`/control-panel/products`}/>
+                                      <Icon type="skin"/>
+                                      <span>All products</span>
+                                    </MenuItem>
+                                    <MenuItem
+                                        key="/control-panel/products/add-a-product">
+                                      <Link
+                                          to={`/control-panel/products/add-a-product`}/>
+                                      <Icon type="plus"/>
+                                      <span>Add product</span>
+                                    </MenuItem>
+                                    <MenuItem key="/control-panel/categories">
+                                      <Link to={`/control-panel/categories`}/>
+                                      <Icon type="filter"/>
+                                      <span>Categories</span>
+                                    </MenuItem>
+                                    <MenuItem key="/control-panel/settings">
+                                      <Link to={`/control-panel/settings`}/>
+                                      <Icon type="setting"/>
+                                      <span>Settings</span>
+                                    </MenuItem>
+                                  </SubMenu>
+                                  :
+                                  null
+                              }
                               <MenuItem key="logout">
                                 <Icon type="logout"/>
                                 <span>Logout</span>
@@ -692,11 +696,15 @@ class Navigation extends Component {
                           <span >Shopping cart</span>
                         </Badge>
                       </MenuItem>
-                      <MenuItem key="/control-panel">
-                        <Link to={`/control-panel`}/>
-                        <Icon type="appstore"/>
-                        <span>Control Panel</span>
-                      </MenuItem>
+                      {this.props.isAdmin ?
+                          <MenuItem key="/control-panel">
+                            <Link to={`/control-panel`}/>
+                            <Icon type="appstore"/>
+                            <span>Control Panel</span>
+                          </MenuItem>
+                          :
+                          null
+                      }
                       <MenuItem key="logout">
                         <Icon type="logout"/>
                         <span>Logout</span>
