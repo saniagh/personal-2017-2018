@@ -424,6 +424,11 @@ class Navigation extends Component {
                                 <Icon type="home"/>
                                 <span>Home</span>
                               </MenuItem>
+                              <MenuItem key="/my-orders">
+                                <Link to={`/my-orders`}/>
+                                <Icon type="car"/>
+                                <span>My orders</span>
+                              </MenuItem>
                               <SubMenu key="categories-navigation"
                                        title={<span>
                                          <Icon type="shop"/>
@@ -488,8 +493,8 @@ class Navigation extends Component {
                                 <Icon type="home"/>
                                 <span>Home</span>
                               </MenuItem>
-                              <MenuItem key="/client-area">
-                                <Link to={`/client-area`}/>
+                              <MenuItem key="/my-orders">
+                                <Link to={`/my-orders`}/>
                                 <Icon type="car"/>
                                 <span>My orders</span>
                               </MenuItem>
@@ -647,6 +652,11 @@ class Navigation extends Component {
                         <Icon type="home"/>
                         <span>Home</span>
                       </MenuItem>
+                      <MenuItem key="/my-orders">
+                        <Link to={`/my-orders`}/>
+                        <Icon type="car"/>
+                        <span>My orders</span>
+                      </MenuItem>
                       <MenuItem key="shopping-cart">
                         <Badge count={this.props.shoppingCartProducts.length}>
                           <Icon type="shopping-cart"/>
@@ -685,8 +695,8 @@ class Navigation extends Component {
                         <Icon type="home"/>
                         <span>Home</span>
                       </MenuItem>
-                      <MenuItem key="/client-area">
-                        <Link to={`/client-area`}/>
+                      <MenuItem key="/my-orders">
+                        <Link to={`/my-orders`}/>
                         <Icon type="car"/>
                         <span>My orders</span>
                       </MenuItem>

@@ -8,6 +8,7 @@ import {
   REHYDRATE_SHOPPING_CART_STATE,
   ON_ADD_PRODUCT_TO_CART,
   ON_REMOVE_PRODUCT_FROM_CART,
+  ON_EMPTY_CART,
 } from '../../modules/actionTypes.js';
 
 export function onShowLoginModalAction() {
@@ -81,6 +82,14 @@ export function onRemoveProductFromCart(index) {
     dispatch({
       type: ON_REMOVE_PRODUCT_FROM_CART,
       index: index,
+    });
+  };
+}
+
+export function onEmptyCart() {
+  return function (dispatch) {
+    dispatch({
+      type: ON_EMPTY_CART,
     });
   };
 }

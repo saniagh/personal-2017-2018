@@ -32,6 +32,9 @@ class Checkout extends Component {
     totalCost = Math.round(totalCost * 100) / 100;
 
     return <div className="checkout-container">
+      <div className={`checkout-block-clicks ${this.props.savedOrder ?
+          '' :
+          'disabled'}`}/>
       <h2 className="checkout-page-title">
         Checkout
       </h2>
@@ -61,9 +64,12 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input"
-                       value={this.props.firstName}
-                       onChange={this.props.onFirstNameChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.firstName ?
+                        'error' :
+                        null}`}
+                    value={this.props.firstName}
+                    onChange={this.props.onFirstNameChange}/>
               </div>
               <div className="checkout-input-wrap">
                 <span className="checkout-input-label">
@@ -73,9 +79,12 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input"
-                       value={this.props.email}
-                       onChange={this.props.onEmailChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.email ?
+                        'error' :
+                        null}`}
+                    value={this.props.email}
+                    onChange={this.props.onEmailChange}/>
               </div>
             </div>
             <div className="checkout-row">
@@ -87,15 +96,21 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input"
-                       value={this.props.lastName}
-                       onChange={this.props.onLastNameChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.lastName ?
+                        'error' :
+                        null}`}
+                    value={this.props.lastName}
+                    onChange={this.props.onLastNameChange}/>
               </div>
               <div className="checkout-input-wrap">
                 <span className="checkout-input-label">Phone number:</span>
-                <input className="checkout-input"
-                       value={this.props.phoneNumber}
-                       onChange={this.props.onPhoneNumberChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.phoneNumber ?
+                        'error' :
+                        null}`}
+                    value={this.props.phoneNumber}
+                    onChange={this.props.onPhoneNumberChange}/>
               </div>
             </div>
             <div className="checkout-row">
@@ -134,9 +149,12 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input full"
-                       value={this.props.stateOrCounty}
-                       onChange={this.props.onStateOrCountyChange}/>
+                <input
+                    className={`checkout-input full ${this.props.errors.stateOrCounty ?
+                        'error' :
+                        null}`}
+                    value={this.props.stateOrCounty}
+                    onChange={this.props.onStateOrCountyChange}/>
               </div>
             </div>
             <div className="checkout-row">
@@ -148,9 +166,12 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input"
-                       value={this.props.townOrCity}
-                       onChange={this.props.onTownOrCityChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.townOrCity ?
+                        'error' :
+                        null}`}
+                    value={this.props.townOrCity}
+                    onChange={this.props.onTownOrCityChange}/>
               </div>
               <div className="checkout-input-wrap">
                 <span className="checkout-input-label">
@@ -160,9 +181,12 @@ class Checkout extends Component {
                   </span>
                 </Tooltip>
                 </span>
-                <input className="checkout-input"
-                       value={this.props.postcodeOrZIP}
-                       onChange={this.props.onPostcodeOrZIPChange}/>
+                <input
+                    className={`checkout-input ${this.props.errors.postcodeOrZIP ?
+                        'error' :
+                        null}`}
+                    value={this.props.postcodeOrZIP}
+                    onChange={this.props.onPostcodeOrZIPChange}/>
               </div>
             </div>
             <div className="checkout-row"
@@ -178,6 +202,9 @@ class Checkout extends Component {
                   fontSize: 14,
                   fontWeight: 700,
                   fontColor: '#333',
+                  border: this.props.errors.orderNotes ?
+                      '3px solid rgba(226, 44, 44, 0.6)' :
+                      '',
                 }}
                           placeholder="Notes about your order, e.g. special notes for delivery"
                           value={this.props.orderNotes}
@@ -228,9 +255,10 @@ class Checkout extends Component {
                 </Checkbox>
               </li>
               <li>
-                <div className="place-order-button">
+                <button className="place-order-button"
+                        onClick={this.props.onSaveOrder}>
                   Place order
-                </div>
+                </button>
               </li>
             </ul>
           </div>

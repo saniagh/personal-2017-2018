@@ -159,6 +159,11 @@
   &.full {
     width: 60%;
   }
+
+  &.error {
+    background-color: rgba(226, 44, 44, 0.6);
+    color: #fff;
+  }
 }
 
 .checkout-input:hover {
@@ -275,4 +280,130 @@
     background-color: #fff;
     color: #333;
   }
+}
+
+.checkout-block-clicks {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  opacity: 0.6;
+  z-index: 5;
+  transition: all 500ms;
+
+  &.disabled {
+    z-index: -1;
+    opacity: 0;
+  }
+}
+
+.order-details-list {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  border: 1px solid #d9d9d9;
+
+  @media (max-width: 800px) {
+    width: 100%;
+    flex: 1;
+  }
+}
+
+.order-details-list-item {
+  border-bottom: 1px solid #e8e8e8;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.65);
+  display: flex;
+}
+
+.order-details-list-item:last-child {
+  border-bottom: 0;
+}
+
+.order-details-label-name {
+  width: 50%;
+  overflow-wrap: break-word;
+  padding: 12px 0 12px 24px;
+  height: auto;
+}
+
+.order-details-label-value {
+  width: 50%;
+  overflow-wrap: break-word;
+  padding: 12px 24px 12px 5px;
+}
+
+.my-orders-header {
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 1300px){
+    font-size: 36px;
+  }
+
+  @media (max-width: 1000px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 570px) {
+    font-size: 24px;
+    text-align: center;
+    padding-top: 20px;
+  }
+}
+
+.my-orders-spacing {
+  padding: 100px 0 190px 0;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 800px) {
+    padding: 40px 0;
+  }
+}
+
+.my-orders-input {
+  height: 57px;
+  border: 1px solid #eee;
+  width: 500px;
+  font-size: 24px;
+  text-indent: 24px;
+
+  @media (max-width: 1000px) {
+    font-size: 18px;
+  }
+}
+
+.my-orders-button {
+  width: 108px;
+  height: 57px;
+  font-size: 18px;
+  line-height: 57px;
+  color: #fff;
+  background-color: #2d2d2d;
+  text-transform: uppercase;
+  font-family: "Roboto Medium", sans-serif;
+  cursor: pointer;
+  border: 1px solid #2d2d2d;
+  transition: all 200ms;
+
+  @media (max-width: 1000px) {
+    font-size: 12px;
+  }
+}
+
+.my-orders-button:hover {
+  background-color: #fff;
+  color: #333;
+}
+
+.my-orders-button:active {
+  background-color: rgba(51, 51, 51, 0.9);
+  color: #fff;
 }

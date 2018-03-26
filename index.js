@@ -41,6 +41,9 @@ app.use('/product', productRoute);
 const uploadRoute = require('./res/handlers/upload');
 app.use('/upload', uploadRoute);
 
+const ordersRoute = require('./res/handlers/orders');
+app.use('/order', ordersRoute);
+
 app.get('*', function (req, res) {
   res.sendFile(__dirname + '/res' + '/index' + '/index.html');
 });

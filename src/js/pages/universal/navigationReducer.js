@@ -8,6 +8,7 @@ import {
   REHYDRATE_SHOPPING_CART_STATE,
   ON_ADD_PRODUCT_TO_CART,
   ON_REMOVE_PRODUCT_FROM_CART,
+  ON_EMPTY_CART,
 } from '../../modules/actionTypes.js';
 
 export default function navigationReducer(
@@ -105,6 +106,18 @@ export default function navigationReducer(
         shoppingCart: {
           ...state.shoppingCart,
           products: newProducts,
+        },
+      };
+    }
+
+    case ON_EMPTY_CART : {
+      localStorage.removeItem('products');
+      localStorage.removeItem('cartLastModified');
+      return {
+        ...state,
+        shoppingCart: {
+          isModalVisible: state.shoppingCart.isModalVisible,
+          products: [],
         },
       };
     }

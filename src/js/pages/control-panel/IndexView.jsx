@@ -13,6 +13,7 @@ import ProductView from './ProductView.jsx';
 import CreateProductView from './CreateProductView.jsx';
 import EditProductView from './EditProductView.jsx';
 import SettingsView from './SettingsView.jsx';
+import ManageOrdersView from './ManageOrdersView.jsx';
 
 import { connect } from 'react-redux';
 
@@ -235,6 +236,9 @@ class IndexView extends Component {
               <Route exact
                      path={`${this.props.match.url}/settings`}
                      component={SettingsView}/>
+              <Route exact
+                     path={`${this.props.match.url}/orders-management/`}
+                     component={ManageOrdersView}/>
             </Content>
           </Layout>
         </Layout>
