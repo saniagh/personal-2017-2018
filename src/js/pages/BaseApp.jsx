@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import 'antd/dist/antd.css';
 
 import Auth from '../modules/Auth.js';
 
