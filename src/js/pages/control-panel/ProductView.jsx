@@ -5,6 +5,8 @@ import axios from 'axios';
 import qs from 'qs';
 import Product from './Product.jsx';
 
+import Auth from '../../modules/Auth.js';
+
 class ProductView extends Component {
   constructor(props) {
     super(props);
@@ -235,6 +237,7 @@ class ProductView extends Component {
       method: 'post',
       url: '/product/quick-edit-product',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -447,6 +450,7 @@ class ProductView extends Component {
       method: 'post',
       url: '/product/quick-edit-product-save',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({

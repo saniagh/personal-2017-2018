@@ -27,6 +27,22 @@ const showHeader = false;
 
 class EditProduct extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      mainClassName: 'main-container hidden',
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
+  }
+
   rowState = {
     selectedRowKeys: [],
     selectedRowsIdentifier: [],
@@ -147,17 +163,18 @@ class EditProduct extends Component {
     };
 
     return (
-        <Card bordered={false}
-              noHovering={true}
-              bodyStyle={{
-                display: 'flex',
-                flexDirection: cardMediaQuery.matches ?
-                    'column-reverse' :
-                    '',
-                padding: cardMediaQuery.matches ? 24 : 5,
-              }}>
-          <EditForm {...fields}/>
-          <span style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={this.state.mainClassName}>
+          <Card bordered={false}
+                noHovering={true}
+                bodyStyle={{
+                  display: 'flex',
+                  flexDirection: cardMediaQuery.matches ?
+                      'column-reverse' :
+                      '',
+                  padding: cardMediaQuery.matches ? 24 : 5,
+                }}>
+            <EditForm {...fields}/>
+            <span style={{ display: 'flex', flexDirection: 'column' }}>
             <Card noHovering={true}
                   loading={this.props.fetchingCategories}
                   title="Publish"
@@ -211,8 +228,9 @@ class EditProduct extends Component {
                   }}>
               <span style={{ display: 'flex', flex: 1, }}>
                 <Button type='danger'
-                        htmlType="button">
-                Move to trash
+                        htmlType="button"
+                        onClick={() => this.props.router.history.replace('/control-panel/products')}>
+                Cancel
               </Button>
               </span>
               <span style={{
@@ -350,27 +368,30 @@ class EditProduct extends Component {
               </span>
             </Card>
           </span>
-          <Modal title="Pick an image"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.props.isModalVisible}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.props.onHideUploadsModal}
-                 onCancel={this.props.onHideUploadsModal}>
-            <UploadView/>
-          </Modal>
-          <Modal title="Pick images to show in product's gallery"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.props.isModalVisibleMultiple}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.props.onHideUploadsMultipleModal}
-                 onCancel={this.props.onHideUploadsMultipleModal}>
-            <UploadViewMultipleChoice/>
-          </Modal>
-        </Card>
+            <Modal title="Pick an image"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.props.isModalVisible}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.props.onHideUploadsModal}
+                   onCancel={this.props.onHideUploadsModal}>
+              <UploadView/>
+            </Modal>
+            <Modal title="Pick images to show in product's gallery"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.props.isModalVisibleMultiple}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.props.onHideUploadsMultipleModal}
+                   onCancel={this.props.onHideUploadsMultipleModal}>
+              <UploadViewMultipleChoice/>
+            </Modal>
+          </Card>
+        </div>
     );
   }
 }

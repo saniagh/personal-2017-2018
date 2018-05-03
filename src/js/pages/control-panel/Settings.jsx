@@ -27,7 +27,16 @@ class Settings extends Component {
     this.state = {
       currency: '',
       isSingleModalVisible: false,
+      mainClassName: 'main-container hidden',
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -480,719 +489,736 @@ class Settings extends Component {
     });
 
     return (
-        <Card bordered={false}
-              noHovering={true}
-              loading={!this.props.loadedPage}
-              style={{
-                padding: cardMediaQuery.matches ? 5 : '',
-              }}>
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="General settings" key="1">
-              <Form>
-                <FormItem key="0"
-                          {...formItemLayout}>
+        <div className={this.state.mainClassName}>
+          <Card bordered={false}
+                noHovering={true}
+                loading={!this.props.loadedPage}
+                style={{
+                  padding: cardMediaQuery.matches ? 5 : '',
+                }}>
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="General settings" key="1">
+                <Form>
+                  <FormItem key="0"
+                            {...formItemLayout}>
+                    <div>
+                      <Button type="primary"
+                              onClick={this.props.onSaveGeneralSettings}
+                              loading={this.props.savingSettings}>
+                        {this.props.savingSettings ?
+                            <span>Working...</span>
+                            :
+                            <span>Save settings</span>
+                        }
+                      </Button>
+                    </div>
+                  </FormItem>
+                  <FormItem key="1"
+                            label="Default settings"
+                            help="Click this button to reset all settings to default."
+                            {...formItemLayout}>
+                    <div>
+                      <Popconfirm
+                          title="Are you sure you want to reset all settings to default？"
+                          okText="Yes" cancelText="No"
+                          onConfirm={this.props.onResetDefault}>
+                        <Button type="default">
+                          Reset settings to default
+                        </Button>
+                      </Popconfirm>
+                    </div>
+                  </FormItem>
+                  <FormItem key="2"
+                            label="Store's currency"
+                            help="Select one of the currencies listed above"
+                            {...formItemLayout}>
+                    {this.props.fetchedSettings ?
+                        <Card bordered={false}
+                              noHovering={true}
+                              loading={this.props.fetchingSettings ||
+                              this.props.savingSettings}
+                              bodyStyle={{
+                                margin: 0,
+                                padding: 0,
+                              }}>
+                          <Select showSearch
+                                  onChange={this.props.onCurrencyChange}
+                                  defaultValue={this.state.currency}
+                                  style={{
+                                    width: cardMediaQuery.matches ?
+                                        '' :
+                                        300,
+                                  }}
+                                  notFoundContent="No matches found.">
+                            {selectOptions}
+                          </Select>
+                        </Card>
+                        :
+                        null
+                    }
+
+                  </FormItem>
+                </Form>
+              </TabPane>
+              <TabPane tab="Promotional banner" key="2">
+                <Card noHovering={true}
+                      bodyStyle={{
+                        padding: cardMediaQuery.matches ?
+                            2 :
+                            '',
+                      }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.props.onSaveTopPromotionalBanner}
+                            type="primary">Save changes to top promotional
+                      banner</Button>
+                  </div>
                   <div>
-                    <Button type="primary"
-                            onClick={this.props.onSaveGeneralSettings}
-                            loading={this.props.savingSettings}>
-                      {this.props.savingSettings ?
-                          <span>Working...</span>
-                          :
-                          <span>Save settings</span>
-                      }
+                    <div>
+                      <Input placeholder="Promotional text"
+                             value={this.props.topPromotionalBanner.promoText}
+                             onChange={this.props.onTopBannerPromoTextChange}
+                             style={{
+                               marginTop: 10,
+                               maxWidth: 300,
+                             }}/>
+                    </div>
+                    <div>
+                      <Input placeholder="Promotional link text"
+                             value={this.props.topPromotionalBanner.promoLinkText}
+                             onChange={this.props.onTopBannerPromoLinkTextChange}
+                             style={{
+                               marginTop: 10,
+                               maxWidth: 300,
+                             }}/>
+                    </div>
+                    <div>
+                      <Input placeholder="Promotional link adress"
+                             value={this.props.topPromotionalBanner.promoLinkAnchor}
+                             onChange={this.props.onTopBannerPromoLinkAnchorChange}
+                             style={{
+                               marginTop: 10,
+                               maxWidth: 300,
+                             }}/>
+                    </div>
+                  </div>
+                </Card>
+              </TabPane>
+              <TabPane tab="Navigation - Layout" key="3">
+                <div style={{ marginBottom: 16 }}>
+                  <Button onClick={this.props.onSaveSiteNavigation}
+                          type="primary">Save site navigation</Button>
+                </div>
+                <div style={{ marginBottom: 16 }}>
+                  <Button onClick={this.props.addSiteNavigationOption}>Add a new
+                    option</Button>
+                </div>
+                <Tabs defaultActiveKey="1">
+                  {navigationTabs}
+                </Tabs>
+              </TabPane>
+              <TabPane tab="Index - Image Slider" key="4">
+                <Card noHovering={true}
+                      bodyStyle={{
+                        padding: cardMediaQuery.matches ?
+                            2 :
+                            '',
+                      }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.props.onSaveSliderImages}
+                            type="primary">Save changes to homepage
+                      slider</Button>
+                  </div>
+                  <div className="div-as-link"
+                       onClick={ () => {
+                         this.props.onShowUploadsMultipleModal();
+                         this.props.onChangeSelectingSliderImages();
+                       }}>
+                    Click here to add/change the current pictures.
+                  </div>
+                  <div className="o-line">
+                    {
+                      this.props.sliderImages.map(
+                          (url, index) => {
+                            if (url.imageUrl)
+                              return <div key={index}
+                                          style={{
+                                            marginTop: cardMediaQuery.matches ?
+                                                20 :
+                                                0,
+                                            marginLeft: cardMediaQuery.matches ?
+                                                0 :
+                                                20,
+                                          }}>
+                                <figure>
+                                  <img src={url.imageUrl} alt=""
+                                       style={{ maxWidth: '434px' }}/>
+                                </figure>
+                                <figcaption
+                                    className="site-navigation-image-caption"
+                                    style={{
+                                      top: 0,
+                                    }}>
+                                  <div>
+                                    <Input placeholder="Photo links to: "
+                                           value={url.imageAnchor}
+                                           onChange={this.props.onSlideImageCaptionChange(
+                                               index)}
+                                           style={{
+                                             marginTop: 10,
+                                             maxWidth: 300,
+                                           }}/>
+                                  </div>
+                                </figcaption>
+                              </div>;
+                          })
+                    }
+                  </div>
+                </Card>
+              </TabPane>
+              <TabPane tab="Index - DESKTOP" key="5">
+                <Card noHovering={true}
+                      bodyStyle={{
+                        padding: cardMediaQuery.matches ?
+                            2 :
+                            '',
+                      }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.props.onSaveIndexImagesDesktop}
+                            loading={this.props.savingIndexImagesDesktop}
+                            type="primary">
+                      Save changes
                     </Button>
                   </div>
-                </FormItem>
-                <FormItem key="1"
-                          label="Default settings"
-                          help="Click this button to reset all settings to default."
-                          {...formItemLayout}>
-                  <div>
-                    <Popconfirm
-                        title="Are you sure you want to reset all settings to default？"
-                        okText="Yes" cancelText="No"
-                        onConfirm={this.props.onResetDefault}>
-                      <Button type="default">
-                        Reset settings to default
-                      </Button>
-                    </Popconfirm>
-                  </div>
-                </FormItem>
-                <FormItem key="2"
-                          label="Store's currency"
-                          help="Select one of the currencies listed above"
-                          {...formItemLayout}>
-                  {this.props.fetchedSettings ?
-                      <Card bordered={false}
-                            noHovering={true}
-                            loading={this.props.fetchingSettings ||
-                            this.props.savingSettings}
-                            bodyStyle={{
-                              margin: 0,
-                              padding: 0,
-                            }}>
-                        <Select showSearch
-                                onChange={this.props.onCurrencyChange}
-                                defaultValue={this.state.currency}
-                                style={{
-                                  width: cardMediaQuery.matches ?
-                                      '' :
-                                      300,
-                                }}
-                                notFoundContent="No matches found.">
-                          {selectOptions}
-                        </Select>
-                      </Card>
-                      :
-                      null
-                  }
-
-                </FormItem>
-              </Form>
-            </TabPane>
-            <TabPane tab="Promotional banner" key="2">
-              <Card noHovering={true}
-                    bodyStyle={{
-                      padding: cardMediaQuery.matches ?
-                          2 :
-                          '',
-                    }}>
-                <div style={{ marginBottom: 16 }}>
-                  <Button onClick={this.props.onSaveTopPromotionalBanner}
-                          type="primary">Save changes to top promotional
-                    banner</Button>
-                </div>
-                <div>
-                  <div>
-                    <Input placeholder="Promotional text"
-                           value={this.props.topPromotionalBanner.promoText}
-                           onChange={this.props.onTopBannerPromoTextChange}
-                           style={{
-                             marginTop: 10,
-                             maxWidth: 300,
+                  <div style={{ height: 'auto' }}>
+                    <h3 className="control-panel-promotions-header-3">
+                      Index promotions
+                    </h3>
+                    <div className="control-panel-promotional-images-desktop">
+                      <img src={this.props.leftIndexPromotionsDesktop.imageUrl ?
+                          this.props.leftIndexPromotionsDesktop.imageUrl
+                          :
+                          '/images/placeholder.png'
+                      }
+                           alt=""
+                           style={{ maxWidth: '610px', maxHeight: '720px' }}
+                           onClick={() => {
+                             this.onChangeIsSingleModalVisible();
+                             this.props.onIndexPromotionsDesktopChoosingForChange(
+                                 'left');
                            }}/>
-                  </div>
-                  <div>
-                    <Input placeholder="Promotional link text"
-                           value={this.props.topPromotionalBanner.promoLinkText}
-                           onChange={this.props.onTopBannerPromoLinkTextChange}
-                           style={{
-                             marginTop: 10,
-                             maxWidth: 300,
-                           }}/>
-                  </div>
-                  <div>
-                    <Input placeholder="Promotional link adress"
-                           value={this.props.topPromotionalBanner.promoLinkAnchor}
-                           onChange={this.props.onTopBannerPromoLinkAnchorChange}
-                           style={{
-                             marginTop: 10,
-                             maxWidth: 300,
-                           }}/>
-                  </div>
-                </div>
-              </Card>
-            </TabPane>
-            <TabPane tab="Navigation - Layout" key="3">
-              <div style={{ marginBottom: 16 }}>
-                <Button onClick={this.props.onSaveSiteNavigation}
-                        type="primary">Save site navigation</Button>
-              </div>
-              <div style={{ marginBottom: 16 }}>
-                <Button onClick={this.props.addSiteNavigationOption}>Add a new
-                  option</Button>
-              </div>
-              <Tabs defaultActiveKey="1">
-                {navigationTabs}
-              </Tabs>
-            </TabPane>
-            <TabPane tab="Index - Image Slider" key="4">
-              <Card noHovering={true}
-                    bodyStyle={{
-                      padding: cardMediaQuery.matches ?
-                          2 :
-                          '',
-                    }}>
-                <div style={{ marginBottom: 16 }}>
-                  <Button onClick={this.props.onSaveSliderImages}
-                          type="primary">Save changes to homepage
-                    slider</Button>
-                </div>
-                <div className="div-as-link"
-                     onClick={ () => {
-                       this.props.onShowUploadsMultipleModal();
-                       this.props.onChangeSelectingSliderImages();
-                     }}>
-                  Click here to add/change the current pictures.
-                </div>
-                <div className="o-line">
-                  {
-                    this.props.sliderImages.map(
-                        (url, index) => {
-                          if (url.imageUrl)
-                            return <div key={index}
-                                        style={{
-                                          marginTop: cardMediaQuery.matches ?
-                                              20 :
-                                              0,
-                                          marginLeft: cardMediaQuery.matches ?
-                                              0 :
-                                              20,
-                                        }}>
-                              <figure>
-                                <img src={url.imageUrl} alt=""
-                                     style={{ maxWidth: '100%' }}/>
-                              </figure>
-                              <figcaption
-                                  className="site-navigation-image-caption"
-                                  style={{
-                                    top: 0,
-                                  }}>
-                                <div>
+                      <div style={{ textAlign: 'center' }}>
+                        <Input placeholder="Photo links to: "
+                               value={this.props.leftIndexPromotionsDesktop.imageAnchor}
+                               onChange={this.props.onLeftIndexPromotionsDesktopImageAnchorChange}
+                               style={{ marginTop: 10, maxWidth: 300 }}/>
+                      </div>
+                    </div>
+                    <div className="control-panel-promotional-images-desktop">
+                      <img
+                          src={this.props.rightIndexPromotionsDesktop.imageUrl ?
+                              this.props.rightIndexPromotionsDesktop.imageUrl
+                              :
+                              '/images/placeholder.png'
+                          }
+                          alt=""
+                          style={{ maxWidth: '610px', maxHeight: '720px' }}
+                          onClick={() => {
+                            this.onChangeIsSingleModalVisible();
+                            this.props.onIndexPromotionsDesktopChoosingForChange(
+                                'right');
+                          }}/>
+                      <div style={{ textAlign: 'center' }}>
+                        <Input placeholder="Photo links to: "
+                               value={this.props.rightIndexPromotionsDesktop.imageAnchor}
+                               onChange={this.props.onRightIndexPromotionsDesktopImageAnchorChange}
+                               style={{ marginTop: 10, maxWidth: 300 }}/>
+                      </div>
+                    </div>
+                    <div
+                        className="control-panel-promotional-images-footer-desktop">
+                      <img
+                          src={this.props.footerIndexPromotionsDesktop.imageUrl ?
+                              this.props.footerIndexPromotionsDesktop.imageUrl
+                              :
+                              '/images/placeholder.png'
+                          }
+                          alt=""
+                          onClick={() => {
+                            this.onChangeIsSingleModalVisible();
+                            this.props.onIndexPromotionsDesktopChoosingForChange(
+                                'footer');
+                          }}/>
+                      <div style={{ textAlign: 'center' }}>
+                        <Input placeholder="Photo links to: "
+                               value={this.props.footerIndexPromotionsDesktop.imageAnchor}
+                               onChange={this.props.onFooterIndexPromotionsDesktopImageAnchorChange}
+                               style={{ marginTop: 10, maxWidth: 300 }}/>
+                      </div>
+                    </div>
+                    <h3 className="control-panel-promotions-header-3">
+                      New Arrivals
+                    </h3>
+                    <div className="index-new-arrivals-control-panel">
+                      {this.props.indexPromotionsNewArrivals.map(
+                          (promotion, i) => {
+                            return <div key={i}
+                                        className="index-new-arrivals-anchor"
+                                        style={{ height: 'auto' }}>
+                              <img
+                                  className="index-new-arrivals-image-control-panel"
+                                  src={promotion.imageUrl ?
+                                      promotion.imageUrl :
+                                      '/images/placeholder.png'}
+                                  alt=""
+                                  onClick={() => {
+                                    this.props.onIndexArrivalsDesktopIndexChange(
+                                        i);
+                                    this.onChangeIsSingleModalVisible();
+                                    this.props.onIndexPromotionsDesktopChoosingForChange(
+                                        'arrivals');
+                                  }
+                                  }/>
+                              <div style={{ textAlign: 'center' }}>
+                                <Input placeholder="Photo links to: "
+                                       value={promotion.imageAnchor}
+                                       onFocus={() => this.props.onIndexArrivalsDesktopIndexChange(
+                                           i)}
+                                       onChange={this.props.onArrivalsIndexPromotionsDesktopImageAnchorChange}
+                                       style={{
+                                         marginTop: 10,
+                                         maxWidth: 300,
+                                       }}/>
+                              </div>
+                            </div>;
+                          })}
+                    </div>
+                    <h3 className="control-panel-promotions-header-3">
+                      Sales
+                    </h3>
+                    <div className="index-sales">
+                      <h4 className="control-panel-promotions-header-4">
+                        Top promotion poster
+                      </h4>
+                      <div className="index-sales-top-control-panel">
+                        <img className="index-sales-top-image-control-panel"
+                             src={this.props.indexSalesTopPosterDesktop.imageUrl ?
+                                 this.props.indexSalesTopPosterDesktop.imageUrl :
+                                 '/images/placeholder.png'}
+                             alt=""
+                             onClick={() => {
+                               this.onChangeIsSingleModalVisible();
+                               this.props.onIndexPromotionsDesktopChoosingForChange(
+                                   'salesPosterTop');
+                             }}/>
+                        <div style={{ textAlign: 'center' }}>
+                          <Input placeholder="Photo links to: "
+                                 value={this.props.indexSalesTopPosterDesktop.imageAnchor}
+                                 onChange={this.props.onSalesIndexDesktopTopPosterAnchorChange}
+                                 style={{ marginTop: 10, maxWidth: 300 }}/>
+                        </div>
+                      </div>
+                      <h4 className="control-panel-promotions-header-4">
+                        Middle images
+                      </h4>
+                      <div className="index-sales-middle-control-panel">
+                        {this.props.indexSalesMiddleImagesDesktop.map(
+                            (goods, i) => {
+                              return <div key={i}
+                                          className="index-sales-middle-control-panel-anchor">
+                                <img
+                                    className="index-sales-middle-image-control-panel"
+                                    src={goods.imageUrl ?
+                                        goods.imageUrl :
+                                        '/images/placeholder.png'}
+                                    alt=""
+                                    onClick={() => {
+                                      this.props.onIndexSalesMiddleImagesDesktopIndexChange(
+                                          i);
+                                      this.onChangeIsSingleModalVisible();
+                                      this.props.onIndexPromotionsDesktopChoosingForChange(
+                                          'salesMiddle');
+                                    }}/>
+                                <div style={{ textAlign: 'center' }}>
                                   <Input placeholder="Photo links to: "
-                                         value={url.imageAnchor}
-                                         onChange={this.props.onSlideImageCaptionChange(
-                                             index)}
+                                         value={goods.imageAnchor}
+                                         onFocus={() => this.props.onIndexSalesMiddleImagesDesktopIndexChange(
+                                             i)}
+                                         onChange={this.props.onSalesIndexDesktopMiddleImagesAnchorChange}
                                          style={{
                                            marginTop: 10,
                                            maxWidth: 300,
                                          }}/>
                                 </div>
-                              </figcaption>
-                            </div>;
-                        })
-                  }
-                </div>
-              </Card>
-            </TabPane>
-            <TabPane tab="Index - DESKTOP" key="5">
-              <Card noHovering={true}
-                    bodyStyle={{
-                      padding: cardMediaQuery.matches ?
-                          2 :
-                          '',
-                    }}>
-                <div style={{ marginBottom: 16 }}>
-                  <Button onClick={this.props.onSaveIndexImagesDesktop}
-                          loading={this.props.savingIndexImagesDesktop}
-                          type="primary">
-                    Save changes
-                  </Button>
-                </div>
-                <div style={{ height: 'auto' }}>
-                  <h3 className="control-panel-promotions-header-3">
-                    Index promotions
-                  </h3>
-                  <div className="control-panel-promotional-images-desktop">
-                    <img src={this.props.leftIndexPromotionsDesktop.imageUrl ?
-                        this.props.leftIndexPromotionsDesktop.imageUrl
-                        :
-                        '/images/placeholder.png'
-                    }
-                         alt=""
-                         onClick={() => {
-                           this.onChangeIsSingleModalVisible();
-                           this.props.onIndexPromotionsDesktopChoosingForChange(
-                               'left');
-                         }}/>
-                    <div style={{ textAlign: 'center' }}>
-                      <Input placeholder="Photo links to: "
-                             value={this.props.leftIndexPromotionsDesktop.imageAnchor}
-                             onChange={this.props.onLeftIndexPromotionsDesktopImageAnchorChange}
-                             style={{ marginTop: 10, maxWidth: 300 }}/>
-                    </div>
-                  </div>
-                  <div className="control-panel-promotional-images-desktop">
-                    <img src={this.props.rightIndexPromotionsDesktop.imageUrl ?
-                        this.props.rightIndexPromotionsDesktop.imageUrl
-                        :
-                        '/images/placeholder.png'
-                    }
-                         alt=""
-                         onClick={() => {
-                           this.onChangeIsSingleModalVisible();
-                           this.props.onIndexPromotionsDesktopChoosingForChange(
-                               'right');
-                         }}/>
-                    <div style={{ textAlign: 'center' }}>
-                      <Input placeholder="Photo links to: "
-                             value={this.props.rightIndexPromotionsDesktop.imageAnchor}
-                             onChange={this.props.onRightIndexPromotionsDesktopImageAnchorChange}
-                             style={{ marginTop: 10, maxWidth: 300 }}/>
-                    </div>
-                  </div>
-                  <div
-                      className="control-panel-promotional-images-footer-desktop">
-                    <img src={this.props.footerIndexPromotionsDesktop.imageUrl ?
-                        this.props.footerIndexPromotionsDesktop.imageUrl
-                        :
-                        '/images/placeholder.png'
-                    }
-                         alt=""
-                         onClick={() => {
-                           this.onChangeIsSingleModalVisible();
-                           this.props.onIndexPromotionsDesktopChoosingForChange(
-                               'footer');
-                         }}/>
-                    <div style={{ textAlign: 'center' }}>
-                      <Input placeholder="Photo links to: "
-                             value={this.props.footerIndexPromotionsDesktop.imageAnchor}
-                             onChange={this.props.onFooterIndexPromotionsDesktopImageAnchorChange}
-                             style={{ marginTop: 10, maxWidth: 300 }}/>
-                    </div>
-                  </div>
-                  <h3 className="control-panel-promotions-header-3">
-                    New Arrivals
-                  </h3>
-                  <div className="index-new-arrivals-control-panel">
-                    {this.props.indexPromotionsNewArrivals.map(
-                        (promotion, i) => {
-                          return <div key={i}
-                                      className="index-new-arrivals-anchor"
-                                      style={{ height: 'auto' }}>
-                            <img
-                                className="index-new-arrivals-image-control-panel"
-                                src={promotion.imageUrl ?
-                                    promotion.imageUrl :
-                                    '/images/placeholder.png'}
-                                alt=""
-                                onClick={() => {
-                                  this.props.onIndexArrivalsDesktopIndexChange(
-                                      i);
-                                  this.onChangeIsSingleModalVisible();
-                                  this.props.onIndexPromotionsDesktopChoosingForChange(
-                                      'arrivals');
-                                }
-                                }/>
-                            <div style={{ textAlign: 'center' }}>
-                              <Input placeholder="Photo links to: "
-                                     value={promotion.imageAnchor}
-                                     onFocus={() => this.props.onIndexArrivalsDesktopIndexChange(
-                                         i)}
-                                     onChange={this.props.onArrivalsIndexPromotionsDesktopImageAnchorChange}
-                                     style={{ marginTop: 10, maxWidth: 300 }}/>
-                            </div>
-                          </div>;
-                        })}
-                  </div>
-                  <h3 className="control-panel-promotions-header-3">
-                    Sales
-                  </h3>
-                  <div className="index-sales">
-                    <h4 className="control-panel-promotions-header-4">
-                      Top promotion poster
-                    </h4>
-                    <div className="index-sales-top-control-panel">
-                      <img className="index-sales-top-image-control-panel"
-                           src={this.props.indexSalesTopPosterDesktop.imageUrl ?
-                               this.props.indexSalesTopPosterDesktop.imageUrl :
-                               '/images/placeholder.png'}
-                           alt=""
-                           onClick={() => {
-                             this.onChangeIsSingleModalVisible();
-                             this.props.onIndexPromotionsDesktopChoosingForChange(
-                                 'salesPosterTop');
-                           }}/>
-                      <div style={{ textAlign: 'center' }}>
-                        <Input placeholder="Photo links to: "
-                               value={this.props.indexSalesTopPosterDesktop.imageAnchor}
-                               onChange={this.props.onSalesIndexDesktopTopPosterAnchorChange}
-                               style={{ marginTop: 10, maxWidth: 300 }}/>
+                              </div>;
+                            })}
                       </div>
-                    </div>
-                    <h4 className="control-panel-promotions-header-4">
-                      Middle images
-                    </h4>
-                    <div className="index-sales-middle-control-panel">
-                      {this.props.indexSalesMiddleImagesDesktop.map(
-                          (goods, i) => {
-                            return <div key={i}
-                                        className="index-sales-middle-control-panel-anchor">
-                              <img
-                                  className="index-sales-middle-image-control-panel"
-                                  src={goods.imageUrl ?
-                                      goods.imageUrl :
-                                      '/images/placeholder.png'}
-                                  alt=""
-                                  onClick={() => {
-                                    this.props.onIndexSalesMiddleImagesDesktopIndexChange(
-                                        i);
-                                    this.onChangeIsSingleModalVisible();
-                                    this.props.onIndexPromotionsDesktopChoosingForChange(
-                                        'salesMiddle');
-                                  }}/>
-                              <div style={{ textAlign: 'center' }}>
-                                <Input placeholder="Photo links to: "
-                                       value={goods.imageAnchor}
-                                       onFocus={() => this.props.onIndexSalesMiddleImagesDesktopIndexChange(
-                                           i)}
-                                       onChange={this.props.onSalesIndexDesktopMiddleImagesAnchorChange}
-                                       style={{
-                                         marginTop: 10,
-                                         maxWidth: 300,
-                                       }}/>
-                              </div>
-                            </div>;
-                          })}
-                    </div>
-                    <h4 className="control-panel-promotions-header-4">
-                      Middle promotion poster
-                    </h4>
-                    <div className="index-sales-top-control-panel">
-                      <img className="index-sales-top-image-control-panel"
-                           src={this.props.indexSalesMiddlePosterDesktop.imageUrl ?
-                               this.props.indexSalesMiddlePosterDesktop.imageUrl :
-                               '/images/placeholder.png'}
-                           alt=""
-                           onClick={() => {
-                             this.onChangeIsSingleModalVisible();
-                             this.props.onIndexPromotionsDesktopChoosingForChange(
-                                 'salesPosterMiddle');
-                           }}/>
-                      <div style={{ textAlign: 'center' }}>
-                        <Input placeholder="Photo links to: "
-                               value={this.props.indexSalesMiddlePosterDesktop.imageAnchor}
-                               onChange={this.props.onSalesIndexDesktopMiddlePosterAnchorChange}
-                               style={{ marginTop: 10, maxWidth: 300 }}/>
-                      </div>
-                    </div>
-                    <h4 className="control-panel-promotions-header-4">
-                      Bottom images
-                    </h4>
-                    <div className="index-sales-middle-control-panel">
-                      {this.props.indexSalesBottomImagesDesktop.map(
-                          (goods, i) => {
-                            return <div key={i}
-                                        className="index-sales-middle-control-panel-anchor">
-                              <img
-                                  className="index-sales-middle-image-control-panel"
-                                  src={goods.imageUrl ?
-                                      goods.imageUrl :
-                                      '/images/placeholder.png'}
-                                  alt=""
-                                  onClick={() => {
-                                    this.props.onIndexSalesBottomImagesDesktopIndexChange(
-                                        i);
-                                    this.onChangeIsSingleModalVisible();
-                                    this.props.onIndexPromotionsDesktopChoosingForChange(
-                                        'salesBottom');
-                                  }}/>
-                              <div style={{ textAlign: 'center' }}>
-                                <Input placeholder="Photo links to: "
-                                       value={goods.imageAnchor}
-                                       onFocus={() => this.props.onIndexSalesBottomImagesDesktopIndexChange(
-                                           i)}
-                                       onChange={this.props.onSalesIndexDesktopBottomImagesAnchorChange}
-                                       style={{
-                                         marginTop: 10,
-                                         maxWidth: 300,
-                                       }}/>
-                              </div>
-                            </div>;
-                          })}
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </TabPane>
-            <TabPane tab="Index - MOBILE" key="6">
-              <Card noHovering={true}
-                    bodyStyle={{
-                      padding: cardMediaQuery.matches ?
-                          2 :
-                          '',
-                    }}>
-                <div style={{ marginBottom: 16 }}>
-                  <Button onClick={this.props.onSaveIndexImagesMobile}
-                          loading={this.props.savingIndexImagesMobile}
-                          type="primary">
-                    Save changes
-                  </Button>
-                </div>
-                <div>
-                  {this.props.indexImagesMobile.map((item, key) => {
-                    return <div style={{ marginBottom: 10 }}>
-                      <Button
-                          style={{ marginTop: cardMediaQuery.matches ? 5 : 0, }}
-                          onClick={this.props.onAddIndexImagesMobile(key)}>
-                        Add image after this one
-                      </Button>
-                      {this.props.indexImagesMobile.length > 1 ?
-                          <Button style={{
-                            marginLeft: cardMediaQuery.matches ? 0 : 10,
-                            marginTop: cardMediaQuery.matches ? 5 : 0,
-                          }}
-                                  onClick={this.props.onRemoveIndexImagesMobile(
-                                      key)}
-                                  type="danger">
-                            Remove image
-                          </Button>
-                          :
-                          null
-                      }
-                      <div style={{ maxWidth: 500 }}>
-                        <img src={item.imageUrl ?
-                            item.imageUrl :
-                            '/images/placeholder.png'}
+                      <h4 className="control-panel-promotions-header-4">
+                        Middle promotion poster
+                      </h4>
+                      <div className="index-sales-top-control-panel">
+                        <img className="index-sales-top-image-control-panel"
+                             src={this.props.indexSalesMiddlePosterDesktop.imageUrl ?
+                                 this.props.indexSalesMiddlePosterDesktop.imageUrl :
+                                 '/images/placeholder.png'}
                              alt=""
-                             style={{
-                               maxWidth: '100%',
-                               cursor: 'pointer',
-                               marginTop: 5,
-                             }}
                              onClick={() => {
-                               this.props.onIndexMobileImagesIndexChange(
-                                   key);
                                this.onChangeIsSingleModalVisible();
                                this.props.onIndexPromotionsDesktopChoosingForChange(
-                                   'mobile');
+                                   'salesPosterMiddle');
                              }}/>
-                        <div>
+                        <div style={{ textAlign: 'center' }}>
                           <Input placeholder="Photo links to: "
-                                 value={item.imageAnchor}
-                                 onFocus={() => this.props.onIndexMobileImagesIndexChange(
-                                     key)}
-                                 onChange={this.props.onIndexMobileImageAnchorChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
+                                 value={this.props.indexSalesMiddlePosterDesktop.imageAnchor}
+                                 onChange={this.props.onSalesIndexDesktopMiddlePosterAnchorChange}
+                                 style={{ marginTop: 10, maxWidth: 300 }}/>
                         </div>
                       </div>
-                    </div>;
-                  })}
-                </div>
-              </Card>
-            </TabPane>
-            <TabPane tab="Footer - Settings" key="7">
-              <Card noHovering={true}
-                    bodyStyle={{
-                      padding: cardMediaQuery.matches ?
-                          2 :
-                          '',
-                    }}>
-                <div style={{ marginBottom: 16 }}>
-                  <Button onClick={this.props.onSaveFooterColumns}
-                          loading={this.props.savingFooterColumns}
-                          type="primary">
-                    Save changes
-                  </Button>
-                </div>
-                <Tabs defaultActiveKey="1">
-                  <TabPane tab="Left column" key="1">
-                    {this.props.footerLeftColumn.map((item, index) => {
-                      return <div key={index}>
-                        <h4 style={{ marginTop: 5 }}>
-                          This is a {item.lineType} line
-                        </h4>
-                        {index > 0 ?
-                            <Button
-                                style={{
-                                  marginTop: cardMediaQuery.matches ?
-                                      5 :
-                                      0,
-                                }}
-                                onClick={this.props.onAddFooterLeftColumnLine(
-                                    index)}>
-                              Add a line after this one
-                            </Button>
-                            :
-                            null
-                        }
-
-                        {index > 0 && this.props.footerLeftColumn.length > 2 ?
+                      <h4 className="control-panel-promotions-header-4">
+                        Bottom images
+                      </h4>
+                      <div className="index-sales-middle-control-panel">
+                        {this.props.indexSalesBottomImagesDesktop.map(
+                            (goods, i) => {
+                              return <div key={i}
+                                          className="index-sales-middle-control-panel-anchor">
+                                <img
+                                    className="index-sales-middle-image-control-panel"
+                                    src={goods.imageUrl ?
+                                        goods.imageUrl :
+                                        '/images/placeholder.png'}
+                                    alt=""
+                                    onClick={() => {
+                                      this.props.onIndexSalesBottomImagesDesktopIndexChange(
+                                          i);
+                                      this.onChangeIsSingleModalVisible();
+                                      this.props.onIndexPromotionsDesktopChoosingForChange(
+                                          'salesBottom');
+                                    }}/>
+                                <div style={{ textAlign: 'center' }}>
+                                  <Input placeholder="Photo links to: "
+                                         value={goods.imageAnchor}
+                                         onFocus={() => this.props.onIndexSalesBottomImagesDesktopIndexChange(
+                                             i)}
+                                         onChange={this.props.onSalesIndexDesktopBottomImagesAnchorChange}
+                                         style={{
+                                           marginTop: 10,
+                                           maxWidth: 300,
+                                         }}/>
+                                </div>
+                              </div>;
+                            })}
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </TabPane>
+              <TabPane tab="Index - MOBILE" key="6">
+                <Card noHovering={true}
+                      bodyStyle={{
+                        padding: cardMediaQuery.matches ?
+                            2 :
+                            '',
+                      }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.props.onSaveIndexImagesMobile}
+                            loading={this.props.savingIndexImagesMobile}
+                            type="primary">
+                      Save changes
+                    </Button>
+                  </div>
+                  <div>
+                    {this.props.indexImagesMobile.map((item, key) => {
+                      return <div style={{ marginBottom: 10 }}>
+                        <Button
+                            style={{
+                              marginTop: cardMediaQuery.matches ?
+                                  5 :
+                                  0,
+                            }}
+                            onClick={this.props.onAddIndexImagesMobile(key)}>
+                          Add image after this one
+                        </Button>
+                        {this.props.indexImagesMobile.length > 1 ?
                             <Button style={{
                               marginLeft: cardMediaQuery.matches ? 0 : 10,
                               marginTop: cardMediaQuery.matches ? 5 : 0,
                             }}
-                                    onClick={this.props.onRemoveFooterLeftColumnLine(
-                                        index)}
+                                    onClick={this.props.onRemoveIndexImagesMobile(
+                                        key)}
                                     type="danger">
-                              Remove this line
+                              Remove image
                             </Button>
                             :
                             null
                         }
-                        <div>
-                          <Input placeholder="Line text"
-                                 value={item.lineText}
-                                 onFocus={() => this.props.onFooterLeftColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterLeftColumnLineTextChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
-                        </div>
-                        <div>
-                          <Input placeholder="Line anchor"
-                                 value={item.lineAnchor}
-                                 onFocus={() => this.props.onFooterLeftColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterLeftColumnLineAnchorChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
+                        <div style={{ maxWidth: 500 }}>
+                          <img src={item.imageUrl ?
+                              item.imageUrl :
+                              '/images/placeholder.png'}
+                               alt=""
+                               style={{
+                                 maxWidth: '100%',
+                                 cursor: 'pointer',
+                                 marginTop: 5,
+                               }}
+                               onClick={() => {
+                                 this.props.onIndexMobileImagesIndexChange(
+                                     key);
+                                 this.onChangeIsSingleModalVisible();
+                                 this.props.onIndexPromotionsDesktopChoosingForChange(
+                                     'mobile');
+                               }}/>
+                          <div>
+                            <Input placeholder="Photo links to: "
+                                   value={item.imageAnchor}
+                                   onFocus={() => this.props.onIndexMobileImagesIndexChange(
+                                       key)}
+                                   onChange={this.props.onIndexMobileImageAnchorChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
                         </div>
                       </div>;
                     })}
-                  </TabPane>
-                  <TabPane tab="Central column" key="2">
-                    {this.props.footerCenterColumn.map((item, index) => {
-                      return <div key={index}>
-                        <h4 style={{ marginTop: 5 }}>
-                          This is a {item.lineType} line
-                        </h4>
-                        {index > 0 ?
-                            <Button
-                                style={{
-                                  marginTop: cardMediaQuery.matches ?
-                                      5 :
-                                      0,
-                                }}
-                                onClick={this.props.onAddFooterCenterColumnLine(
-                                    index)}>
-                              Add a line after this one
-                            </Button>
-                            :
-                            null
-                        }
+                  </div>
+                </Card>
+              </TabPane>
+              <TabPane tab="Footer - Settings" key="7">
+                <Card noHovering={true}
+                      bodyStyle={{
+                        padding: cardMediaQuery.matches ?
+                            2 :
+                            '',
+                      }}>
+                  <div style={{ marginBottom: 16 }}>
+                    <Button onClick={this.props.onSaveFooterColumns}
+                            loading={this.props.savingFooterColumns}
+                            type="primary">
+                      Save changes
+                    </Button>
+                  </div>
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="Left column" key="1">
+                      {this.props.footerLeftColumn.map((item, index) => {
+                        return <div key={index}>
+                          <h4 style={{ marginTop: 5 }}>
+                            This is a {item.lineType} line
+                          </h4>
+                          {index > 0 ?
+                              <Button
+                                  style={{
+                                    marginTop: cardMediaQuery.matches ?
+                                        5 :
+                                        0,
+                                  }}
+                                  onClick={this.props.onAddFooterLeftColumnLine(
+                                      index)}>
+                                Add a line after this one
+                              </Button>
+                              :
+                              null
+                          }
 
-                        {index > 0 && this.props.footerCenterColumn.length > 2 ?
-                            <Button style={{
-                              marginLeft: cardMediaQuery.matches ? 0 : 10,
-                              marginTop: cardMediaQuery.matches ? 5 : 0,
-                            }}
-                                    onClick={this.props.onRemoveFooterCenterColumnLine(
-                                        index)}
-                                    type="danger">
-                              Remove this line
-                            </Button>
-                            :
-                            null
-                        }
-                        <div>
-                          <Input placeholder="Line text"
-                                 value={item.lineText}
-                                 onFocus={() => this.props.onFooterCenterColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterCenterColumnLineTextChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
-                        </div>
-                        <div>
-                          <Input placeholder="Line anchor"
-                                 value={item.lineAnchor}
-                                 onFocus={() => this.props.onFooterCenterColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterCenterColumnLineAnchorChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
-                        </div>
-                      </div>;
-                    })}
-                  </TabPane>
-                  <TabPane tab="Right column" key="3">
-                    {this.props.footerRightColumn.map((item, index) => {
-                      return <div key={index}>
-                        <h4 style={{ marginTop: 5 }}>
-                          This is a {item.lineType} line
-                        </h4>
-                        {index > 0 ?
-                            <Button
-                                style={{
-                                  marginTop: cardMediaQuery.matches ?
-                                      5 :
-                                      0,
-                                }}
-                                onClick={this.props.onAddFooterRightColumnLine(
-                                    index)}>
-                              Add a line after this one
-                            </Button>
-                            :
-                            null
-                        }
+                          {index > 0 && this.props.footerLeftColumn.length > 2 ?
+                              <Button style={{
+                                marginLeft: cardMediaQuery.matches ? 0 : 10,
+                                marginTop: cardMediaQuery.matches ? 5 : 0,
+                              }}
+                                      onClick={this.props.onRemoveFooterLeftColumnLine(
+                                          index)}
+                                      type="danger">
+                                Remove this line
+                              </Button>
+                              :
+                              null
+                          }
+                          <div>
+                            <Input placeholder="Line text"
+                                   value={item.lineText}
+                                   onFocus={() => this.props.onFooterLeftColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterLeftColumnLineTextChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                          <div>
+                            <Input placeholder="Line anchor"
+                                   value={item.lineAnchor}
+                                   onFocus={() => this.props.onFooterLeftColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterLeftColumnLineAnchorChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                        </div>;
+                      })}
+                    </TabPane>
+                    <TabPane tab="Central column" key="2">
+                      {this.props.footerCenterColumn.map((item, index) => {
+                        return <div key={index}>
+                          <h4 style={{ marginTop: 5 }}>
+                            This is a {item.lineType} line
+                          </h4>
+                          {index > 0 ?
+                              <Button
+                                  style={{
+                                    marginTop: cardMediaQuery.matches ?
+                                        5 :
+                                        0,
+                                  }}
+                                  onClick={this.props.onAddFooterCenterColumnLine(
+                                      index)}>
+                                Add a line after this one
+                              </Button>
+                              :
+                              null
+                          }
 
-                        {index > 0 && this.props.footerRightColumn.length > 2 ?
-                            <Button style={{
-                              marginLeft: cardMediaQuery.matches ? 0 : 10,
-                              marginTop: cardMediaQuery.matches ? 5 : 0,
-                            }}
-                                    onClick={this.props.onRemoveFooterRightColumnLine(
-                                        index)}
-                                    type="danger">
-                              Remove this line
-                            </Button>
-                            :
-                            null
-                        }
-                        <div>
-                          <Input placeholder="Line text"
-                                 value={item.lineText}
-                                 onFocus={() => this.props.onFooterRightColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterRightColumnLineTextChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
-                        </div>
-                        <div>
-                          <Input placeholder="Line anchor"
-                                 value={item.lineAnchor}
-                                 onFocus={() => this.props.onFooterRightColumnIndexChange(
-                                     index)}
-                                 onChange={this.props.onFooterRightColumnLineAnchorChange}
-                                 style={{
-                                   marginTop: 10,
-                                   maxWidth: 300,
-                                 }}/>
-                        </div>
-                      </div>;
-                    })}
-                  </TabPane>
-                </Tabs>
-              </Card>
-            </TabPane>
-          </Tabs>
-          <Modal title="Pick an image"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.state.isSingleModalVisible}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.onChangeIsSingleModalVisible}
-                 onCancel={this.onChangeIsSingleModalVisible}>
-            <UploadView
-                fromIndexPromotionsDesktop={this.props.fromIndexPromotionsDesktop}
-                onChangeIsSingleModalVisible={this.onChangeIsSingleModalVisible}
-                onIndexPromotionsDesktopChooseOne={this.props.onIndexPromotionsDesktopChooseOne}/>
-          </Modal>
-          <Modal title="Pick images to show in product's gallery"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.props.isModalVisibleMultiple}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.props.onHideUploadsMultipleModal}
-                 onCancel={() => {
-                   this.props.onHideUploadsMultipleModal();
-                   this.props.onChangeSelectingSliderImages();
-                   this.props.onSelectSliderImages();
-                 }}>
-            <UploadViewMultipleChoice modalFromSettings={true}
-                                      selectingSliderImages={this.props.selectingSliderImages}
-                                      onChangeSelectingSliderImages={this.props.onChangeSelectingSliderImages}
-                                      onSelectSliderImages={this.props.onSelectSliderImages}
-                                      addPicturesToColumn={this.props.addPicturesToColumn}
-                                      getCurrentOptionKey={this.props.getCurrentOptionKey}/>
-          </Modal>
-        </Card>
+                          {index > 0 &&
+                          this.props.footerCenterColumn.length > 2 ?
+                              <Button style={{
+                                marginLeft: cardMediaQuery.matches ? 0 : 10,
+                                marginTop: cardMediaQuery.matches ? 5 : 0,
+                              }}
+                                      onClick={this.props.onRemoveFooterCenterColumnLine(
+                                          index)}
+                                      type="danger">
+                                Remove this line
+                              </Button>
+                              :
+                              null
+                          }
+                          <div>
+                            <Input placeholder="Line text"
+                                   value={item.lineText}
+                                   onFocus={() => this.props.onFooterCenterColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterCenterColumnLineTextChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                          <div>
+                            <Input placeholder="Line anchor"
+                                   value={item.lineAnchor}
+                                   onFocus={() => this.props.onFooterCenterColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterCenterColumnLineAnchorChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                        </div>;
+                      })}
+                    </TabPane>
+                    <TabPane tab="Right column" key="3">
+                      {this.props.footerRightColumn.map((item, index) => {
+                        return <div key={index}>
+                          <h4 style={{ marginTop: 5 }}>
+                            This is a {item.lineType} line
+                          </h4>
+                          {index > 0 ?
+                              <Button
+                                  style={{
+                                    marginTop: cardMediaQuery.matches ?
+                                        5 :
+                                        0,
+                                  }}
+                                  onClick={this.props.onAddFooterRightColumnLine(
+                                      index)}>
+                                Add a line after this one
+                              </Button>
+                              :
+                              null
+                          }
+
+                          {index > 0 &&
+                          this.props.footerRightColumn.length > 2 ?
+                              <Button style={{
+                                marginLeft: cardMediaQuery.matches ? 0 : 10,
+                                marginTop: cardMediaQuery.matches ? 5 : 0,
+                              }}
+                                      onClick={this.props.onRemoveFooterRightColumnLine(
+                                          index)}
+                                      type="danger">
+                                Remove this line
+                              </Button>
+                              :
+                              null
+                          }
+                          <div>
+                            <Input placeholder="Line text"
+                                   value={item.lineText}
+                                   onFocus={() => this.props.onFooterRightColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterRightColumnLineTextChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                          <div>
+                            <Input placeholder="Line anchor"
+                                   value={item.lineAnchor}
+                                   onFocus={() => this.props.onFooterRightColumnIndexChange(
+                                       index)}
+                                   onChange={this.props.onFooterRightColumnLineAnchorChange}
+                                   style={{
+                                     marginTop: 10,
+                                     maxWidth: 300,
+                                   }}/>
+                          </div>
+                        </div>;
+                      })}
+                    </TabPane>
+                  </Tabs>
+                </Card>
+              </TabPane>
+            </Tabs>
+            <Modal title="Pick an image"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.state.isSingleModalVisible}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.onChangeIsSingleModalVisible}
+                   onCancel={this.onChangeIsSingleModalVisible}>
+              <UploadView
+                  fromIndexPromotionsDesktop={this.props.fromIndexPromotionsDesktop}
+                  onChangeIsSingleModalVisible={this.onChangeIsSingleModalVisible}
+                  onIndexPromotionsDesktopChooseOne={this.props.onIndexPromotionsDesktopChooseOne}/>
+            </Modal>
+            <Modal title="Pick images to show in product's gallery"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.props.isModalVisibleMultiple}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.props.onHideUploadsMultipleModal}
+                   onCancel={() => {
+                     this.props.onHideUploadsMultipleModal();
+                     this.props.onChangeSelectingSliderImages();
+                     this.props.onSelectSliderImages();
+                   }}>
+              <UploadViewMultipleChoice modalFromSettings={true}
+                                        selectingSliderImages={this.props.selectingSliderImages}
+                                        onChangeSelectingSliderImages={this.props.onChangeSelectingSliderImages}
+                                        onSelectSliderImages={this.props.onSelectSliderImages}
+                                        addPicturesToColumn={this.props.addPicturesToColumn}
+                                        getCurrentOptionKey={this.props.getCurrentOptionKey}/>
+            </Modal>
+          </Card>
+        </div>
     );
   }
 }

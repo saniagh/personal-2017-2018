@@ -21,7 +21,16 @@ class Product extends Component {
     this.state = {
       searchQuery: '',
       productsTableContent: [],
+      mainClassName: 'main-container hidden',
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,6 +55,7 @@ class Product extends Component {
         },
         sku: product.sku,
         stockStatus: product.stockStatus,
+        stockQuantity: product.stockQuantity,
         productPrice: nextProps.fetchedSettings ?
             product.productPrice + ' ' + nextProps.currency[1] :
             product.productPrice,
@@ -94,6 +104,7 @@ class Product extends Component {
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
+            stockQuantity: product.stockQuantity,
             productPrice: product.productPrice + ' ' + this.props.currency[1],
             salePrice: product.salePrice + ' ' + this.props.currency[1],
             productCategory: categoriesString,
@@ -136,6 +147,7 @@ class Product extends Component {
             },
             sku: product.sku,
             stockStatus: product.stockStatus,
+            stockQuantity: product.stockQuantity,
             productPrice: product.productPrice + ' ' + this.props.currency[1],
             salePrice: product.salePrice + ' ' + this.props.currency[1],
             productCategory: categoriesString,
@@ -183,6 +195,7 @@ class Product extends Component {
           },
           sku: product.sku,
           stockStatus: product.stockStatus,
+          stockQuantity: product.stockQuantity,
           productPrice: product.productPrice + ' ' + this.props.currency[1],
           salePrice: product.salePrice + ' ' + this.props.currency[1],
           productCategory: categoriesString,
@@ -296,7 +309,8 @@ class Product extends Component {
           key: 'productName',
           render: text =>
               <span>
-                <div>{text.value}</div>
+                <Link to={`/product/${text.productLink}&${text.id}`}
+                      style={{ color: 'rgba(0, 0, 0, 0.65)' }}>{text.value}</Link>
                 <div>
                 <a onClick={() => this.props.onQuickUpdateInitiate(text.id)}>Quick Update</a>
                   </div>
@@ -313,12 +327,17 @@ class Product extends Component {
         },
         {
           title: 'Stock',
-          dataIndex: 'stockStatus',
-          key: 'stockStatus',
+          dataIndex: 'stockQuantity',
+          key: 'stockQuantity',
           render: text => <span>{text ?
               <span style={{ color: 'green' }}>In Stock</span> :
               <span style={{ color: 'tomato' }}>Out of Stock</span>}
               </span>,
+        },
+        {
+          title: 'Stock Qty',
+          dataIndex: 'stockQuantity',
+          key: 'stockQuantity',
         },
         {
           title: 'Price',
@@ -335,7 +354,8 @@ class Product extends Component {
           defaultSortOrder: 'descend',
           sorter: (a, b) => parseFloat(a.salePrice) -
           parseFloat(b.salePrice),
-          render: text => <span>{text ? text : '-'}</span>,
+          render: text => <span>{text !== ' $' && text !== ' RON' &&
+          text !== ' €' ? text : '-'}</span>,
         },
         {
           title: 'Categories',
@@ -436,56 +456,57 @@ class Product extends Component {
     const cardMediaQuery = window.matchMedia('(max-width: 768px)');
 
     return (
-        <Card bordered={false}
-              noHovering={true}>
+        <div className={this.state.mainClassName}>
           <Card bordered={false}
-                noHovering={true}
-                loading={!this.props.loadedPage}
-                bodyStyle={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: cardMediaQuery.matches ? 24 : 5,
-                }}>
-            <div style={{ width: '100%' }}>
-              <Link to={`${this.props.router.route.match.url}/add-a-product`}>
-                <Button type="primary"
-                        htmlType="button">
-                  Add product
-                </Button>
-              </Link>
-            </div>
-            <Input style={{ width: '30em', padding: '0 0 0 10px' }}
-                   value={this.state.searchQuery}
-                   onChange={this.onSearchQueryChange}
-                   placeholder="Search products by name"
-                   onKeyDown={(e) => {
-                     if (e.key === 'Enter') {
-                       this.onSearch(this.state.searchQuery);
-                     }
-                   }}
-                   suffix={<Icon type="search"
-                                 className="certain-category-icon"
-                                 onClick={() => this.onSearch(
-                                     this.state.searchQuery)}/>}/>
-          </Card>
-          <Table {...this.tableState}
-                 loading={this.props.fetchingProducts}
-                 scroll={{ x: 1300 }}
-                 title={title}
-                 footer={footer}
-                 rowSelection={rowSelection}
-                 columns={productsTableColumns}
-                 dataSource={productsTableContent}/>
-          <Card bordered={false}
-                loading={this.props.fetchingCategories}
-                noHovering={true}
-                bodyStyle={{
-                  margin: 0,
-                  padding: 0,
-                }}>
-            {this.props.quickEditing && this.props.fetchedProduct &&
-            this.props.fetchedCategories ?
-                <span>
+                noHovering={true}>
+            <Card bordered={false}
+                  noHovering={true}
+                  loading={!this.props.loadedPage}
+                  bodyStyle={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    padding: cardMediaQuery.matches ? 24 : 5,
+                  }}>
+              <div style={{ width: '100%' }}>
+                <Link to={`${this.props.router.route.match.url}/add-a-product`}>
+                  <Button type="primary"
+                          htmlType="button">
+                    Add product
+                  </Button>
+                </Link>
+              </div>
+              <Input style={{ width: '30em', padding: '0 0 0 10px' }}
+                     value={this.state.searchQuery}
+                     onChange={this.onSearchQueryChange}
+                     placeholder="Search products by name"
+                     onKeyDown={(e) => {
+                       if (e.key === 'Enter') {
+                         this.onSearch(this.state.searchQuery);
+                       }
+                     }}
+                     suffix={<Icon type="search"
+                                   className="certain-category-icon"
+                                   onClick={() => this.onSearch(
+                                       this.state.searchQuery)}/>}/>
+            </Card>
+            <Table {...this.tableState}
+                   loading={this.props.fetchingProducts}
+                   scroll={{ x: 1300 }}
+                   title={title}
+                   footer={footer}
+                   rowSelection={rowSelection}
+                   columns={productsTableColumns}
+                   dataSource={productsTableContent}/>
+            <Card bordered={false}
+                  loading={this.props.fetchingCategories}
+                  noHovering={true}
+                  bodyStyle={{
+                    margin: 0,
+                    padding: 0,
+                  }}>
+              {this.props.quickEditing && this.props.fetchedProduct &&
+              this.props.fetchedCategories ?
+                  <span>
                 <Button type="primary"
                         onClick={this.props.onCloseQuickEdit}
                         style={{ marginBottom: 5 }}>
@@ -494,12 +515,12 @@ class Product extends Component {
                 <QuickEditForm {...fields}/>
               </span>
 
-                :
-                null
-            }
+                  :
+                  null
+              }
+            </Card>
           </Card>
-
-        </Card>
+        </div>
     );
   }
 }

@@ -26,6 +26,8 @@ let createHandlers = function (dispatch) {
   };
 };
 
+import Auth from '../../modules/Auth.js';
+
 class UploadView extends Component {
   constructor(props) {
     super(props);
@@ -89,6 +91,9 @@ class UploadView extends Component {
     axios({
       method: 'get',
       url: '/upload/getAllUploads',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
+      }
     }).then((res) => {
       this.setState({
         uploads: res.data.uploads,
@@ -142,6 +147,7 @@ class UploadView extends Component {
         method: 'post',
         url: '/upload/changeImageDisplayName',
         headers: {
+          'Authorization': `bearer ${Auth.getToken()}`,
           'Content-type': 'application/x-www-form-urlencoded',
         },
         data: qs.stringify({

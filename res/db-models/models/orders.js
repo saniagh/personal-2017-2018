@@ -25,6 +25,9 @@ const OrdersSchema = new mongoose.Schema({
   postcodeOrZIP: {
     type: String,
   },
+  fullHomeAddress: {
+    type: String,
+  },
   orderNotes: {
     type: String,
   },
@@ -44,6 +47,9 @@ const OrdersSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+  },
+  totalCost: {
+    type: String,
   },
 });
 

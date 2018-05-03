@@ -11,6 +11,8 @@ import {
 
 import UploadMultipleChoice from './UploadMultipleChoice.jsx';
 
+import Auth from '../../modules/Auth.js';
+
 let createHandlers = function (dispatch) {
   let onChooseMultipleImagesHandler = function (imageUrlsArray) {
     dispatch(onChooseMultipleImages(imageUrlsArray));
@@ -133,6 +135,9 @@ class UploadViewMultipleChoice extends Component {
     axios({
       method: 'get',
       url: '/upload/getAllUploads',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
+      }
     }).then((res) => {
       this.setState({
         uploads: res.data.uploads,

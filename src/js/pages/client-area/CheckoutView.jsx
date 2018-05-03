@@ -34,6 +34,8 @@ let createHandlers = function (dispatch) {
   };
 };
 
+import Auth from '../../modules/Auth.js';
+
 class CheckoutView extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +51,7 @@ class CheckoutView extends Component {
       stateOrCounty: '',
       townOrCity: '',
       postcodeOrZIP: '',
+      fullHomeAddress: '',
       orderNotes: '',
       currency: [],
       fetchingSettings: false,
@@ -142,6 +145,16 @@ class CheckoutView extends Component {
     });
   };
 
+  onFullHomeAddressChange = (e) => {
+    this.setState({
+      fullHomeAddress: e.target.value,
+      errors: {
+        ...this.state.errors,
+        fullHomeAddress: '',
+      },
+    });
+  };
+
   onOrderNotesChange = (e) => {
     this.setState({
       orderNotes: e.target.value,
@@ -225,9 +238,15 @@ class CheckoutView extends Component {
       axios({
         method: 'post',
         url: '/order/make-order',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded',
-        },
+        headers: Auth.isUserAuthenticated() ?
+            {
+              'Authorization': `bearer ${Auth.getToken()}`,
+              'Content-type': 'application/x-www-form-urlencoded',
+            }
+            :
+            {
+              'Content-type': 'application/x-www-form-urlencoded',
+            },
         data: qs.stringify({
           firstName: state.firstName,
           lastName: state.lastName,
@@ -237,6 +256,7 @@ class CheckoutView extends Component {
           stateOrCounty: state.stateOrCounty,
           townOrCity: state.townOrCity,
           postcodeOrZIP: state.postcodeOrZIP,
+          fullHomeAddress: state.fullHomeAddress,
           orderNotes: state.orderNotes,
           orderedProducts: JSON.stringify(this.props.shoppingCartProducts),
         }),
@@ -303,6 +323,7 @@ class CheckoutView extends Component {
                      stateOrCounty={this.state.stateOrCounty}
                      townOrCity={this.state.townOrCity}
                      postcodeOrZIP={this.state.postcodeOrZIP}
+                     fullHomeAddress={this.state.fullHomeAddress}
                      orderNotes={this.state.orderNotes}
                      shoppingCartProducts={this.props.shoppingCartProducts}
                      currency={this.state.currency}
@@ -310,6 +331,7 @@ class CheckoutView extends Component {
                      reducerEmail={this.props.email}
                      errors={this.state.errors}
                      savedOrder={this.state.savedOrder}
+                     savingOrder={this.state.savingOrder}
                      onFirstNameChange={this.onFirstNameChange}
                      onLastNameChange={this.onLastNameChange}
                      onEmailChange={this.onEmailChange}
@@ -318,6 +340,7 @@ class CheckoutView extends Component {
                      onStateOrCountyChange={this.onStateOrCountyChange}
                      onTownOrCityChange={this.onTownOrCityChange}
                      onPostcodeOrZIPChange={this.onPostcodeOrZIPChange}
+                     onFullHomeAddressChange={this.onFullHomeAddressChange}
                      onOrderNotesChange={this.onOrderNotesChange}
                      onConfirmTermsOfService={this.onConfirmTermsOfService}
                      onSaveOrder={this.onSaveOrder}

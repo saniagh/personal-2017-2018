@@ -25,6 +25,7 @@ class Navigation extends Component {
       overlayZIndex: -1,
       drawerZIndex: -1,
       hidePromoBanner: false,
+      mainClassName: 'main-container hidden',
     };
   }
 
@@ -67,6 +68,12 @@ class Navigation extends Component {
   };
 
   componentDidMount() {
+
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
 
     window.addEventListener('scroll', () => {
       if (document.documentElement.scrollTop > 90) {
@@ -346,6 +353,7 @@ class Navigation extends Component {
 
     return (
         mediaQuery.matches ?
+            <div className={this.state.mainClassName}>
             <nav className="top-navigation">
               <NavBar
                   style={{
@@ -518,6 +526,11 @@ class Navigation extends Component {
                                       <Icon type="skin"/>
                                       <span>All products</span>
                                     </MenuItem>
+                                    <MenuItem key="/control-panel/orders-management">
+                                      <Link to={`/control-panel/orders-management`}/>
+                                      <Icon type="database"/>
+                                      <span>Manage orders</span>
+                                    </MenuItem>
                                     <MenuItem
                                         key="/control-panel/products/add-a-product">
                                       <Link
@@ -596,7 +609,9 @@ class Navigation extends Component {
                   null
               }
             </nav>
+            </div>
             :
+            <div className={this.state.mainClassName}>
             <nav className="top-navigation">
               {this.props.location.pathname.indexOf('control-panel') === -1 &&
               this.props.fetchedSettings &&
@@ -758,6 +773,7 @@ class Navigation extends Component {
                 <SignupView/>
               </Modal>
             </nav>
+            </div>
     );
   }
 }

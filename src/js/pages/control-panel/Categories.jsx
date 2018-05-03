@@ -20,6 +20,23 @@ const expandedRowRender = record => <p>{record.categoryDescription}</p>;
 const showHeader = true;
 
 class Categories extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      mainClassName: 'main-container hidden',
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 100);
+  }
+
   onShowUploadModal = () => {
     this.props.onShowUploadsModal();
   };
@@ -175,167 +192,198 @@ class Categories extends Component {
     const cardMediaQuery = window.matchMedia('(max-width: 768px)');
 
     return (
-        <Card bordered={false}
-              noHovering={true}>
-          <Card className="categories-wrap"
-                bordered={false}
-                noHovering={true}
-                bodyStyle={mediaQuery.matches ?
-                    {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      padding: cardMediaQuery.matches ? 5 : 24,
-                      maxWidth: '100vh',
-                    } :
-                    {
-                      display: 'flex',
-                      flex: 1,
-                    }}>
-            <Card bordered={false}
+        <div className={this.state.mainClassName}>
+          <Card bordered={false}
+                noHovering={true}>
+            <Card className="categories-wrap"
+                  bordered={false}
                   noHovering={true}
-                  loading={!this.props.loadedPage}
-                  title="Add a new category"
-                  style={mediaQuery.matches ?
+                  bodyStyle={mediaQuery.matches ?
                       {
                         display: 'flex',
                         flexDirection: 'column',
-                        maxWidth: '100%',
-                      }
-                      : {
+                        padding: cardMediaQuery.matches ? 5 : 24,
+                        maxWidth: '100vh',
+                      } :
+                      {
                         display: 'flex',
                         flex: 1,
-                        flexDirection: 'column',
-                        maxWidth: '35%',
-                      }
-                  }
-                  bodyStyle={{ padding: 0 }}>
-              <Form>
-                <FormItem key="0"
-                          label="Name"
-                          help={categoryName.errorMsg ?
-                              categoryName.errorMsg :
-                              'Category\'s name as it appears on the website'}
-                          hasFeedback>
-                  {getFieldDecorator('Category\'s name', {
-                    rules: [
-                      {
-                        required: true,
-                      },
-                      {
-                        min: 1,
-                        max: 64,
-                      },
-                      { setFieldsValue: categoryName.value, },
-                    ],
-                  })(
-                      <Input onChange={this.props.onCategoryNameChange}/>,
-                  )}
-                </FormItem>
-                <FormItem key="1"
-                          label="Descriptor"
-                          help={categoryDescriptor.errorMsg ?
-                              categoryDescriptor.errorMsg :
-                              'A descriptor is used for linking categories to one another.'}
-                          hasFeedback>
-                  {getFieldDecorator('Category\'s descriptor', {
-                    rules: [
-                      {
-                        required: true,
-                      },
-                      {
-                        min: 1,
-                        max: 64,
-                      },
-                      { setFieldsValue: categoryDescriptor.value, },
-                    ],
-                  })(
-                      <Input onChange={this.props.onCategoryDescriptorChange}/>,
-                  )}
-                </FormItem>
-                <FormItem key="2"
-                          label="Category's parent category"
-                          help="To create a hierarchy, specify another category as the parent of the one you are creating now. For example, Electronics would be a parent category for Smartphones or Computers. Any category not assigned a parent will be considered primary and will be shown on the categories navigation.">
-                  <Select showSearch
-                          notFoundContent="No matches found."
-                          onChange={this.props.onCategoryParentChange}>
-                    {parentsOptions}
-                  </Select>
-                </FormItem>
-                <FormItem key="3"
-                          label="Description"
-                          help={categoryDescription.errorMsg ?
-                              categoryDescription.errorMsg :
-                              'A description is not always necessary, but you can still show one as a tooltip.'}
-                          hasFeedback>
-                  {getFieldDecorator('Category\'s description', {
-                    rules: [
-                      {
-                        min: 1,
-                        max: 256,
-                      },
-                      { setFieldsValue: categoryDescription.value, },
-                    ],
-                  })(
-                      <TextArea autosize
-                                onChange={this.props.onCategoryDescriptionChange}/>,
-                  )}
-                </FormItem>
-                <FormItem key="4">
-                  <Card bordered={false}
-                        noHovering={true}
-                        bodyStyle={{
-                          padding: 0,
+                      }}>
+              <Card bordered={false}
+                    noHovering={true}
+                    loading={!this.props.loadedPage}
+                    title="Add a new category"
+                    style={mediaQuery.matches ?
+                        {
+                          display: 'flex',
+                          flexDirection: 'column',
+                          maxWidth: '100%',
+                        }
+                        : {
                           display: 'flex',
                           flex: 1,
-                          justifyContent: 'flex-start',
-                        }}>
-                    <Avatar shape="square"
-                            size="large"
-                            src={this.props.imageUrl ?
-                                this.props.imageUrl :
-                                `/images/placeholder.png`}
-                            style={{ cursor: 'pointer' }}
-                            onClick={this.onShowUploadModal}/>
+                          flexDirection: 'column',
+                          maxWidth: '35%',
+                        }
+                    }
+                    bodyStyle={{ padding: 0 }}>
+                <Form>
+                  <FormItem key="0"
+                            label="Name"
+                            help={categoryName.errorMsg ?
+                                categoryName.errorMsg :
+                                'Category\'s name as it appears on the website'}
+                            hasFeedback>
+                    {getFieldDecorator('Category\'s name', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                        {
+                          min: 1,
+                          max: 64,
+                        },
+                        { setFieldsValue: categoryName.value, },
+                      ],
+                    })(
+                        <Input onChange={this.props.onCategoryNameChange}/>,
+                    )}
+                  </FormItem>
+                  <FormItem key="1"
+                            label="Descriptor"
+                            help={categoryDescriptor.errorMsg ?
+                                categoryDescriptor.errorMsg :
+                                'A descriptor is used for linking categories to one another.'}
+                            hasFeedback>
+                    {getFieldDecorator('Category\'s descriptor', {
+                      rules: [
+                        {
+                          required: true,
+                        },
+                        {
+                          min: 1,
+                          max: 64,
+                        },
+                        { setFieldsValue: categoryDescriptor.value, },
+                      ],
+                    })(
+                        <Input
+                            onChange={this.props.onCategoryDescriptorChange}/>,
+                    )}
+                  </FormItem>
+                  <FormItem key="2"
+                            label="Category's parent category"
+                            help="To create a hierarchy, specify another category as the parent of the one you are creating now. For example, Electronics would be a parent category for Smartphones or Computers. Any category not assigned a parent will be considered primary and will be shown on the categories navigation.">
+                    <Select showSearch
+                            notFoundContent="No matches found."
+                            onChange={this.props.onCategoryParentChange}>
+                      {parentsOptions}
+                    </Select>
+                  </FormItem>
+                  <FormItem key="3"
+                            label="Description"
+                            help={categoryDescription.errorMsg ?
+                                categoryDescription.errorMsg :
+                                'A description is not always necessary, but you can still show one as a tooltip.'}
+                            hasFeedback>
+                    {getFieldDecorator('Category\'s description', {
+                      rules: [
+                        {
+                          min: 1,
+                          max: 256,
+                        },
+                        { setFieldsValue: categoryDescription.value, },
+                      ],
+                    })(
+                        <TextArea autosize
+                                  onChange={this.props.onCategoryDescriptionChange}/>,
+                    )}
+                  </FormItem>
+                  <FormItem key="4">
+                    <Card bordered={false}
+                          noHovering={true}
+                          bodyStyle={{
+                            padding: 0,
+                            display: 'flex',
+                            flex: 1,
+                            justifyContent: 'flex-start',
+                          }}>
+                      <Avatar shape="square"
+                              size="large"
+                              src={this.props.imageUrl ?
+                                  this.props.imageUrl :
+                                  `/images/placeholder.png`}
+                              style={{ cursor: 'pointer' }}
+                              onClick={this.onShowUploadModal}/>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        marginLeft: 5,
+                      }}>
+                        <Button type="default"
+                                onClick={this.onShowUploadModal}>
+                          Upload/Add an image
+                        </Button>
+                      </div>
+                    </Card>
+                  </FormItem>
+                  <FormItem key="5">
                     <div style={{
+                      padding: 0,
                       display: 'flex',
-                      flexDirection: 'column',
+                      flex: 1,
                       justifyContent: 'center',
-                      marginLeft: 5,
                     }}>
-                      <Button type="default"
-                              onClick={this.onShowUploadModal}>
-                        Upload/Add an image
+                      <Button type="primary"
+                              htmlType="submit"
+                              loading={this.props.savingCategory}
+                              onClick={() => {
+                                this.props.onSaveCategory();
+                              }
+                              }>
+                        {this.props.savingCategory ?
+                            <span>Working...</span>
+                            :
+                            <span>Add the category</span>
+                        }
                       </Button>
                     </div>
+                  </FormItem>
+                </Form>
+              </Card>
+              {cardMediaQuery.matches ?
+                  null
+                  :
+                  <Card bordered={false}
+                        noHovering={true}
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          flexDirection: 'column',
+                        }}>
+                    <Table {...this.tableState}
+                           loading={this.props.fetchingCategories}
+                           title={title}
+                           footer={footer}
+                           rowSelection={rowSelection}
+                           columns={categoriesTableColumns}
+                           dataSource={categoriesTableContent}/>
                   </Card>
-                </FormItem>
-                <FormItem key="5">
-                  <div style={{
-                    padding: 0,
-                    display: 'flex',
-                    flex: 1,
-                    justifyContent: 'center',
-                  }}>
-                    <Button type="primary"
-                            htmlType="submit"
-                            loading={this.props.savingCategory}
-                            onClick={() => {
-                              this.props.onSaveCategory();
-                            }
-                            }>
-                      {this.props.savingCategory ?
-                          <span>Working...</span>
-                          :
-                          <span>Add the category</span>
-                      }
-                    </Button>
-                  </div>
-                </FormItem>
-              </Form>
+              }
+              <Modal title="Pick an image"
+                     wrapClassName="vertical-center-modal"
+                     className="upload-modal-override"
+                     width={ window.innerWidth }
+                     visible={this.props.isModalVisible}
+                     style={{ minHeight: window.innerHeight }}
+                     footer={null}
+                     onOk={this.onHideUploadModal}
+                     onCancel={this.onHideUploadModal}>
+                <UploadView/>
+              </Modal>
             </Card>
             {cardMediaQuery.matches ?
-                null
-                :
                 <Card bordered={false}
                       noHovering={true}
                       style={{
@@ -345,46 +393,18 @@ class Categories extends Component {
                       }}>
                   <Table {...this.tableState}
                          loading={this.props.fetchingCategories}
+                         scroll={{ x: 1920 }}
                          title={title}
                          footer={footer}
                          rowSelection={rowSelection}
                          columns={categoriesTableColumns}
                          dataSource={categoriesTableContent}/>
                 </Card>
+                :
+                null
             }
-            <Modal title="Pick an image"
-                   wrapClassName="vertical-center-modal"
-                   width="auto"
-                   visible={this.props.isModalVisible}
-                   style={{ maxWidth: window.innerWidth }}
-                   footer={null}
-                   onOk={this.onHideUploadModal}
-                   onCancel={this.onHideUploadModal}>
-              <UploadView/>
-            </Modal>
           </Card>
-          {cardMediaQuery.matches ?
-              <Card bordered={false}
-                    noHovering={true}
-                    style={{
-                      display: 'flex',
-                      flex: 1,
-                      flexDirection: 'column',
-                    }}>
-                <Table {...this.tableState}
-                       loading={this.props.fetchingCategories}
-                       scroll={{ x: 1920 }}
-                       title={title}
-                       footer={footer}
-                       rowSelection={rowSelection}
-                       columns={categoriesTableColumns}
-                       dataSource={categoriesTableContent}/>
-              </Card>
-              :
-              null
-          }
-
-        </Card>
+        </div>
     );
   }
 }

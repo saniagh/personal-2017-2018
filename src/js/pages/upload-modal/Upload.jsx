@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Upload, Icon, Tabs, Card } from 'antd';
+import { Upload, Icon, Tabs, Card, Spin } from 'antd';
 import Gallery from 'react-grid-gallery';
 import CustomizedForm from './CustomizedForm.jsx';
 
 const UploadDragger = Upload.Dragger;
 const TabPane = Tabs.TabPane;
+
+import Auth from '../../modules/Auth.js';
 
 class UploadC extends Component {
   constructor(props) {
@@ -45,6 +47,9 @@ class UploadC extends Component {
             <div>
               <UploadDragger name='upload-file'
                              action='/upload/upload'
+                             headers={
+                               { 'Authorization': `bearer ${Auth.getToken()}`, }
+                             }
                              style={{ padding: 80 }}
                              multiple={true}
                              onChange={this.handleChange}>
@@ -62,27 +67,30 @@ class UploadC extends Component {
           </TabPane>
           <TabPane tab={<span><Icon type="picture"/>Media library</span>}
                    key="1">
-            <div className="uploads-container">
-              <div className="gallery-container">
-                <Card bordered={false}
-                      noHovering={true}
-                      loading={this.props.fetchingUploads}
-                      bodyStyle={{
-                        margin: 0,
-                        padding: 0,
-                      }}>
-                  <Gallery images={this.props.uploads}
-                           onSelectImage={this.props.onSelectImage}
-                           enableLightbox={false}
-                           onClickThumbnail={this.props.onSelectImage}
-                           multiple
-                  />
-                </Card>
-              </div>
-              <div className="info-container">
-                <div className="info-uploads">
-                  {this.props.selectedUrl ?
-                      <span>
+            <Spin tip="Fetching uploads"
+                  size="large"
+                  spinning={this.props.fetchingUploads}>
+              <div className="uploads-container">
+                <div className="gallery-container">
+                  <Card bordered={false}
+                        noHovering={true}
+                        loading={this.props.fetchingUploads}
+                        bodyStyle={{
+                          margin: 0,
+                          padding: 0,
+                        }}>
+                    <Gallery images={this.props.uploads}
+                             onSelectImage={this.props.onSelectImage}
+                             enableLightbox={false}
+                             onClickThumbnail={this.props.onSelectImage}
+                             multiple
+                    />
+                  </Card>
+                </div>
+                <div className="info-container">
+                  <div className="info-uploads">
+                    {this.props.selectedUrl ?
+                        <span>
                         <Card bodyStyle={{ padding: 14, background: '#f3f3f3' }}
                               bordered={false}
                               noHovering={true}>
@@ -106,12 +114,13 @@ class UploadC extends Component {
                           <CustomizedForm {...fields}/>
                         </Card>
                       </span>
-                      :
-                      null
-                  }
+                        :
+                        null
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
+            </Spin>
           </TabPane>
         </Tabs>
     );

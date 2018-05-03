@@ -3,6 +3,10 @@ const express = require('express');
 
 const router = new express.Router();
 
+const authValidation = require(
+    '../middleware/auth-validation.js',
+);
+
 router.get('/get-settings', (req, res) => {
   Settings.find({}, (err, settings) => {
     if (err) {
@@ -38,7 +42,12 @@ router.get('/set-default-settings', (req, res) => {
   });
 });
 
-router.post('/update-settings', (req, res) => {
+router.post('/update-settings', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: { currency: JSON.parse(req.body.currency) },
   }, (err) => {
@@ -52,7 +61,12 @@ router.post('/update-settings', (req, res) => {
   });
 });
 
-router.get('/update-to-default-settings', (req, res) => {
+router.get('/update-to-default-settings', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: { currency: ['RON', 'RON'] },
   }, (err) => {
@@ -66,7 +80,12 @@ router.get('/update-to-default-settings', (req, res) => {
   });
 });
 
-router.post('/update-site-navigation', (req, res) => {
+router.post('/update-site-navigation', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: {
       siteNavigation: JSON.parse(req.body.siteNavigation),
@@ -82,7 +101,12 @@ router.post('/update-site-navigation', (req, res) => {
   });
 });
 
-router.post('/update-site-slider', (req, res) => {
+router.post('/update-site-slider', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: {
       sliderImages: JSON.parse(req.body.sliderImages),
@@ -98,7 +122,12 @@ router.post('/update-site-slider', (req, res) => {
   });
 });
 
-router.post('/update-top-promotional-banner', (req, res) => {
+router.post('/update-top-promotional-banner', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: {
       topPromotionalBanner: JSON.parse(req.body.topPromotionalBanner),
@@ -114,7 +143,12 @@ router.post('/update-top-promotional-banner', (req, res) => {
   });
 });
 
-router.post('/update-index-images-desktop', (req, res) => {
+router.post('/update-index-images-desktop', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
         $set: {
           leftIndexPromotionsDesktop: JSON.parse(
@@ -146,7 +180,12 @@ router.post('/update-index-images-desktop', (req, res) => {
   );
 });
 
-router.post('/update-index-images-mobile', (req, res) => {
+router.post('/update-index-images-mobile', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
         $set: {
           indexImagesMobile: JSON.parse(req.body.indexImagesMobile),
@@ -163,7 +202,12 @@ router.post('/update-index-images-mobile', (req, res) => {
   );
 });
 
-router.post('/update-footer', (req, res) => {
+router.post('/update-footer', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Settings.updateMany({}, {
     $set: {
       footerLeftColumn: JSON.parse(req.body.footerLeftColumn),

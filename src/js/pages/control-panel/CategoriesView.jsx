@@ -14,6 +14,8 @@ import qs from 'qs';
 
 import Categories from './Categories.jsx';
 
+import Auth from '../../modules/Auth.js';
+
 let createHandlers = function (dispatch) {
   let onShowUploadsModal = function () {
     dispatch(onShowUploadsModalAction());
@@ -183,6 +185,7 @@ class CategoriesView extends Component {
       method: 'post',
       url: '/products-categories/add-category',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -275,6 +278,7 @@ class CategoriesView extends Component {
       method: 'post',
       url: '/products-categories/delete-categories',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({

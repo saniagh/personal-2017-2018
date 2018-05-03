@@ -4,8 +4,6 @@ import axios from 'axios';
 import qs from 'qs';
 import { notification, Card } from 'antd';
 
-import { smoothScroll } from '../../modules/scrollFunction.js';
-
 import {
   onAddProductToCart,
 } from '../universal/navigationActions.js';
@@ -116,7 +114,6 @@ class ViewProductView extends Component {
   }
 
   componentDidMount() {
-    smoothScroll();
     this.setState({
       fetchingProduct: true,
       fetchingSettings: true,

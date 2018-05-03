@@ -29,10 +29,10 @@ const ProductSchema = new mongoose.Schema({
     default: '',
   },
   productPrice: {
-    type: Number,
+    type: String,
   },
   salePrice: {
-    type: Number,
+    type: String,
     default: '',
   },
   stockStatus: {

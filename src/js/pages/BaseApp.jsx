@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import 'antd/dist/antd.css';
 
 import Auth from '../modules/Auth.js';
 
@@ -223,7 +222,7 @@ class BaseApp extends Component {
                           </div>
                         </Link>
                         <div className="shopping-cart-qty">
-                          {item.qty} x {this.state.currency[1]}
+                          {item.qty} x {this.state.currency[1] }
                           {item.product.salePrice ?
                               item.product.salePrice :
                               item.product.productPrice}

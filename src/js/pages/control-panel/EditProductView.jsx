@@ -19,6 +19,8 @@ import {
 import axios from 'axios';
 import qs from 'qs';
 
+import Auth from '../../modules/Auth.js';
+
 import EditProduct from './EditProduct.jsx';
 
 let createHandlers = function (dispatch) {
@@ -187,6 +189,7 @@ class EditProductView extends Component {
       method: 'post',
       url: '/product/edit-product',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -476,6 +479,7 @@ class EditProductView extends Component {
       method: 'post',
       url: '/product/edit-product-save',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({

@@ -1,11 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Rate, Icon, Button, Input, Card } from 'antd';
+import { Button, Input, Card } from 'antd';
 
 import ImageGallery from 'react-image-gallery';
 
 class ViewProduct extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      mainClassName: 'main-container hidden',
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
+  }
 
   turnIntoHtml = () => {
     return {
@@ -25,7 +41,7 @@ class ViewProduct extends Component {
     });
 
     return (
-        <div>
+        <div className={this.state.mainClassName}>
           <section className="product-section mt15">
             <div className="preview-gallery full">
               <ImageGallery items={images}
@@ -43,7 +59,7 @@ class ViewProduct extends Component {
                 <p className="product-price full">
             <span className="price-now full">
               <strong>
-                {this.props.currency[1]}
+                {this.props.currency[1] }
                 {product.salePrice ?
                     <span>
                       <span>
@@ -60,16 +76,14 @@ class ViewProduct extends Component {
                   {product.salePrice ?
                       <del className="old-price full">
                         <strong>
-                          {this.props.currency[1]}
-                          MARKET PRICE {product.productPrice}
+                          {this.props.currency[1] }
+                          {product.productPrice}
                         </strong>
                       </del>
                       :
                       null
                   }
                 </p>
-                <Rate character={<Icon type="heart"/>}
-                      value={3}/>
               </div>
               <div className="preview-order-box">
                 <ul className="list-style-none preview-product-list">
@@ -95,16 +109,21 @@ class ViewProduct extends Component {
                   </li>
                 </ul>
                 <p className="pt20">
-                  Availability: {product.stockStatus ?
+                  Availability: {product.stockStatus && product.stockQuantity ?
                     <span>In Stock</span> :
                     <span style={{ color: 'red' }}>Not in Stock</span>
                 }
                 </p>
                 <div className="preview-add-cart-div">
                   <button className="preview-add-card-button full"
-                          onClick={this.props.onAddProductToCart(
-                              this.props.product, this.props.orderQty)}>
-                    ADD TO CART
+                          disabled={!product.stockQuantity}
+                          onClick={product.stockQuantity ?
+                              this.props.onAddProductToCart(
+                                  this.props.product, this.props.orderQty) :
+                              console.log('')}>
+                    {product.stockQuantity ?
+                        'ADD TO CART' :
+                        'Product not in stock'}
                   </button>
                 </div>
               </div>

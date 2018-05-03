@@ -62,6 +62,18 @@ module.exports = (req, res, next) => {
     formValidity = false;
   }
 
+  if (!requestData.stateOrCounty ||
+      typeof requestData.stateOrCounty !== 'string') {
+    errors.stateOrCounty = 'This isn\'t a valid home address.';
+    formValidity = false;
+  } else if (requestData.stateOrCounty.trim().length === 0) {
+    errors.stateOrCounty = 'This field cannot be empty.';
+    formValidity = false;
+  } else if (requestData.stateOrCounty.trim().length > 64) {
+    errors.stateOrCounty = 'This address is too long';
+    formValidity = false;
+  }
+
   if (!requestData.townOrCity || typeof requestData.townOrCity !== 'string') {
     errors.townOrCity = 'This isn\'t a valid town or city name.';
     formValidity = false;

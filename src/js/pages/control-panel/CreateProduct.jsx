@@ -33,7 +33,16 @@ class CreateProduct extends Component {
 
     this.state = {
       editingProductLink: false,
+      mainClassName: 'main-container hidden',
     };
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 200);
   }
 
   rowState = {
@@ -191,38 +200,39 @@ class CreateProduct extends Component {
     }
 
     return (
-        <Card bordered={false}
-              noHovering={true}
-              bodyStyle={{
-                display: 'flex',
-                flexDirection: cardMediaQuery.matches ? 'column-reverse' : '',
-                padding: cardMediaQuery.matches ? 24 : 5,
-              }}>
-          <Form style={{ width: formWidth }}>
-            <Card loading={this.props.fetchingCategories}
-                  bordered={false}
-                  noHovering={true}
-                  bodyStyle={{
-                    padding: 0,
-                    margin: 0,
-                  }}>
-              <FormItem key="0"
-                        style={{ marginBottom: 4 }}
-                        hasFeedback>
-                {getFieldDecorator('Product\'s name', {
-                  rules: [
-                    {
-                      required: true,
-                      setFieldsValue: productName.value,
-                    },
-                  ],
-                })(
-                    <Input placeholder="Product's name"
-                           style={{ width: '100%', fontSize: 16 }}
-                           onChange={this.props.onProductNameChange}/>,
-                )}
-              </FormItem>
-              <FormItem key="1">
+        <div className={this.state.mainClassName}>
+          <Card bordered={false}
+                noHovering={true}
+                bodyStyle={{
+                  display: 'flex',
+                  flexDirection: cardMediaQuery.matches ? 'column-reverse' : '',
+                  padding: cardMediaQuery.matches ? 24 : 5,
+                }}>
+            <Form style={{ width: formWidth }}>
+              <Card loading={this.props.fetchingCategories}
+                    bordered={false}
+                    noHovering={true}
+                    bodyStyle={{
+                      padding: 0,
+                      margin: 0,
+                    }}>
+                <FormItem key="0"
+                          style={{ marginBottom: 4 }}
+                          hasFeedback>
+                  {getFieldDecorator('Product\'s name', {
+                    rules: [
+                      {
+                        required: true,
+                        setFieldsValue: productName.value,
+                      },
+                    ],
+                  })(
+                      <Input placeholder="Product's name"
+                             style={{ width: '100%', fontSize: 16 }}
+                             onChange={this.props.onProductNameChange}/>,
+                  )}
+                </FormItem>
+                <FormItem key="1">
                 <span style={{ display: 'flex', }}>
                   <span style={{ display: 'flex', }}>
                     <b>Permalink: </b>
@@ -260,16 +270,16 @@ class CreateProduct extends Component {
                         }
                   </Button>
                 </span>
-              </FormItem>
-              <FormItem key="2">
-                <ReactQuill theme="snow"
-                            onChange={this.props.onProductDescriptionChange}
-                            value={this.props.productDescription}
-                            modules={modules}
-                            formats={formats}/>
-              </FormItem>
-            </Card>
-            <span>
+                </FormItem>
+                <FormItem key="2">
+                  <ReactQuill theme="snow"
+                              onChange={this.props.onProductDescriptionChange}
+                              value={this.props.productDescription}
+                              modules={modules}
+                              formats={formats}/>
+                </FormItem>
+              </Card>
+              <span>
               <Card noHovering={true}
                     loading={this.props.fetchingCategories}
                     bodyStyle={{
@@ -451,8 +461,8 @@ class CreateProduct extends Component {
                 </Tabs>
               </Card>
             </span>
-          </Form>
-          <span style={{ display: 'flex', flexDirection: 'column' }}>
+            </Form>
+            <span style={{ display: 'flex', flexDirection: 'column' }}>
             <Card noHovering={true}
                   loading={this.props.fetchingCategories}
                   title="Publish"
@@ -506,8 +516,10 @@ class CreateProduct extends Component {
                   }}>
               <span style={{ display: 'flex', flex: 1, }}>
                 <Button type='danger'
-                        htmlType="button">
-                Move to trash
+                        htmlType="button"
+                        onClick={() => this.props.router.history.replace(
+                            '/control-panel/products')}>
+                Cancel
               </Button>
               </span>
               <span style={{
@@ -646,27 +658,30 @@ class CreateProduct extends Component {
               </span>
             </Card>
           </span>
-          <Modal title="Pick an image"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.props.isModalVisible}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.props.onHideUploadsModal}
-                 onCancel={this.props.onHideUploadsModal}>
-            <UploadView/>
-          </Modal>
-          <Modal title="Pick images to show in product's gallery"
-                 wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.props.isModalVisibleMultiple}
-                 style={{ maxWidth: window.innerWidth }}
-                 footer={null}
-                 onOk={this.props.onHideUploadsMultipleModal}
-                 onCancel={this.props.onHideUploadsMultipleModal}>
-            <UploadViewMultipleChoice/>
-          </Modal>
-        </Card>
+            <Modal title="Pick an image"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.props.isModalVisible}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.props.onHideUploadsModal}
+                   onCancel={this.props.onHideUploadsModal}>
+              <UploadView/>
+            </Modal>
+            <Modal title="Pick images to show in product's gallery"
+                   wrapClassName="vertical-center-modal"
+                   className="upload-modal-override"
+                   width={ window.innerWidth }
+                   visible={this.props.isModalVisibleMultiple}
+                   style={{ minHeight: window.innerHeight }}
+                   footer={null}
+                   onOk={this.props.onHideUploadsMultipleModal}
+                   onCancel={this.props.onHideUploadsMultipleModal}>
+              <UploadViewMultipleChoice/>
+            </Modal>
+          </Card>
+        </div>
     );
   }
 }

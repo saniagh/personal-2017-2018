@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Upload, Icon, Tabs, Card, Button } from 'antd';
+import { Upload, Icon, Tabs, Card, Button, Spin } from 'antd';
 import Gallery from 'react-grid-gallery';
 
 const UploadDragger = Upload.Dragger;
 const TabPane = Tabs.TabPane;
+
+import Auth from '../../modules/Auth.js';
 
 class UploadMultipleChoice extends Component {
   constructor(props) {
@@ -35,6 +37,9 @@ class UploadMultipleChoice extends Component {
             <div>
               <UploadDragger name='upload-file'
                              action='/upload/upload'
+                             headers={
+                               { 'Authorization': `bearer ${Auth.getToken()}`, }
+                             }
                              style={{ padding: 80 }}
                              multiple={true}
                              onChange={this.handleChange}>
@@ -52,19 +57,23 @@ class UploadMultipleChoice extends Component {
           </TabPane>
           <TabPane tab={<span><Icon type="picture"/>Media library</span>}
                    key="1">
-            <div style={{ marginBottom: 10, textAlign: 'right' }}>
-              <Button type="primary"
-                      onClick={this.props.onChooseImagesFunction}>
-                Choose selected images
-              </Button>
-            </div>
-            <div style={{ maxWidth: '100vh !important' }}>
-              <Gallery images={this.props.uploads}
-                       onSelectImage={this.props.onSelectImage}
-                       enableLightbox={false}
-                       onClickThumbnail={this.props.onSelectImage}
-              />
-            </div>
+            <Spin tip="Fetching uploads"
+                  size="large"
+                  spinning={this.props.fetchingUploads}>
+              <div style={{ marginBottom: 10, textAlign: 'right' }}>
+                <Button type="primary"
+                        onClick={this.props.onChooseImagesFunction}>
+                  Choose selected images
+                </Button>
+              </div>
+              <div style={{ maxWidth: '100vh !important' }}>
+                <Gallery images={this.props.uploads}
+                         onSelectImage={this.props.onSelectImage}
+                         enableLightbox={false}
+                         onClickThumbnail={this.props.onSelectImage}
+                />
+              </div>
+            </Spin>
           </TabPane>
         </Tabs>
     );

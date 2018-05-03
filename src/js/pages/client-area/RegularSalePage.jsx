@@ -20,6 +20,7 @@ class RegularSalePage extends Component {
       pageNumber: 1,
       isModalVisible: false,
       chosenProductKey: -1,
+      mainClassName: 'main-container hidden',
     };
   }
 
@@ -69,6 +70,11 @@ class RegularSalePage extends Component {
 
   componentDidMount() {
     window.addEventListener('popstate', this.onHideModal);
+    setTimeout(() => {
+      this.setState({
+        mainClassName: 'main-container',
+      });
+    }, 100);
   }
 
   render() {
@@ -234,125 +240,36 @@ class RegularSalePage extends Component {
     const cardMediaQuery = window.matchMedia('(max-width: 1300px)');
 
     return (
-        <div className="main-wrap">
-          <Card bordered={false}
-                noHovering={true}
-                loading={!this.props.fetchedProducts}
-                style={{
-                  padding: 0,
-                }}
-                bodyStyle={{
-                  margin: 0,
-                  padding: 0,
-                }}>
-            <div style={{ marginBottom: 40, height: 30 }}>
-              <div className="results-count-wrap">
-                <div className="results-count fl">
-                  {this.props.fetchedProducts ?
-                      <span>
-               {this.props.searchTerm}: ({this.props.products.length} styles)
+        <div className={this.state.mainClassName}>
+          <div className="main-wrap">
+            <Card bordered={false}
+                  noHovering={true}
+                  loading={!this.props.fetchedProducts}
+                  style={{
+                    padding: 0,
+                  }}
+                  bodyStyle={{
+                    margin: 0,
+                    padding: 0,
+                  }}>
+              <div style={{ marginBottom: 40, height: 30 }}>
+                <div className="results-count-wrap">
+                  <div className="results-count fl">
+                    {this.props.fetchedProducts ?
+                        <span>
+               {this.props.searchTerm}: ({this.props.products.length} results)
                   </span>
-                      :
-                      null
-                  }
+                        :
+                        null
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
-          </Card>
-          <aside className="aside-nav fl">
-            <Card bordered={false}
-                  noHovering={true}
-                  loading={!this.props.fetchedCategories}
-                  style={{
-                    padding: 0,
-                  }}
-                  bodyStyle={{
-                    margin: 0,
-                    padding: 0,
-                  }}>
-              <section className="aside-section">
-                <div className="aside-section-list-wrap">
-                  <ul>
-                    {asideMenu}
-                  </ul>
-                </div>
-              </section>
             </Card>
-            <Card bordered={false}
-                  noHovering={true}
-                  loading={!this.props.fetchedCategories &&
-                  !this.props.fetchedTags}
-                  style={{
-                    padding: 0,
-                  }}
-                  bodyStyle={{
-                    margin: 0,
-                    padding: 0,
-                  }}>
-              <section className="filters">
-                <section className="filters-list">
-                  <Collapse defaultActiveKey={['1']}>
-                    <Panel header="Categories" key="1">
-                      <ul className="list-style-none">
-                        {asideCategories}
-                      </ul>
-                    </Panel>
-                  </Collapse>
-                </section>
-                <section className="filters-list">
-                  <Collapse defaultActiveKey={['1']}>
-                    <Panel header="Tags" key="1">
-                      <ul className="list-style-none">
-                        {asideTags}
-                      </ul>
-                    </Panel>
-                  </Collapse>
-                </section>
-              </section>
-            </Card>
-          </aside>
-          <p className="search-term">{this.props.searchTerm}</p>
-          <div className="sort-by fr">
-            <div className="fl">
-              <strong className="sort-by-text">Sort by</strong>
-              <Select defaultValue="featured"
-                      style={{ width: 144, }}
-                      onChange={this.props.changeSortByStatus}>
-                <Option value="featured">Featured</Option>
-                <Option value="onsale">On Sale</Option>
-                <Option value="lowhigh">Price low to high</Option>
-                <Option value="highlow">Price high to low</Option>
-              </Select>
-            </div>
-            <div className="view-number fr">
-              <p className="fl">
-                Showing:
-                <span
-                    className={`showing-number ${this.state.productsToShow ===
-                    60 ? 'active' : null}`}
-                    onClick={this.onProductsToShowChange(60)}>
-                  60
-                </span>
-                <span
-                    className={`showing-number ${this.state.productsToShow ===
-                    120 ? 'active' : null}`}
-                    onClick={this.onProductsToShowChange(120)}>
-                  120
-                </span>
-              </p>
-            </div>
-          </div>
-
-          <section className="products-content-box fr">
-            <div className="margin-top30">
-              <ul className="products-list">
-                {productsList}
-              </ul>
-            </div>
-            <div className="pagination-container">
+            <aside className="aside-nav fl">
               <Card bordered={false}
                     noHovering={true}
-                    loading={!this.props.fetchedProducts}
+                    loading={!this.props.fetchedCategories}
                     style={{
                       padding: 0,
                     }}
@@ -360,42 +277,133 @@ class RegularSalePage extends Component {
                       margin: 0,
                       padding: 0,
                     }}>
-                {cardMediaQuery.matches ?
-                    <Button onClick={this.props.products.length >
-                    this.state.indexEnd ? this.onLoadMore : () => {
-                    }}
-                            type="primary"
-                            disabled={this.props.products.length <
-                            this.state.indexEnd}>
-                      {this.props.products.length >
-                      this.state.indexEnd ? 'View more' : 'No more to show'}
-                    </Button>
-                    :
-                    <Pagination current={this.state.pageNumber}
-                                onChange={this.onPageChange}
-                                pageSize={this.state.productsToShow}
-                                total={this.props.products.length}/>
-                }
+                <section className="aside-section">
+                  <div className="aside-section-list-wrap">
+                    <ul>
+                      {asideMenu}
+                    </ul>
+                  </div>
+                </section>
               </Card>
+              <Card bordered={false}
+                    noHovering={true}
+                    loading={!this.props.fetchedCategories &&
+                    !this.props.fetchedTags}
+                    style={{
+                      padding: 0,
+                    }}
+                    bodyStyle={{
+                      margin: 0,
+                      padding: 0,
+                    }}>
+                <section className="filters">
+                  <section className="filters-list">
+                    <Collapse defaultActiveKey={['1']}>
+                      <Panel header="Categories" key="1">
+                        <ul className="list-style-none">
+                          {asideCategories}
+                        </ul>
+                      </Panel>
+                    </Collapse>
+                  </section>
+                  <section className="filters-list">
+                    <Collapse defaultActiveKey={['1']}>
+                      <Panel header="Tags" key="1">
+                        <ul className="list-style-none">
+                          {asideTags}
+                        </ul>
+                      </Panel>
+                    </Collapse>
+                  </section>
+                </section>
+              </Card>
+            </aside>
+            <p className="search-term">{this.props.searchTerm}</p>
+            <div className="sort-by fr">
+              <div className="fl">
+                <strong className="sort-by-text">Sort by</strong>
+                <Select defaultValue="featured"
+                        style={{ width: 144, }}
+                        onChange={this.props.changeSortByStatus}>
+                  <Option value="featured">Featured</Option>
+                  <Option value="onsale">On Sale</Option>
+                  <Option value="lowhigh">Price low to high</Option>
+                  <Option value="highlow">Price high to low</Option>
+                </Select>
+              </div>
+              <div className="view-number fr">
+                <p className="fl">
+                  Showing:
+                  <span
+                      className={`showing-number ${this.state.productsToShow ===
+                      60 ? 'active' : null}`}
+                      onClick={this.onProductsToShowChange(60)}>
+                  60
+                </span>
+                  <span
+                      className={`showing-number ${this.state.productsToShow ===
+                      120 ? 'active' : null}`}
+                      onClick={this.onProductsToShowChange(120)}>
+                  120
+                </span>
+                </p>
+              </div>
             </div>
-          </section>
-          <Modal wrapClassName="vertical-center-modal"
-                 width="auto"
-                 visible={this.state.isModalVisible}
-                 title={null}
-                 footer={null}
-                 style={{ maxWidth: window.innerWidth }}
-                 onOk={this.onHideModal}
-                 onCancel={() => {
-                   this.onHideModal();
-                   this.props.history.replace(
-                       '/browse-shop/' + this.props.searchTerm);
-                 }}>
-            <QuickViewProductView
-                product={this.props.products[this.state.chosenProductKey]}
-                currency={this.props.currency}
-                onHideModal={this.onHideModal}/>
-          </Modal>
+
+            <section className="products-content-box fr">
+              <div className="margin-top30">
+                <ul className="products-list">
+                  {productsList}
+                </ul>
+              </div>
+              <div className="pagination-container">
+                <Card bordered={false}
+                      noHovering={true}
+                      loading={!this.props.fetchedProducts}
+                      style={{
+                        padding: 0,
+                      }}
+                      bodyStyle={{
+                        margin: 0,
+                        padding: 0,
+                      }}>
+                  {cardMediaQuery.matches ?
+                      <Button onClick={this.props.products.length >
+                      this.state.indexEnd ? this.onLoadMore : () => {
+                      }}
+                              type="primary"
+                              disabled={this.props.products.length <
+                              this.state.indexEnd}>
+                        {this.props.products.length >
+                        this.state.indexEnd ? 'View more' : 'No more to show'}
+                      </Button>
+                      :
+                      <Pagination current={this.state.pageNumber}
+                                  onChange={this.onPageChange}
+                                  pageSize={this.state.productsToShow}
+                                  total={this.props.products.length}/>
+                  }
+                </Card>
+              </div>
+            </section>
+            <Modal wrapClassName="vertical-center-modal"
+                   width="auto"
+                   visible={this.state.isModalVisible}
+                   title={null}
+                   footer={null}
+                   style={{ maxWidth: window.innerWidth }}
+                   onOk={this.onHideModal}
+                   onCancel={() => {
+                     this.onHideModal();
+                     this.props.history.replace(
+                         '/browse-shop/' + this.props.searchTerm);
+                   }}>
+              <QuickViewProductView
+                  product={this.props.products[this.state.chosenProductKey]}
+                  currency={this.props.currency}
+                  onHideModal={this.onHideModal}/>
+            </Modal>
+          </div>
         </div>
     );
   }

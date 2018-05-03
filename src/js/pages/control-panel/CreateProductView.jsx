@@ -19,6 +19,8 @@ import {
 import axios from 'axios';
 import qs from 'qs';
 
+import Auth from '../../modules/Auth.js';
+
 import CreateProduct from './CreateProduct.jsx';
 
 let createHandlers = function (dispatch) {
@@ -397,6 +399,7 @@ class CreateProductView extends Component {
       method: 'post',
       url: '/product/add-product',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({

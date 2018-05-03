@@ -22,9 +22,9 @@ module.exports = (req, res, next) => {
           return res.status(401).end();
         } else {
 
-          req.body.id = user._id;
+          req.body.userId = user._id;
           req.body.username = user.username;
-          req.body.email = user.email;
+          req.body.tokenEmail = user.email;
           req.body.isAdmin = user.isAdmin;
 
           return next();

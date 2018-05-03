@@ -1,5 +1,11 @@
+const Ddos = require('ddos');
+const ddos = new Ddos({ burst: 300, limit: 4000 });
+const compression = require('compression');
 const express = require('express');
 const app = express();
+
+app.use(compression());
+app.use(ddos.express);
 
 const passport = require('passport');
 const dbConfig = require('./db-config');
@@ -21,11 +27,6 @@ app.use(passport.initialize());
 passport.use('signup', signupPassport);
 passport.use('login', loginPassport);
 app.use('/authentication', authRoutes);
-
-const authValidation = require('./res/middleware/auth-validation');
-
-// The middleware should be used for routes that require the user to be authenticated
-//app.use('/mock', authValidation);
 
 const settingsRoute = require('./res/handlers/settings.js');
 app.use('/settings', settingsRoute);

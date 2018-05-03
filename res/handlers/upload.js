@@ -5,6 +5,10 @@ const uuid = require('uuid');
 
 const router = new express.Router();
 
+const authValidation = require(
+    '../middleware/auth-validation.js',
+);
+
 // once we implement users we should use the user id to change the filename
 
 let uniqueName;
@@ -29,7 +33,12 @@ const upload = multer({
   },
 }).single('upload-file');
 
-router.post('/upload', (req, res) => {
+router.post('/upload', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   upload(req, res, function (err) {
     if (err) {
       res.status(400).send('File size is too large/Unexpected error');
@@ -49,6 +58,7 @@ router.post('/upload', (req, res) => {
           success: false,
         });
       }
+
       return res.json({
         success: true,
       });
@@ -56,7 +66,12 @@ router.post('/upload', (req, res) => {
   });
 });
 
-router.get('/getAllUploads', (req, res) => {
+router.get('/getAllUploads', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Uploads.find({}, (err, uploads) => {
     if (err) {
       return res.status(400).json({
@@ -72,7 +87,12 @@ router.get('/getAllUploads', (req, res) => {
   }).sort({ createdAt: -1 });
 });
 
-router.post('/changeImageDisplayName', (req, res) => {
+router.post('/changeImageDisplayName', authValidation, (req, res) => {
+
+  if (req.body.isAdmin === false) {
+    return res.status(401).end();
+  }
+
   Uploads.updateOne({ url: req.body.selectedUrl }, {
     $set: {
       displayName: req.body.selectedDisplayName,

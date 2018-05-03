@@ -5,6 +5,42 @@
 @import "../../src/css/regular-sale.scss";
 @import "../../src/css/view-product.scss";
 @import "../../src/css/checkout.scss";
+@import "../../src/css/manage-orders.scss";
+
+.ant-modal {
+  padding-bottom: 0 !important;
+}
+
+.upload-modal-override {
+  .ant-modal-content {
+    height: 100%;
+    min-height: 965px;
+
+    .ant-modal-body {
+      min-height: 965px;
+
+      .ant-tabs {
+        min-height: 965px;
+
+        .ant-upload {
+          min-height: 450px;
+        }
+      }
+    }
+  }
+}
+
+.ant-table-tbody {
+  td {
+    max-width: 400px;
+  }
+}
+
+.rt-td {
+  text-align: center;
+  height: 50px;
+  line-height: 3;
+}
 
 .signup-form {
   width: 100%;

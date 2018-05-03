@@ -20,6 +20,8 @@ import qs from 'qs';
 
 import Settings from './Settings.jsx';
 
+import Auth from '../../modules/Auth.js';
+
 let createHandlers = function (dispatch) {
 
   let onShowUploadsMultipleModal = function () {
@@ -1229,6 +1231,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-settings',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1295,6 +1298,9 @@ class SettingsView extends Component {
     axios({
       method: 'get',
       url: '/settings//update-to-default-settings',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
+      },
     }).then(() => {
 
       notification.success({
@@ -1356,6 +1362,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-site-navigation',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1430,6 +1437,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-site-slider',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1504,6 +1512,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-top-promotional-banner',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1577,6 +1586,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-index-images-desktop',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1632,6 +1642,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-index-images-mobile',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({
@@ -1671,6 +1682,7 @@ class SettingsView extends Component {
       method: 'post',
       url: '/settings/update-footer',
       headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
         'Content-type': 'application/x-www-form-urlencoded',
       },
       data: qs.stringify({

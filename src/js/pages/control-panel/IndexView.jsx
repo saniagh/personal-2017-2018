@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Link } from 'react-router-dom';
+import axios from 'axios';
+
+import Auth from '../../modules/Auth.js';
 
 import { Layout, Menu, Icon } from 'antd';
 const { Header, Content, Sider } = Layout;
@@ -14,6 +17,7 @@ import CreateProductView from './CreateProductView.jsx';
 import EditProductView from './EditProductView.jsx';
 import SettingsView from './SettingsView.jsx';
 import ManageOrdersView from './ManageOrdersView.jsx';
+import ManageOrderDetailsView from './ManageOrderDetailsView.jsx';
 
 import { connect } from 'react-redux';
 
@@ -40,9 +44,31 @@ class IndexView extends Component {
         selectedKeys: ['/control-panel/products'],
       });
 
-    if (this.props.isAdmin === false) {
+    axios({
+      method: 'post',
+      url: '/authentication/auth-validation',
+      headers: {
+        'Authorization': `bearer ${Auth.getToken()}`,
+      },
+    }).then(() => {
+      axios({
+        method: 'post',
+        url: '/authentication/decode-credentials',
+        headers: {
+          'Authorization': `bearer ${Auth.getToken()}`,
+        },
+      }).then((res) => {
+        const response = res.data;
+
+        if (response.isAdmin === false) {
+          this.context.router.history.replace('/');
+        }
+      }).catch(() => {
+        this.context.router.history.replace('/');
+      });
+    }).catch(() => {
       this.context.router.history.replace('/');
-    }
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,10 +77,6 @@ class IndexView extends Component {
       this.setState({
         selectedKeys: ['/control-panel/products'],
       });
-
-    if (nextProps.isAdmin === false) {
-      this.context.router.history.replace('/');
-    }
   }
 
   render() {
@@ -128,6 +150,11 @@ class IndexView extends Component {
                         <Icon type="home"/>
                         <span>Control Panel</span>
                       </MenuItem>
+                      <MenuItem key="/control-panel/orders-management">
+                        <Link to={`/control-panel/orders-management`}/>
+                        <Icon type="database"/>
+                        <span>Manage orders</span>
+                      </MenuItem>
                       <SubMenu key="/control-panel/products-submenu"
                                title={
                                  <span>
@@ -169,6 +196,19 @@ class IndexView extends Component {
               {this.context.router.route.location.pathname ===
               '/control-panel' ?
                   <span>Control Panel</span>
+                  :
+                  null
+              }
+              {this.context.router.route.location.pathname ===
+              '/control-panel/orders-management' ?
+                  <span>Orders Management</span>
+                  :
+                  null
+              }
+              {this.context.router.route.location.pathname.indexOf(
+                  '/control-panel/orders-management/order') !== -1
+                  ?
+                  <span>Order Details</span>
                   :
                   null
               }
@@ -237,8 +277,11 @@ class IndexView extends Component {
                      path={`${this.props.match.url}/settings`}
                      component={SettingsView}/>
               <Route exact
-                     path={`${this.props.match.url}/orders-management/`}
+                     path={`${this.props.match.url}/orders-management`}
                      component={ManageOrdersView}/>
+              <Route exact
+                     path={`${this.props.match.url}/orders-management/order/:orderId`}
+                     component={ManageOrderDetailsView}/>
             </Content>
           </Layout>
         </Layout>

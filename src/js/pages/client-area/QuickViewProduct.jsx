@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Rate, Icon, Button, Input } from 'antd';
+import { Button, Input } from 'antd';
 
 import 'react-image-gallery/styles/css/image-gallery.css';
 import ImageGallery from 'react-image-gallery';
@@ -68,8 +68,6 @@ class QuickViewProduct extends Component {
                     null
                 }
               </p>
-              <Rate character={<Icon type="heart"/>}
-                    value={3}/>
             </div>
             <div className="preview-order-box">
               <ul className="list-style-none preview-product-list">
@@ -95,16 +93,21 @@ class QuickViewProduct extends Component {
                 </li>
               </ul>
               <p className="pt20">
-                Availability: {product.stockStatus ?
+                Availability: {product.stockStatus && product.stockQuantity ?
                   <span>In Stock</span> :
                   <span style={{ color: 'red' }}>Not in Stock</span>
               }
               </p>
               <div className="preview-add-cart-div">
-                <button className="preview-add-card-button"
-                        onClick={this.props.onAddProductToCart(
-                            this.props.product, this.props.orderQty)}>
-                  ADD TO CART
+                <button className="preview-add-card-button full"
+                        disabled={!product.stockQuantity}
+                        onClick={product.stockQuantity ?
+                            this.props.onAddProductToCart(
+                                this.props.product, this.props.orderQty) :
+                            console.log('')}>
+                  {product.stockQuantity ?
+                      'ADD TO CART' :
+                      'Product not in stock'}
                 </button>
               </div>
               <div className="preview-link-to-full">
