@@ -439,6 +439,9 @@ class Settings extends Component {
                                     }}>
                           <figure>
                             <img src={pictureData.imageUrl} alt=""
+                                 onError={(e) => {
+                                   e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                                 }}
                                  style={{
                                    maxWidth: 200,
                                    maxHeight: 310,
@@ -651,6 +654,9 @@ class Settings extends Component {
                                           }}>
                                 <figure>
                                   <img src={url.imageUrl} alt=""
+                                       onError={(e) => {
+                                         e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                                       }}
                                        style={{ maxWidth: '434px' }}/>
                                 </figure>
                                 <figcaption
@@ -700,6 +706,10 @@ class Settings extends Component {
                           '/images/placeholder.png'
                       }
                            alt=""
+                           onError={(e) => {
+                             e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                           }}
+
                            style={{ maxWidth: '610px', maxHeight: '720px' }}
                            onClick={() => {
                              this.onChangeIsSingleModalVisible();
@@ -721,6 +731,9 @@ class Settings extends Component {
                               '/images/placeholder.png'
                           }
                           alt=""
+                          onError={(e) => {
+                            e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                          }}
                           style={{ maxWidth: '610px', maxHeight: '720px' }}
                           onClick={() => {
                             this.onChangeIsSingleModalVisible();
@@ -743,6 +756,9 @@ class Settings extends Component {
                               '/images/placeholder.png'
                           }
                           alt=""
+                          onError={(e) => {
+                            e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                          }}
                           onClick={() => {
                             this.onChangeIsSingleModalVisible();
                             this.props.onIndexPromotionsDesktopChoosingForChange(
@@ -770,6 +786,9 @@ class Settings extends Component {
                                       promotion.imageUrl :
                                       '/images/placeholder.png'}
                                   alt=""
+                                  onError={(e) => {
+                                    e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                                  }}
                                   onClick={() => {
                                     this.props.onIndexArrivalsDesktopIndexChange(
                                         i);
@@ -805,6 +824,9 @@ class Settings extends Component {
                                  this.props.indexSalesTopPosterDesktop.imageUrl :
                                  '/images/placeholder.png'}
                              alt=""
+                             onError={(e) => {
+                               e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                             }}
                              onClick={() => {
                                this.onChangeIsSingleModalVisible();
                                this.props.onIndexPromotionsDesktopChoosingForChange(
@@ -831,6 +853,9 @@ class Settings extends Component {
                                         goods.imageUrl :
                                         '/images/placeholder.png'}
                                     alt=""
+                                    onError={(e) => {
+                                      e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                                    }}
                                     onClick={() => {
                                       this.props.onIndexSalesMiddleImagesDesktopIndexChange(
                                           i);
@@ -861,6 +886,9 @@ class Settings extends Component {
                                  this.props.indexSalesMiddlePosterDesktop.imageUrl :
                                  '/images/placeholder.png'}
                              alt=""
+                             onError={(e) => {
+                               e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                             }}
                              onClick={() => {
                                this.onChangeIsSingleModalVisible();
                                this.props.onIndexPromotionsDesktopChoosingForChange(
@@ -887,6 +915,9 @@ class Settings extends Component {
                                         goods.imageUrl :
                                         '/images/placeholder.png'}
                                     alt=""
+                                    onError={(e) => {
+                                      e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                                    }}
                                     onClick={() => {
                                       this.props.onIndexSalesBottomImagesDesktopIndexChange(
                                           i);
@@ -956,6 +987,9 @@ class Settings extends Component {
                               item.imageUrl :
                               '/images/placeholder.png'}
                                alt=""
+                               onError={(e) => {
+                                 e.target.src = 'http://hdimages.org/wp-content/uploads/2017/03/placeholder-image4.jpg';
+                               }}
                                style={{
                                  maxWidth: '100%',
                                  cursor: 'pointer',

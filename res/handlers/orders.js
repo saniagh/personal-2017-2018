@@ -105,8 +105,8 @@ router.post('/make-order', createGroupLimiter, addOrderFormValidation,
                     subject: 'Bloo\'s Shop - Order Confirmation',
                     html: `<div style="font-family: Roboto;"><h1>Hello ${req.body.firstName +
                     ' ' +
-                    req.body.lastName},</h1><p>You have successfully placed an order on <a href="localhost">Bloo's Shop</a>.</p><p>Your order is being processed. You will receive a confirmation upon delivery by our courier.</p><p>To be able to view your order click <a href=${'localhost/order-details/' +
-                    order._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="localhost"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
+                    req.body.lastName},</h1><p>You have successfully placed an order on <a href="http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000">Bloo's Shop</a>.</p><p>Your order is being processed. You will receive a confirmation upon delivery by our courier.</p><p>To be able to view your order click <a href=${'http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000/order-details/' +
+                    order._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
                   };
 
                   transporter.sendMail(mailOptions, function (err, info) {
@@ -167,8 +167,8 @@ router.post('/make-order', createGroupLimiter, addOrderFormValidation,
               subject: 'Bloo\'s Shop - Order Confirmation',
               html: `<div style="font-family: Roboto;"><h1>Hello ${req.body.firstName +
               ' ' +
-              req.body.lastName},</h1><p>You have successfully placed an order on <a href="localhost">Bloo's Shop</a>.</p><p>Your order is being processed. You will receive a confirmation upon delivery by our courier.</p><p>To be able to view your order click <a href=${'localhost/order-details/' +
-              order._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="localhost"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
+              req.body.lastName},</h1><p>You have successfully placed an order on <a href="http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000">Bloo's Shop</a>.</p><p>Your order is being processed. You will receive a confirmation upon delivery by our courier.</p><p>To be able to view your order click <a href=${'http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000/order-details/' +
+              order._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
             };
 
             transporter.sendMail(mailOptions, function (err, info) {
@@ -294,8 +294,8 @@ router.post('/complete-order', authValidation, (req, res) => {
         subject: 'Bloo\'s Shop - Order Delivered',
         html: `<div style="font-family: Roboto;"><h1>Hello ${order[0].firstName +
         ' ' +
-        order[0].lastName},</h1><p>This is a confirmation that your order has been marked as completed.</p><p>If you consider this to be false, please do not hesitate to contact us.</p><p>To be able to view your order click <a href=${'localhost/order-details/' +
-        order[0]._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="localhost"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
+        order[0].lastName},</h1><p>This is a confirmation that your order has been marked as completed.</p><p>If you consider this to be false, please do not hesitate to contact us.</p><p>To be able to view your order click <a href=${'http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000/order-details/' +
+        order[0]._id}>here</a>.</p><div style="display: flex; margin-top: 20px;"><a href="http://ec2-52-29-50-230.eu-central-1.compute.amazonaws.com:3000"><img src="https://i.imgur.com/pDebTe6.png" alt="Bloo's Shop"></a></div></div>`,
       };
 
       transporter.sendMail(mailOptions, function (err, info) {

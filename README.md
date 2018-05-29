@@ -92,16 +92,25 @@
 
 <h4>II. Installation:</h4>
 
+
+<h5>For EmpowerSoft I have included the file you need to create with the template below.</h5>
+
 <p>In the root folder create a folder called db-config and in it a file called index.json with the following content:</p>
 
 ```javascript
 {
-  "dbUri": "mongodb://localhost/DATABASE_NAME",
+  "dbUri": "mongodb://localhost/application_db",
   "jwtSecret": "YOUR_SECRET_KEY"
 }
 ```
 
 <p><b>The git version of this project will not be distributed with all the uploads. Please manually create a folder called uploads in /public/ . If you are not using this from the git repository, ignore this step.</b></p>
+
+<p>Import the mongo database dump from the folder /application-db with the following command: </p>
+
+```shell
+mongorestore -d application_db application_db/
+```
 
 <p>Next do the following in the root folder:</p>
 

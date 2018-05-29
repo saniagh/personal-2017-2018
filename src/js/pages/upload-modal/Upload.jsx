@@ -41,7 +41,7 @@ class UploadC extends Component {
     };
 
     return (
-        <Tabs defaultActiveKey="0">
+        <Tabs defaultActiveKey="1">
           <TabPane tab={<span><Icon type="inbox"/>Upload files</span>}
                    key="0">
             <div>

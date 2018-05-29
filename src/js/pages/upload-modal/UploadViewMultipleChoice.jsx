@@ -45,10 +45,22 @@ class UploadViewMultipleChoice extends Component {
     };
   }
 
+  getCurrentUrlsInArray = (url) => {
+    let flag = false;
+    for (let i = 0; i <= this.state.selectedUrlsArray.length; i++) {
+      if (this.state.selectedUrlsArray[i] === url) {
+        flag = true;
+      }
+    }
+
+    return flag;
+  };
+
   getSelectedImageUrls = () => {
-    let selected = [];
+    let selected = this.state.selectedUrlsArray;
     for (let i = 0; i < this.state.uploads.length; i++)
-      if (this.state.uploads[i].isSelected === true)
+      if (this.state.uploads[i].isSelected === true &&
+          this.getCurrentUrlsInArray(this.state.uploads[i].url) === false)
         selected.push(this.state.uploads[i].url);
     this.setState({
       selectedUrlsArray: selected,
@@ -105,6 +117,7 @@ class UploadViewMultipleChoice extends Component {
       if (this.props.modalFromSettings && this.state.hasSelectedNImages < 2 &&
           this.props.selectingSliderImages === false) {
         img.isSelected = true;
+
         this.setState({
           hasSelectedNImages: this.state.hasSelectedNImages + 1,
         });
@@ -137,7 +150,7 @@ class UploadViewMultipleChoice extends Component {
       url: '/upload/getAllUploads',
       headers: {
         'Authorization': `bearer ${Auth.getToken()}`,
-      }
+      },
     }).then((res) => {
       this.setState({
         uploads: res.data.uploads,

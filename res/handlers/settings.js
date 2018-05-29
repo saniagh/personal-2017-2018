@@ -28,6 +28,21 @@ router.get('/set-default-settings', (req, res) => {
   // ['Currency name', 'Currency symbol']
   const defaultSettingsData = {
     currency: ['RON', 'RON'],
+    siteNavigation: [],
+    sliderImages: [],
+    topPromotionalBanner: {},
+    leftIndexPromotionsDesktop: {},
+    rightIndexPromotionsDesktop: {},
+    footerIndexPromotionsDesktop: {},
+    indexPromotionsNewArrivals: [],
+    indexSalesTopPosterDesktop: {},
+    indexSalesMiddleImagesDesktop: [],
+    indexSalesMiddlePosterDesktop: {},
+    indexSalesBottomImagesDesktop: [],
+    indexImagesMobile: [],
+    footerLeftColumn: [],
+    footerCenterColumn: [],
+    footerRightColumn: [],
   };
 
   const newDefaultSettings = new Settings(defaultSettingsData);
