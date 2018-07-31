@@ -181,25 +181,28 @@ class OrderDetails extends Component {
 
                     return <li key={index}
                                className="order-details-products-list-item">
-                      <Link
-                          to={`/product/${product.product.productLink}&${product.product._id}`}
-                          style={{ float: 'left' }}>
-                        <img src={product.product.productThumbnail} height={80}
-                             width="auto"/>
-                      </Link>
-                      <div className="order-product-details"
-                           style={{ float: 'left' }}
-                           dangerouslySetInnerHTML={html}>
-                      </div>
-                      <div className="order-details-price">
-                        <p><b>{this.props.currency[1]}{
-                          product.product.salePrice ?
-                              parseFloat(product.product.salePrice *
-                                  product.qty).toFixed(2) :
-                              parseFloat(product.product.productPrice *
-                                  product.qty).toFixed(2)}</b>
-                        </p>
-                        <p>{product.qty} item/s</p>
+                      <div>
+                        <Link
+                            to={`/product/${product.product.productLink}&${product.product._id}`}
+                            style={{ float: 'left' }}>
+                          <img src={product.product.productThumbnail}
+                               height={80}
+                               width="auto"/>
+                        </Link>
+                        <div className="order-product-details"
+                             style={{ float: 'left' }}
+                             dangerouslySetInnerHTML={html}>
+                        </div>
+                        <div className="order-details-price">
+                          <p><b>{this.props.currency[1]}{
+                            product.product.salePrice ?
+                                parseFloat(product.product.salePrice *
+                                    product.qty).toFixed(2) :
+                                parseFloat(product.product.productPrice *
+                                    product.qty).toFixed(2)}</b>
+                          </p>
+                          <p>{product.qty} item/s</p>
+                        </div>
                       </div>
                     </li>;
                   })

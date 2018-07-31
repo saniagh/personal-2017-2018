@@ -472,9 +472,8 @@
 
 .order-product-details {
   padding-left: 20px;
-  max-width: 500px;
-  max-height: 80px;
   overflow: hidden;
+
 
   p {
     font-size: 14px;
@@ -494,8 +493,8 @@
   padding: 10px;
   border: 1px solid #e8e8e8;
   clear: both;
-  height: 100px;
   margin: 10px auto 10px auto;
+  overflow: hidden;
 }
 
 .order-details-order-summary-container {

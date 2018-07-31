@@ -148,7 +148,7 @@ npm run bundle-p
 npm install bcrypt --save
 ```
 <p>
-<b>For testing in development, I recommend removing the ddos and flood protection ( line 7 and 8 from /index.js and createGroupLimited middleware from line 37 in /res/handlers/orders.js )</b>
+<b>For testing in development, I recommend removing the ddos and flood protection ( line 7 and 8 from /index.js and createGroupLimiter middleware from line 37 in /res/handlers/orders.js )</b>
 </p>
 
 <h3>9.Creator:</h3>
